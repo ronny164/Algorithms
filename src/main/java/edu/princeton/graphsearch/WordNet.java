@@ -11,12 +11,12 @@ import java.util.Set;
 
 /**
  * WordNet is a semantic lexicon for the English language that is used extensively by computational
- * linguists and cognitive scientists; for example, it was a key component in IBM's Watson. 
- * WordNet groups words into sets of synonyms called synsets and describes semantic relationships 
- * between them. One such relationship is the is-a relationship, which connects a 
- * hyponym (more specific synset) to a hypernym (more general synset). 
+ * linguists and cognitive scientists; for example, it was a key component in IBM's Watson.
+ * WordNet groups words into sets of synonyms called synsets and describes semantic relationships
+ * between them. One such relationship is the is-a relationship, which connects a
+ * hyponym (more specific synset) to a hypernym (more general synset).
  * For example, a plant organ is a hypernym of carrot and plant organ is a hypernym of plant root.
- * 
+ *
  * @author Ronny A. Pena
  */
 public class WordNet {
@@ -26,7 +26,7 @@ public class WordNet {
 
   /**
    * Constructor takes the name of the two input files. The generated graph is validated.
-   * 
+   *
    * @param synsetsFileName The synsets file name.
    * @param hypernymsFileName The hypernyms file name.
    */
@@ -34,14 +34,14 @@ public class WordNet {
     if (synsetsFileName == null || hypernymsFileName == null) {
       throw new NullPointerException();
     }
+    this.wordMap = new BiMultiMap<>();
     readWords(synsetsFileName);
     Digraph dag = new Digraph(wordMap.size());
     readHyphens(dag, hypernymsFileName);
-    sap = new ShortestAncestralPath(dag);
+    this.sap = new ShortestAncestralPath(dag);
   }
 
   private void readWords(String synsetsFileName) {
-    wordMap = new BiMultiMap<>();
     In synsetsIn = new In(synsetsFileName);
     while (synsetsIn.hasNextLine()) {
       String line = synsetsIn.readLine();
@@ -80,7 +80,7 @@ public class WordNet {
 
   private void validateGraph(Digraph dag, Set<Integer> startVertices) {
 
-    //Using depth first search.
+    // Using depth first search.
     Deque<Integer> stack = new LinkedList<>();
     boolean[] visited = new boolean[dag.V()];
     Set<Integer> roots = new HashSet<>();
@@ -98,7 +98,7 @@ public class WordNet {
           }
         }
       }
-      
+
       // this is a root
       if (dag.outdegree(currentVertex) == 0) {
         roots.add(currentVertex);
@@ -121,7 +121,7 @@ public class WordNet {
 
   /**
    * Is the word a WordNet noun?
-   * 
+   *
    * @param word The word to check.
    * @return whether the word is a noun.
    */
@@ -134,7 +134,7 @@ public class WordNet {
 
   /**
    * Generates the distance of shortest ancestral path between nounA and nounB.
-   * 
+   *
    * @param nounA The nounA noun.
    * @param nounB The nounB noun.
    * @return The distance of the ancestor or throws an exception if not found.
@@ -147,9 +147,9 @@ public class WordNet {
   }
 
   /**
-   * Generates a synset that is the common ancestor of nounA and nounB 
+   * Generates a synset that is the common ancestor of nounA and nounB
    * that participates in a shortest ancestral path.
-   * 
+   *
    * @param nounA The nounA noun.
    * @param nounB The nounB noun.
    * @return The ancestor or throws an exception if not found.

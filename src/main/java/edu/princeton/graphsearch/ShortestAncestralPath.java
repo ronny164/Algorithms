@@ -9,10 +9,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * An ancestral path between two vertices v and w in a directed graph is a directed path from v to 
- * a common ancestor x, together with a directed path from w to the same ancestor x. A shortest 
+ * An ancestral path between two vertices v and w in a directed graph is a directed path from v to
+ * a common ancestor x, together with a directed path from w to the same ancestor x. A shortest
  * ancestral path is an ancestral path of minimum total length.
- * 
+ *
  * @author Ronny A. Pena
  */
 public class ShortestAncestralPath {
@@ -39,7 +39,7 @@ public class ShortestAncestralPath {
 
   /**
    * Constructor takes a directed graph (not necessarily a DAG).
-   * 
+   *
    * @param graph The graph.
    */
   public ShortestAncestralPath(Digraph graph) {
@@ -96,7 +96,7 @@ public class ShortestAncestralPath {
 
   /**
    * Generates the length of shortest ancestral path between v and w.
-   * 
+   *
    * @param vertexV The v vertex.
    * @param vertexW The w vertex.
    * @return The length of the ancestor or -1 if no such path.
@@ -107,7 +107,7 @@ public class ShortestAncestralPath {
 
   /**
    * Generates the length of shortest ancestral path between any vertex in v and any vertex in w.
-   * 
+   *
    * @param verticesV The v vertices.
    * @param verticesW The w vertices.
    * @return The length of the ancestor or -1 if no such path.
@@ -122,7 +122,7 @@ public class ShortestAncestralPath {
 
   /**
    * Generates a common ancestor of v and w that participates in a shortest ancestral path.
-   * 
+   *
    * @param vertexV The v vertex.
    * @param vertexW The w vertex.
    * @return The ancestor or -1 if no such ancestor exist.
@@ -133,7 +133,7 @@ public class ShortestAncestralPath {
 
   /**
    * Generates a common ancestor that participates in shortest ancestral path.
-   * 
+   *
    * @param verticesV The v vertices.
    * @param verticesW The w vertices.
    * @return The ancestor or -1 if no such ancestor exist.

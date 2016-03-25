@@ -7,7 +7,8 @@ import java.util.Map;
 
 /**
  * Data structure for maintaining many-to-many relationships.
- * 
+ * Bidirectional map with Multi-valued support.
+ *
  * @author Ronny A. Pena
  *
  * @param <K> The key type.

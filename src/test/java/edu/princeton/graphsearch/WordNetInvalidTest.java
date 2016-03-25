@@ -14,7 +14,7 @@ public class WordNetInvalidTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void test3InvalidCycle() {
-    new WordNet("./src/test/resources/wordnet/synsets.txt", 
+    new WordNet("./src/test/resources/wordnet/synsets.txt",
         "./src/test/resources/wordnet/hypernyms3InvalidCycle.txt");
   }
 
@@ -26,7 +26,7 @@ public class WordNetInvalidTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void test6InvalidCycle() {
-    new WordNet("./src/test/resources/wordnet/synsets.txt", 
+    new WordNet("./src/test/resources/wordnet/synsets.txt",
         "./src/test/resources/wordnet/hypernyms6InvalidCycle.txt");
   }
 

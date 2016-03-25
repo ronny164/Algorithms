@@ -31,7 +31,7 @@ public class Outcast {
     if (nouns.length == 0) {
       throw new IllegalArgumentException();
     }
-    
+
     int[] distances = new int[nouns.length];
     int maxDistanceSum = Integer.MIN_VALUE;
     String maxWord = null;

@@ -10,11 +10,12 @@ import org.junit.Test;
 public class WordNetTest {
 
   private WordNet wordnet;
-  
+
   @Before
   public void setup() {
-    wordnet = new WordNet("./src/test/resources/wordnet/synsets.txt",
-        "./src/test/resources/wordnet/hypernyms.txt");
+    wordnet =
+        new WordNet("./src/test/resources/wordnet/synsets.txt",
+            "./src/test/resources/wordnet/hypernyms.txt");
   }
 
   @Test

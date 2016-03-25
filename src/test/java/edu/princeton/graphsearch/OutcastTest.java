@@ -14,18 +14,18 @@ public class OutcastTest {
 
   @Before
   public void setUp() {
-    wordnet = new WordNet(WORDNET_SYNSETS_LOCATION,"./src/test/resources/wordnet/hypernyms.txt");
+    wordnet = new WordNet(WORDNET_SYNSETS_LOCATION, "./src/test/resources/wordnet/hypernyms.txt");
     outcast = new Outcast(wordnet);
   }
-  
+
   @Test
   public void testOutcastBasic() {
-    String[] fileNames = new String[] {
-        "./src/test/resources/wordnet/outcast5.txt", 
-        "./src/test/resources/wordnet/outcast8.txt",
-        "./src/test/resources/wordnet/outcast11.txt"};
+    String[] fileNames =
+        new String[] {"./src/test/resources/wordnet/outcast5.txt",
+            "./src/test/resources/wordnet/outcast8.txt",
+            "./src/test/resources/wordnet/outcast11.txt"};
     String[] expected = new String[] {"table", "bed", "potato"};
-    
+
     for (int i = 0; i < fileNames.length; i++) {
       String fileName = fileNames[i];
       In in = new In(fileName);
