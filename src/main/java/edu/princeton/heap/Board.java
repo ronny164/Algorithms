@@ -89,13 +89,11 @@ public class Board {
       for (int i = 0; i < blocks.length; i++) {
         int start = blocks[i] - 1;
         int target = i;
-        int moves = 0;
         if (start != -1 && start != target) {
           int columnDistance = Math.abs((start % dimension) - (target % dimension));
           int rowDistance = Math.abs((start / dimension) - (target / dimension));
-          moves += columnDistance;
-          moves += rowDistance;
-          manhattanDistance += moves;
+          manhattanDistance += columnDistance;
+          manhattanDistance += rowDistance;
         }
       }
     }
@@ -135,10 +133,8 @@ public class Board {
       int j = 1;
       while (twin.blocks[i] == 0 || twin.blocks[j] == 0) {
         if (twin.blocks[i] == 0) {
-          // i++;
           i = StdRandom.uniform(twin.blocks.length);
         } else if (twin.blocks[j] == 0) {
-          // j++;
           j = StdRandom.uniform(twin.blocks.length);
         } else {
           break;
