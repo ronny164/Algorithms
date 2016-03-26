@@ -1,15 +1,18 @@
 package edu.princeton.heap;
 
 /**
+ * This class is only used by the solver. Allowing package fields since is not public.
+ * 
  * @author Ronny A. Pena
  */
-public class SearchNode implements Comparable<SearchNode> {
+class SearchNode implements Comparable<SearchNode> {
+  
   Board board;
   SearchNode previous;
   int moves;
   boolean twin;
 
-  public SearchNode(Board board, SearchNode previous, int moves, boolean twin) {
+  SearchNode(Board board, SearchNode previous, int moves, boolean twin) {
     super();
     this.board = board;
     this.previous = previous;
@@ -17,7 +20,7 @@ public class SearchNode implements Comparable<SearchNode> {
     this.twin = twin;
   }
 
-  public int getPriority() {
+  int getPriority() {
     return moves + board.manhattan();
   }
 
