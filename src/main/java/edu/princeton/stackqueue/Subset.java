@@ -17,8 +17,7 @@ public class Subset {
   private static void approach2(String[] args) {
     int k = Integer.parseInt(args[0]);
     String[] input = new String[k];
-    int i = 0, j = 0;
-    while (!StdIn.isEmpty()) {
+    for (int i = 0, j = 0; !StdIn.isEmpty();) {
       j = StdRandom.uniform(i + 1);
       String s1 = StdIn.readString();
       insertSwapIfEmpty(input, s1, i, j, k);

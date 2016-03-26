@@ -1,8 +1,7 @@
 package edu.princeton.heap;
 
-import edu.princeton.cs.algs4.MinPQ;
-
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 /**
  * @author Ronny A. Pena
@@ -23,15 +22,15 @@ public class AStarSolver {
       throw new NullPointerException();
     }
 
-    MinPQ<SearchNode> minQueue = new MinPQ<>();
-    minQueue.insert(new SearchNode(initial, null, 0, false));
-    minQueue.insert(new SearchNode(initial.twin(), null, 0, true));
+    PriorityQueue<SearchNode> minQueue = new PriorityQueue<>();
+    minQueue.add(new SearchNode(initial, null, 0, false));
+    minQueue.add(new SearchNode(initial.twin(), null, 0, true));
 
     while (!minQueue.isEmpty()) {
-      SearchNode searchNode = minQueue.delMin();
+      SearchNode searchNode = minQueue.remove();
       for (Board neighbor : searchNode.board.neighbors()) {
         if (searchNode.previous == null || !searchNode.previous.board.equals(neighbor)) {
-          minQueue.insert(new SearchNode(neighbor, searchNode, searchNode.moves + 1,
+          minQueue.add(new SearchNode(neighbor, searchNode, searchNode.moves + 1,
               searchNode.twin));
         }
       }
@@ -45,7 +44,8 @@ public class AStarSolver {
   }
 
   /**
-   * @return Is the initial board solvable?
+   * Is the initial board solvable?
+   * @return The answer. 
    */
   public boolean isSolvable() {
     return this.solvable;

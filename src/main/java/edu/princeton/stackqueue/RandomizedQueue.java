@@ -62,14 +62,20 @@ public class RandomizedQueue<T> implements Iterable<T> {
     return head == tail;
   }
 
-  public int size() { // return the number of items on the queue
+  /**
+   * @return The number of items on the queue.
+   */
+  public int size() {
     if (head == tail) {
       return 0;
     }
     return tail - head;
   }
 
-  public void enqueue(T item) { // add the item
+  /**
+   * Add the item.
+   */
+  public void enqueue(T item) {
     if (item == null) {
       throw new java.lang.NullPointerException();
     }

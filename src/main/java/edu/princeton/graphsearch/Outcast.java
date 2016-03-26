@@ -32,21 +32,20 @@ public class Outcast {
       throw new IllegalArgumentException();
     }
 
-    int[] distances = new int[nouns.length];
     int maxDistanceSum = Integer.MIN_VALUE;
     String maxWord = null;
     for (int i = 0; i < nouns.length; i++) {
       String wordA = nouns[i];
+      int currentDistance = 0;
       for (int j = 0; j < nouns.length; j++) {
         String wordB = nouns[j];
         if (i != j && wordNet.isNoun(wordA) && wordNet.isNoun(wordB)) {
-          int distance = wordNet.distance(wordA, wordB);
-          distances[i] += distance;
+          currentDistance += wordNet.distance(wordA, wordB);
         }
       }
       // keep the one with the maximum distance.
-      if (distances[i] > maxDistanceSum) {
-        maxDistanceSum = distances[i];
+      if (currentDistance > maxDistanceSum) {
+        maxDistanceSum = currentDistance;
         maxWord = wordA;
       }
     }
