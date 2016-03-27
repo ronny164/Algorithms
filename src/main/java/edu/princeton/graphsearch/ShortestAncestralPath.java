@@ -19,13 +19,11 @@ public class ShortestAncestralPath {
 
   private static final class Vertex {
     private int index;
-    private boolean[] visited;
     private int[] distanceTo;
 
-    public Vertex(int index, boolean[] visited, int[] distTo) {
+    public Vertex(int index, int[] distTo) {
       super();
       this.index = index;
-      this.visited = visited;
       this.distanceTo = distTo;
     }
   }
@@ -33,8 +31,6 @@ public class ShortestAncestralPath {
   private Digraph graph;
   private int[] distanceToV;
   private int[] distanceToW;
-  private boolean[] visitedV;
-  private boolean[] visitedW;
   private Collection<Integer> dirty;
 
   /**
@@ -55,12 +51,11 @@ public class ShortestAncestralPath {
 
     while (!queue.isEmpty()) {
       Vertex vertex = queue.remove();
-      boolean[] visited = vertex.visited;
       int[] distanceTo = vertex.distanceTo;
       int vertexIndex = vertex.index;
 
       // Optimization 1, keep track of the ancestor with the minimal distance.
-      if (visitedV[vertexIndex] && visitedW[vertexIndex]) {
+      if (distanceToV[vertexIndex] != -1 && distanceToW[vertexIndex]  != -1) {
         int currentDistance = distanceToV[vertexIndex] + distanceToW[vertexIndex];
         if (currentDistance < minDistance) {
           ancestor = vertexIndex;
@@ -82,11 +77,10 @@ public class ShortestAncestralPath {
       Iterable<Integer> adjs = graph.adj(vertexIndex);
       if (adjs != null) {
         for (int adj : adjs) {
-          if (!visited[adj]) {
+          if (distanceTo[adj] == -1) { //not visited
             distanceTo[adj] = distanceTo[vertexIndex] + 1;
-            visited[adj] = true;
             dirty.add(adj);
-            queue.add(new Vertex(adj, visited, distanceTo));
+            queue.add(new Vertex(adj, distanceTo));
           }
         }
       }
@@ -144,23 +138,21 @@ public class ShortestAncestralPath {
     }
     Queue<Vertex> queue = new LinkedList<>();
     reset();
-    addVertex(verticesV, queue, visitedV, distanceToV);
-    addVertex(verticesW, queue, visitedW, distanceToW);
+    addVertex(verticesV, queue, distanceToV);
+    addVertex(verticesW, queue, distanceToW);
     return bsf(queue);
   }
 
-  private void addVertex(Iterable<Integer> vertices, Queue<Vertex> queue, boolean[] visited,
-      int[] distanceTo) {
+  private void addVertex(Iterable<Integer> vertices, Queue<Vertex> queue, int[] distanceTo) {
     
     //adding all the vertices for path search..
     for (int vertex : vertices) {
       if (vertex < 0 || vertex >= graph.V()) {
         throw new IndexOutOfBoundsException();
       }
-      visited[vertex] = true;
-      distanceTo[vertex] = 0;
+      distanceTo[vertex] = 0; // distance and visited
       dirty.add(vertex);
-      queue.add(new Vertex(vertex, visited, distanceTo));
+      queue.add(new Vertex(vertex, distanceTo));
     }
   }
 
@@ -173,28 +165,18 @@ public class ShortestAncestralPath {
 
     if (this.distanceToV == null) {
       this.distanceToV = new int[graph.V()];
-      Arrays.fill(distanceToV, Integer.MIN_VALUE);
+      Arrays.fill(distanceToV, -1);
     }
 
     if (this.distanceToW == null) {
       this.distanceToW = new int[graph.V()];
-      Arrays.fill(distanceToW, Integer.MIN_VALUE);
-    }
-
-    if (this.visitedV == null) {
-      this.visitedV = new boolean[graph.V()];
-    }
-
-    if (this.visitedW == null) {
-      this.visitedW = new boolean[graph.V()];
+      Arrays.fill(distanceToW, -1);
     }
 
     // Optimization 4. Instead of resetting all vertices, only reset the ones that were used.
     for (int vertex : dirty) {
-      distanceToV[vertex] = Integer.MIN_VALUE;
-      distanceToW[vertex] = Integer.MIN_VALUE;
-      visitedV[vertex] = false;
-      visitedW[vertex] = false;
+      distanceToV[vertex] = -1;
+      distanceToW[vertex] = -1;
     }
     dirty.clear();
   }
