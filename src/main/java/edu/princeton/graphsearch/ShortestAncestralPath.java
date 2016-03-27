@@ -45,49 +45,6 @@ public class ShortestAncestralPath {
     this.graph = new Digraph(graph);
   }
 
-  private int bsf(Queue<Vertex> queue) {
-    int ancestor = -1;
-    int minDistance = Integer.MAX_VALUE;
-
-    while (!queue.isEmpty()) {
-      Vertex vertex = queue.remove();
-      int[] distanceTo = vertex.distanceTo;
-      int vertexIndex = vertex.index;
-
-      // Optimization 1, keep track of the ancestor with the minimal distance.
-      if (distanceToV[vertexIndex] != -1 && distanceToW[vertexIndex]  != -1) {
-        int currentDistance = distanceToV[vertexIndex] + distanceToW[vertexIndex];
-        if (currentDistance < minDistance) {
-          ancestor = vertexIndex;
-          minDistance = currentDistance;
-
-          // Optimization 2. If the distance is zero, It means that two nodes are the same.
-          if (currentDistance == 0) {
-            return ancestor;
-          }
-        }
-      }
-
-      // Optimization 3. If the current distance is getting bigger,
-      // we are passing over the shortest ancestor.
-      if (distanceTo[vertexIndex] >= minDistance) {
-        return ancestor;
-      }
-
-      Iterable<Integer> adjs = graph.adj(vertexIndex);
-      if (adjs != null) {
-        for (int adj : adjs) {
-          if (distanceTo[adj] == -1) { //not visited
-            distanceTo[adj] = distanceTo[vertexIndex] + 1;
-            dirty.add(adj);
-            queue.add(new Vertex(adj, distanceTo));
-          }
-        }
-      }
-    }
-    return ancestor;
-  }
-
   /**
    * Generates the length of shortest ancestral path between v and w.
    *
@@ -136,24 +93,7 @@ public class ShortestAncestralPath {
     if (verticesV == null || verticesW == null) {
       throw new NullPointerException();
     }
-    Queue<Vertex> queue = new LinkedList<>();
-    reset();
-    addVertex(verticesV, queue, distanceToV);
-    addVertex(verticesW, queue, distanceToW);
-    return bsf(queue);
-  }
-
-  private void addVertex(Iterable<Integer> vertices, Queue<Vertex> queue, int[] distanceTo) {
-    
-    //adding all the vertices for path search..
-    for (int vertex : vertices) {
-      if (vertex < 0 || vertex >= graph.V()) {
-        throw new IndexOutOfBoundsException();
-      }
-      distanceTo[vertex] = 0; // distance and visited
-      dirty.add(vertex);
-      queue.add(new Vertex(vertex, distanceTo));
-    }
+    return bsf(verticesV, verticesW);
   }
 
   private void reset() {
@@ -179,5 +119,66 @@ public class ShortestAncestralPath {
       distanceToW[vertex] = -1;
     }
     dirty.clear();
+  }
+
+  private void addVertex(Iterable<Integer> vertices, Queue<Vertex> queue, int[] distanceTo) {
+    
+    //adding all the vertices for path search..
+    for (int vertex : vertices) {
+      if (vertex < 0 || vertex >= graph.V()) {
+        throw new IndexOutOfBoundsException();
+      }
+      distanceTo[vertex] = 0; // distance and visited
+      dirty.add(vertex);
+      queue.add(new Vertex(vertex, distanceTo));
+    }
+  }
+
+  private int bsf(Iterable<Integer> verticesV, Iterable<Integer> verticesW) {
+
+    reset();
+    Queue<Vertex> queue = new LinkedList<>();
+    addVertex(verticesV, queue, distanceToV);
+    addVertex(verticesW, queue, distanceToW);
+    int ancestor = -1;
+    int minDistance = Integer.MAX_VALUE;
+
+    while (!queue.isEmpty()) {
+      Vertex vertex = queue.remove();
+      int[] distanceTo = vertex.distanceTo;
+      int vertexIndex = vertex.index;
+
+      // Optimization 1, keep track of the ancestor with the minimal distance.
+      if (distanceToV[vertexIndex] != -1 && distanceToW[vertexIndex]  != -1) {
+        int currentDistance = distanceToV[vertexIndex] + distanceToW[vertexIndex];
+        if (currentDistance < minDistance) {
+          ancestor = vertexIndex;
+          minDistance = currentDistance;
+
+          // Optimization 2. If the distance is zero, It means that two nodes are the same.
+          if (currentDistance == 0) {
+            return ancestor;
+          }
+        }
+      }
+
+      // Optimization 3. If the current distance is getting bigger,
+      // we are passing over the shortest ancestor.
+      if (distanceTo[vertexIndex] >= minDistance) {
+        return ancestor;
+      }
+
+      Iterable<Integer> adjs = graph.adj(vertexIndex);
+      if (adjs != null) {
+        for (int adj : adjs) {
+          if (distanceTo[adj] == -1) { //not visited
+            distanceTo[adj] = distanceTo[vertexIndex] + 1;
+            dirty.add(adj);
+            queue.add(new Vertex(adj, distanceTo));
+          }
+        }
+      }
+    }
+    return ancestor;
   }
 }
