@@ -1,7 +1,8 @@
-package edu.princeton.graphsearch;
+package edu.princeton.shortestpath;
 
+import edu.princeton.shortestpath.WordNet;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,10 @@ public class WordNetTest {
   @Test
   public void testWordNetBasic() {
     assertEquals(5, wordnet.distance("worm", "bird"));
-    assertTrue(wordnet.sap("worm", "bird").contains("animal"));
+    assertEquals(0, wordnet.distance("worm", "insect"));
+    String actual = wordnet.sap("worm", "bird");
+    assertNotNull(actual);
+    assertEquals("animal animate_being beast brute creature fauna", actual);
   }
 
   @Test

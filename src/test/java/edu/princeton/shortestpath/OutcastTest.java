@@ -1,7 +1,9 @@
-package edu.princeton.graphsearch;
+package edu.princeton.shortestpath;
 
 import static org.junit.Assert.assertEquals;
 import edu.princeton.cs.algs4.In;
+import edu.princeton.shortestpath.Outcast;
+import edu.princeton.shortestpath.WordNet;
 
 import org.junit.Before;
 import org.junit.Test;

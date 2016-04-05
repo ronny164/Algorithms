@@ -1,8 +1,9 @@
-package edu.princeton.graphsearch;
+package edu.princeton.shortestpath;
 
 import static org.junit.Assert.assertEquals;
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.In;
+import edu.princeton.shortestpath.ShortestAncestralPath;
 
 import org.junit.Test;
 

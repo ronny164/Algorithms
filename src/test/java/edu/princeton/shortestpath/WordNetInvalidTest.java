@@ -1,5 +1,6 @@
-package edu.princeton.graphsearch;
+package edu.princeton.shortestpath;
 
+import edu.princeton.shortestpath.WordNet;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

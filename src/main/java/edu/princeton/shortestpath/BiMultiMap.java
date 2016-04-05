@@ -1,4 +1,4 @@
-package edu.princeton.graphsearch;
+package edu.princeton.shortestpath;
 
 import java.util.Collection;
 import java.util.HashMap;
