@@ -173,23 +173,22 @@ public class BaseballElimination {
 
 
   private boolean isTrivial(int currentTeam) {
-    boolean trivial = false;
     List<String> eliminationNames = new LinkedList<>();
     for (Entry<String, Integer> entry : teamNames.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != currentTeam) {
         int avaliableToWin = wins[currentTeam] + remainingPerTeam[currentTeam] - wins[otherTeam];
         if (avaliableToWin < 0) {
-          trivial = true;
           eliminationNames.add(entry.getKey());
         }
       }
     }
-    if (trivial) {
+    if (eliminationNames.size() > 0) {
       certificates.put(currentTeam, eliminationNames);
-      eliminated[currentTeam] = trivial;
+      eliminated[currentTeam] = true;
+      return true;
     }
-    return trivial;
+    return false;
   }
 
 
