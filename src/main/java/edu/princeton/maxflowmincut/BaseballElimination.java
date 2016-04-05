@@ -1,4 +1,5 @@
-package edu.princeton.maxflow;
+package edu.princeton.maxflowmincut;
+
 
 import edu.princeton.cs.algs4.Counter;
 import edu.princeton.cs.algs4.FlowEdge;
@@ -34,12 +35,12 @@ public class BaseballElimination {
 
   private static final class NetworkSetup {
     private FlowNetwork network;
-    private double total;
+    private double totalOtherRemaining;
 
-    public NetworkSetup(FlowNetwork network, double total) {
+    public NetworkSetup(FlowNetwork network, double totalOtherRemaining) {
       super();
       this.network = network;
-      this.total = total;
+      this.totalOtherRemaining = totalOtherRemaining;
     }
   }
 
@@ -78,23 +79,24 @@ public class BaseballElimination {
         remainingTeamPairs[team][i] = Integer.parseInt(getNextWord(line, counter));
       }
     }
-    computeMaxFlow(n);
+    computeEliminations(n);
   }
 
   /**
    * Computes the max flow (mathematical eliminations) for team team.
    * @param vertices The number of teams.
    */
-  private void computeMaxFlow(int vertices) {
+  private void computeEliminations(int vertices) {
     int requiredNetworkVertices = choose(vertices - 1, 2) + vertices + 2;
     int source = vertices;
     int sink = vertices + 1;
     for (int team = 0; team < vertices; team++) {
-      NetworkSetup setup = buildNetwork(source, team, sink, vertices, requiredNetworkVertices);
-      FordFulkerson maxflow = new FordFulkerson(setup.network, source, sink);
-      eliminated[team] = maxflow.value() < setup.total;
-      if (eliminated[team]) {
-        createCertificateCut(maxflow, team);
+      if (!isTrivial(team)) {
+        NetworkSetup setup = buildNetwork(source, team, sink, vertices, requiredNetworkVertices);
+        FordFulkerson maxflow = new FordFulkerson(setup.network, source, sink);
+        if (maxflow.value() < setup.totalOtherRemaining) {
+          createCertificateCut(maxflow, team);
+        }
       }
     }
   }
@@ -105,21 +107,21 @@ public class BaseballElimination {
   private NetworkSetup buildNetwork(int source, int currentTeam, int sink, int vertices,
       int requiredNetworkVertices) {
     int gameVertex = vertices + 2;
-    double total = 0;
+    double totalOtherRemaining = 0;
     FlowNetwork network = new FlowNetwork(requiredNetworkVertices);
     for (int team1 = 0; team1 < vertices; team1++) {
       if (team1 != currentTeam) {
         for (int team2 = team1 + 1; team2 < vertices; team2++) {
           if (team1 != team2 && team2 != currentTeam) {
             int reminder = addSourceEdges(network, source, gameVertex, team1, team2);
-            total += reminder;
+            totalOtherRemaining += reminder;
             gameVertex++;
           }
         }
         addSinkEdges(network, sink, currentTeam, team1);
       }
     }
-    return new NetworkSetup(network, total);
+    return new NetworkSetup(network, totalOtherRemaining);
   }
 
   private int addSourceEdges(FlowNetwork network, int source, int gameVertex, int team1, int team2) {
@@ -132,21 +134,7 @@ public class BaseballElimination {
 
   private void addSinkEdges(FlowNetwork network, int sink, int mainTeam, int otherTeam) {
     int avaliableToWin = wins[mainTeam] + remainingPerTeam[mainTeam] - wins[otherTeam];
-    if (avaliableToWin < 0) {
-      network.addEdge(new FlowEdge(otherTeam, sink, 0)); // eliminated.
-    } else {
-      network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
-    }
-  }
-
-  private void createCertificateCut(FordFulkerson maxflow, int currentTeam) {
-    LinkedList<String> eliminationName = new LinkedList<>();
-    for (Entry<String, Integer> entry : teamNames.entrySet()) {
-      if (maxflow.inCut(entry.getValue())) { // part of the cut
-        eliminationName.push(entry.getKey());
-      }
-    }
-    certificates.put(currentTeam, eliminationName);
+    network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
   }
 
   /**
@@ -181,6 +169,39 @@ public class BaseballElimination {
       counter.increment();
     }
     return line.substring(start, counter.tally());
+  }
+
+
+  private boolean isTrivial(int currentTeam) {
+    boolean trivial = false;
+    List<String> eliminationNames = new LinkedList<>();
+    for (Entry<String, Integer> entry : teamNames.entrySet()) {
+      int otherTeam = entry.getValue();
+      if (otherTeam != currentTeam) {
+        int avaliableToWin = wins[currentTeam] + remainingPerTeam[currentTeam] - wins[otherTeam];
+        if (avaliableToWin < 0) {
+          trivial = true;
+          eliminationNames.add(entry.getKey());
+        }
+      }
+    }
+    if (trivial) {
+      certificates.put(currentTeam, eliminationNames);
+      eliminated[currentTeam] = trivial;
+    }
+    return trivial;
+  }
+
+
+  private void createCertificateCut(FordFulkerson maxflow, int currentTeam) {
+    List<String> eliminationNames = new LinkedList<>();
+    for (Entry<String, Integer> entry : teamNames.entrySet()) {
+      if (maxflow.inCut(entry.getValue())) { // part of the cut
+        eliminationNames.add(entry.getKey());
+      }
+    }
+    certificates.put(currentTeam, eliminationNames);
+    eliminated[currentTeam] = true;
   }
 
   /**
@@ -253,6 +274,7 @@ public class BaseballElimination {
     if (team == null || !teamNames.containsKey(team)) {
       throw new IllegalArgumentException();
     }
+
     return eliminated[teamNames.get(team)];
   }
 
