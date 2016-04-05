@@ -14,7 +14,6 @@ public class BaseballEliminationTest {
   private static final class Result {
     private int count = 0;
     private List<String> teams = new ArrayList<>();
-
   }
 
   private Result runFile(String fileName) {
@@ -55,16 +54,16 @@ public class BaseballEliminationTest {
    */
   @Test
   public void testTeams4() {
-    Result print = runFile("./src/test/resources/baseball/teams4.txt");
-    assertEquals(2, print.count);
-    assertEquals("[Philadelphia, Montreal]", print.teams.toString());
+    Result result = runFile("./src/test/resources/baseball/teams4.txt");
+    assertEquals(2, result.count);
+    assertEquals("[Philadelphia, Montreal]", result.teams.toString());
   }
 
   @Test
   public void testTeams4a() {
-    Result print = runFile("./src/test/resources/baseball/teams4a.txt");
-    assertEquals(2, print.count);
-    assertEquals("[Ghaddafi, Bin_Ladin]", print.teams.toString());
+    Result result = runFile("./src/test/resources/baseball/teams4a.txt");
+    assertEquals(2, result.count);
+    assertEquals("[Ghaddafi, Bin_Ladin]", result.teams.toString());
   }
 
   /**
@@ -83,31 +82,31 @@ public class BaseballEliminationTest {
    */
   @Test
   public void testTeams4b() {
-    Result print = runFile("./src/test/resources/baseball/teams4b.txt");
-    assertEquals(1, print.count);
-    assertEquals("[Hufflepuff]", print.teams.toString());
+    Result result = runFile("./src/test/resources/baseball/teams4b.txt");
+    assertEquals(1, result.count);
+    assertEquals("[Hufflepuff]", result.teams.toString());
   }
 
   @Test
   public void testTeams5() {
-    Result print = runFile("./src/test/resources/baseball/teams5.txt");
-    assertEquals(1, print.count);
-    assertEquals("[Detroit]", print.teams.toString());
+    Result result = runFile("./src/test/resources/baseball/teams5.txt");
+    assertEquals(1, result.count);
+    assertEquals("[Detroit]", result.teams.toString());
   }
 
   @Test
   public void testTeams7() {
-    Result print = runFile("./src/test/resources/baseball/teams7.txt");
-    assertEquals(2, print.count);
-    assertEquals("[Ireland, China]", print.teams.toString());
+    Result result = runFile("./src/test/resources/baseball/teams7.txt");
+    assertEquals(2, result.count);
+    assertEquals("[Ireland, China]", result.teams.toString());
   }
 
   @Test
   public void testTeams32() {
-    Result print = runFile("./src/test/resources/baseball/teams32.txt");
-    assertEquals(9, print.count);
+    Result result = runFile("./src/test/resources/baseball/teams32.txt");
+    assertEquals(9, result.count);
     assertEquals("[Team2, Team3, Team12, Team13, Team14, Team17, Team25, Team28, Team29]",
-        print.teams.toString());
+        result.teams.toString());
   }
 
   /**
@@ -126,9 +125,9 @@ public class BaseballEliminationTest {
    */
   @Test
   public void teamAllGames() {
-    Result print = runFile("./src/test/resources/baseball/teams12-allgames.txt");
-    assertEquals(1, print.count);
-    assertEquals("[Team1]", print.teams.toString());
+    Result result = runFile("./src/test/resources/baseball/teams12-allgames.txt");
+    assertEquals(1, result.count);
+    assertEquals("[Team1]", result.teams.toString());
   }
 
 }
