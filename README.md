@@ -11,8 +11,8 @@ Covers:
 * Sorting
 * Kd-Tree (Nearest neighbor search & 2d range search)
 * Graphs (undirected, directed, weighted, etc)
-* Breadth First Search, Depth First Search
-* A* algorithm (best-first search)
+* BFS (breadth first search), DFS (depth first search)
+* A* algorithm (best first search)
 * Shortest anscestral path
 * Weighted shortest path
 * MaxFlow/MinCut
