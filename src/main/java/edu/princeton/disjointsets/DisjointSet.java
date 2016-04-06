@@ -43,14 +43,10 @@ public class DisjointSet {
   }
 
   public void union(int p, int q) {
-    boolean joint = false;
     int pRoot = findRoot(p);
     int qRoot = findRoot(q);
     if (pRoot != qRoot) {
-      joint = true;
       tree[pRoot] = qRoot;
-    }
-    if (joint) {
       sets--;
     }
   }
