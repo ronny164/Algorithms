@@ -1,5 +1,9 @@
 package edu.princeton.disjointsets;
-
+/**
+ * Basic Disjoint-sets data structure with path compression.
+ * 
+ * @author Ronny A. Pena
+ */
 public class DisjointSet {
 
   private int sets;
@@ -55,6 +59,9 @@ public class DisjointSet {
     return findRoot(p) == findRoot(q);
   }
   
+  /**
+   * @return the number of components.
+   */
   public int sets() {
     return sets;
   }
