@@ -8,7 +8,6 @@ import edu.princeton.cs.algs4.FordFulkerson;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.Map.Entry;
  * 
  * @author Ronny A. Pena
  */
-public class BaseballElimination {
+public class LazyBaseballElimination {
 
   private static final class NetworkSetup {
     private FlowNetwork network;
@@ -49,24 +48,33 @@ public class BaseballElimination {
   private int[] loses;
   private int[] remainingPerTeam;
   private int[][] remainingTeamPairs;
-  private boolean[] eliminated;
-  private Map<Integer, List<String>> certificates;
+  // vertices The number of teams.
+  private int vertices;
+  private int requiredNetworkVertices;
+  private int source;
+  private int sink;
+  private boolean[] calculated;
+  private List<String>[] certificateOfEliminations;
 
   /**
    * Create a baseball division from given filename in format specified below.
    * @param filename The file input data.
    */
-  public BaseballElimination(String filename) {
+  public LazyBaseballElimination(String filename) {
 
     In inputFile = new In(filename);
     int n = Integer.parseInt(inputFile.readLine());
+    vertices = n;
+    requiredNetworkVertices = choose(vertices - 1, 2) + vertices + 2;
+    source = vertices;
+    sink = vertices + 1;
     teamNames = new LinkedHashMap<>();
     wins = new int[n];
     loses = new int[n];
     remainingPerTeam = new int[n];
     remainingTeamPairs = new int[n][n];
-    eliminated = new boolean[n];
-    certificates = new HashMap<>();
+    certificateOfEliminations = new LinkedList[n];
+    calculated = new boolean[n];
 
     for (int team = 0; inputFile.hasNextLine(); team++) {
       String line = inputFile.readLine();
@@ -79,52 +87,46 @@ public class BaseballElimination {
         remainingTeamPairs[team][i] = Integer.parseInt(getNextWord(line, counter));
       }
     }
-    computeEliminations(n);
   }
 
-  /**
-   * Computes the max flow (mathematical eliminations) for team team.
-   * @param vertices The number of teams.
-   */
-  private void computeEliminations(int vertices) {
-    int requiredNetworkVertices = choose(vertices - 1, 2) + vertices + 2;
-    int source = vertices;
-    int sink = vertices + 1;
-    for (int team = 0; team < vertices; team++) {
-      if (!isTrivial(team)) {
-        NetworkSetup setup = buildNetwork(source, team, sink, vertices, requiredNetworkVertices);
-        FordFulkerson maxflow = new FordFulkerson(setup.network, source, sink);
-        if (maxflow.value() < setup.totalOtherRemaining) {
-          createCertificateCut(maxflow, team);
-        }
-      }
+  private List<String> computeElimination(int team) {
+    List<String> eliminationList = trivialElimination(team);
+    if (eliminationList != null) {
+      return eliminationList;
     }
+    // Computes the max flow (mathematical eliminations) for team.
+    NetworkSetup setup = buildNetwork(team);
+    FordFulkerson maxflow = new FordFulkerson(setup.network, source, sink);
+    if (maxflow.value() < setup.totalOtherRemaining) {
+      eliminationList = cutElimination(maxflow, team);
+      return eliminationList;
+    }
+    return null;
   }
 
   /**
    * Builds the flow network.
    */
-  private NetworkSetup buildNetwork(int source, int currentTeam, int sink, int vertices,
-      int requiredNetworkVertices) {
+  private NetworkSetup buildNetwork(int team) {
     int gameVertex = vertices + 2;
     double totalOtherRemaining = 0;
     FlowNetwork network = new FlowNetwork(requiredNetworkVertices);
     for (int team1 = 0; team1 < vertices; team1++) {
-      if (team1 != currentTeam) {
+      if (team1 != team) {
         for (int team2 = team1 + 1; team2 < vertices; team2++) {
-          if (team1 != team2 && team2 != currentTeam) {
-            int reminder = addSourceEdges(network, source, gameVertex, team1, team2);
+          if (team1 != team2 && team2 != team) {
+            int reminder = addSourceEdges(network, gameVertex, team1, team2);
             totalOtherRemaining += reminder;
             gameVertex++;
           }
         }
-        addSinkEdges(network, sink, currentTeam, team1);
+        addSinkEdges(network, team, team1);
       }
     }
     return new NetworkSetup(network, totalOtherRemaining);
   }
 
-  private int addSourceEdges(FlowNetwork network, int source, int gameVertex, int team1, int team2) {
+  private int addSourceEdges(FlowNetwork network, int gameVertex, int team1, int team2) {
     int reminder = remainingTeamPairs[team1][team2];
     network.addEdge(new FlowEdge(source, gameVertex, reminder));
     network.addEdge(new FlowEdge(gameVertex, team1, Double.POSITIVE_INFINITY));
@@ -132,7 +134,7 @@ public class BaseballElimination {
     return reminder;
   }
 
-  private void addSinkEdges(FlowNetwork network, int sink, int mainTeam, int otherTeam) {
+  private void addSinkEdges(FlowNetwork network, int mainTeam, int otherTeam) {
     int avaliableToWin = wins[mainTeam] + remainingPerTeam[mainTeam] - wins[otherTeam];
     network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
   }
@@ -171,36 +173,36 @@ public class BaseballElimination {
     return line.substring(start, counter.tally());
   }
 
-
-  private boolean isTrivial(int currentTeam) {
-    List<String> eliminationNames = new LinkedList<>();
+  private List<String> trivialElimination(int team) {
+    List<String> eliminationNames = null;
     for (Entry<String, Integer> entry : teamNames.entrySet()) {
       int otherTeam = entry.getValue();
-      if (otherTeam != currentTeam) {
-        int avaliableToWin = wins[currentTeam] + remainingPerTeam[currentTeam] - wins[otherTeam];
+      if (otherTeam != team) {
+        int avaliableToWin = wins[team] + remainingPerTeam[team] - wins[otherTeam];
         if (avaliableToWin < 0) {
+          if (eliminationNames == null) {
+            eliminationNames = new LinkedList<>();
+          }
           eliminationNames.add(entry.getKey());
         }
       }
     }
-    if (eliminationNames.size() > 0) {
-      certificates.put(currentTeam, eliminationNames);
-      eliminated[currentTeam] = true;
-      return true;
-    }
-    return false;
+    return eliminationNames;
   }
 
 
-  private void createCertificateCut(FordFulkerson maxflow, int currentTeam) {
-    List<String> eliminationNames = new LinkedList<>();
+  private List<String> cutElimination(FordFulkerson maxflow, int team) {
+    List<String> eliminationNames = null;
     for (Entry<String, Integer> entry : teamNames.entrySet()) {
-      if (maxflow.inCut(entry.getValue())) { // part of the cut
+      int otherTeam = entry.getValue();
+      if (otherTeam != team && maxflow.inCut(otherTeam)) { // part of the cut
+        if (eliminationNames == null) {
+          eliminationNames = new LinkedList<>();
+        }
         eliminationNames.add(entry.getKey());
       }
     }
-    certificates.put(currentTeam, eliminationNames);
-    eliminated[currentTeam] = true;
+    return eliminationNames;
   }
 
   /**
@@ -265,6 +267,13 @@ public class BaseballElimination {
     return remainingTeamPairs[teamNames.get(team1)][teamNames.get(team2)];
   }
 
+  private void lazyCompute(int teamIndex) {
+    if (!calculated[teamIndex]) {
+      certificateOfEliminations[teamIndex] = computeElimination(teamIndex);
+      calculated[teamIndex] = true;
+    }
+  }
+  
   /**
    * @param team The selected team.
    * @return is given team eliminated?
@@ -274,26 +283,30 @@ public class BaseballElimination {
       throw new IllegalArgumentException();
     }
 
-    return eliminated[teamNames.get(team)];
+    int teamIndex = teamNames.get(team);
+    lazyCompute(teamIndex);
+    return certificateOfEliminations[teamIndex] != null;
   }
 
   /**
+   * isEliminated must be called first, otherwise, this will always return null.
+   * 
    * @param team The selected team.
    * @return subset R of teams that eliminates given team; null if not eliminated
    */
   public Iterable<String> certificateOfElimination(String team) {
-    if (isEliminated(team)) {
-      int teamIndex = teamNames.get(team);
-      return certificates.get(teamIndex);
+    if (team == null || !teamNames.containsKey(team)) {
+      throw new IllegalArgumentException();
     }
-    return null;
+    lazyCompute(teamNames.get(team));
+    return certificateOfEliminations[teamNames.get(team)];
   }
 
   /**
    * Main driver.
    */
   public static void main(String[] args) {
-    BaseballElimination division = new BaseballElimination(args[0]);
+    LazyBaseballElimination division = new LazyBaseballElimination(args[0]);
     for (String team : division.teams()) {
       if (division.isEliminated(team)) {
         StdOut.print(team + " is eliminated by the subset R = { ");

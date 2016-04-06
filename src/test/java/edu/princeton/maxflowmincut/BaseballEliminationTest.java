@@ -21,7 +21,7 @@ public class BaseballEliminationTest {
 
   private Result runFile(String fileName) {
     System.out.println(fileName);
-    BaseballElimination problem = new BaseballElimination(fileName);
+    EagerBaseballElimination problem = new EagerBaseballElimination(fileName);
     Result result = new Result();
     for (String team : problem.teams()) {
       if (problem.isEliminated(team)) {
@@ -40,11 +40,11 @@ public class BaseballEliminationTest {
   public void testNextWord() {
     Counter counter = new Counter("");
     String line = "hi there, you know me?";
-    assertEquals("hi", BaseballElimination.getNextWord(line, counter));
-    assertEquals("there,", BaseballElimination.getNextWord(line, counter));
-    assertEquals("you", BaseballElimination.getNextWord(line, counter));
-    assertEquals("know", BaseballElimination.getNextWord(line, counter));
-    assertEquals("me?", BaseballElimination.getNextWord(line, counter));
+    assertEquals("hi", EagerBaseballElimination.getNextWord(line, counter));
+    assertEquals("there,", EagerBaseballElimination.getNextWord(line, counter));
+    assertEquals("you", EagerBaseballElimination.getNextWord(line, counter));
+    assertEquals("know", EagerBaseballElimination.getNextWord(line, counter));
+    assertEquals("me?", EagerBaseballElimination.getNextWord(line, counter));
   }
 
   /**
