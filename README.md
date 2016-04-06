@@ -15,4 +15,4 @@ Covers:
 * A* algorithm (best first search)
 * Shortest anscestral path
 * Weighted shortest path
-* MaxFlow/MinCut
+* Max-flow/min-cut
