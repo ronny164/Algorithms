@@ -9,7 +9,7 @@ Covers:
 * Red-black BST
 * Hashtables
 * Sorting
-* Kd-Tree (Nearest neighbor search & 2d range search)
+* Kd-Tree (2d Nearest neighbor search & range search)
 * Graphs (undirected, directed, weighted, etc)
 * BFS (breadth first search), DFS (depth first search)
 * A* algorithm (best first search)
