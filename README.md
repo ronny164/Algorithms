@@ -12,7 +12,7 @@ Covers:
 * Kd-Tree (2d Nearest neighbor search & range search)
 * Graphs (undirected, directed, weighted, etc)
 * BFS (breadth first search), DFS (depth first search)
-* A* algorithm (best first search) game tree.
+* A* algorithm (best first search), game tree
 * Shortest anscestral path
 * Weighted shortest path
 * Max-flow/min-cut
