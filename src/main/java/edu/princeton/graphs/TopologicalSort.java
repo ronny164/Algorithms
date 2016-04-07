@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * 
@@ -22,7 +21,6 @@ public class TopologicalSort {
       throw new IllegalArgumentException();
     }
     Deque<Integer> ordered = new LinkedList<>();
-    List<Integer> startVertices = new LinkedList<>();
     boolean[] visited = new boolean[graph.V()];
     for (int root = graph.V() - 1; root >= 0; root--) {
       if (graph.indegree(root) == 0) {
