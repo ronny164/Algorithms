@@ -43,18 +43,33 @@ public class LazyBaseballElimination {
     }
   }
 
-  private Map<String, Integer> teamNames;
-  private int[] wins;
-  private int[] loses;
-  private int[] remainingPerTeam;
-  private int[][] remainingTeamPairs;
+  private static final class Team {
+    private int index;
+    private int wins;
+    private int loses;
+    private int remaining;
+    private int[] remainingPerTeam;
+    private List<String> certificates;
+    private boolean calculated;
+
+    public Team(int index, int wins, int loses, int remaining, int[] remainingPerTeam) {
+      super();
+      this.index = index;
+      this.wins = wins;
+      this.loses = loses;
+      this.remaining = remaining;
+      this.remainingPerTeam = remainingPerTeam;
+    }
+  }
+
+  private Map<String, Integer> names;
+  private Team[] teams;
+
   // vertices The number of teams.
   private int vertices;
   private int requiredNetworkVertices;
   private int source;
   private int sink;
-  private boolean[] calculated;
-  private List<String>[] certificateOfEliminations;
 
   /**
    * Create a baseball division from given filename in format specified below.
@@ -68,24 +83,21 @@ public class LazyBaseballElimination {
     requiredNetworkVertices = choose(vertices - 1, 2) + vertices + 2;
     source = vertices;
     sink = vertices + 1;
-    teamNames = new LinkedHashMap<>();
-    wins = new int[n];
-    loses = new int[n];
-    remainingPerTeam = new int[n];
-    remainingTeamPairs = new int[n][n];
-    certificateOfEliminations = new LinkedList[n];
-    calculated = new boolean[n];
+    names = new LinkedHashMap<>();
 
     for (int team = 0; inputFile.hasNextLine(); team++) {
       String line = inputFile.readLine();
       Counter counter = new Counter("");
-      teamNames.put(getNextWord(line, counter), team);
-      wins[team] = Integer.parseInt(getNextWord(line, counter));
-      loses[team] = Integer.parseInt(getNextWord(line, counter));
-      remainingPerTeam[team] = Integer.parseInt(getNextWord(line, counter));
+      String name = getNextWord(line, counter);
+      int wins = Integer.parseInt(getNextWord(line, counter));
+      int loses = Integer.parseInt(getNextWord(line, counter));
+      int remaining = Integer.parseInt(getNextWord(line, counter));
+      int[] remainingPerTeam = new int[n];
       for (int i = 0; i < n; i++) {
-        remainingTeamPairs[team][i] = Integer.parseInt(getNextWord(line, counter));
+        remainingPerTeam[i] = Integer.parseInt(getNextWord(line, counter));
       }
+      teams[team] = new Team(team, wins, loses, remaining, remainingPerTeam);
+      names.put(name, team);
     }
   }
 
@@ -127,7 +139,7 @@ public class LazyBaseballElimination {
   }
 
   private int addSourceEdges(FlowNetwork network, int gameVertex, int team1, int team2) {
-    int reminder = remainingTeamPairs[team1][team2];
+    int reminder = teams[team1].remainingPerTeam[team2];
     network.addEdge(new FlowEdge(source, gameVertex, reminder));
     network.addEdge(new FlowEdge(gameVertex, team1, Double.POSITIVE_INFINITY));
     network.addEdge(new FlowEdge(gameVertex, team2, Double.POSITIVE_INFINITY));
@@ -135,7 +147,7 @@ public class LazyBaseballElimination {
   }
 
   private void addSinkEdges(FlowNetwork network, int mainTeam, int otherTeam) {
-    int avaliableToWin = wins[mainTeam] + remainingPerTeam[mainTeam] - wins[otherTeam];
+    int avaliableToWin = teams[mainTeam].wins + teams[mainTeam].remaining - teams[otherTeam].wins;
     network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
   }
 
@@ -175,10 +187,10 @@ public class LazyBaseballElimination {
 
   private List<String> trivialElimination(int team) {
     List<String> eliminationNames = null;
-    for (Entry<String, Integer> entry : teamNames.entrySet()) {
+    for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != team) {
-        int avaliableToWin = wins[team] + remainingPerTeam[team] - wins[otherTeam];
+        int avaliableToWin = teams[team].wins + teams[team].remaining - teams[otherTeam].wins;
         if (avaliableToWin < 0) {
           if (eliminationNames == null) {
             eliminationNames = new LinkedList<>();
@@ -193,7 +205,7 @@ public class LazyBaseballElimination {
 
   private List<String> cutElimination(FordFulkerson maxflow, int team) {
     List<String> eliminationNames = null;
-    for (Entry<String, Integer> entry : teamNames.entrySet()) {
+    for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != team && maxflow.inCut(otherTeam)) { // part of the cut
         if (eliminationNames == null) {
@@ -209,14 +221,14 @@ public class LazyBaseballElimination {
    * @return The number of teams.
    */
   public int numberOfTeams() {
-    return teamNames.size();
+    return names.size();
   }
 
   /**
    * @return All the teams.
    */
   public Iterable<String> teams() {
-    return teamNames.keySet();
+    return names.keySet();
   }
 
   /**
@@ -224,10 +236,10 @@ public class LazyBaseballElimination {
    * @return The number of wins for given team.
    */
   public int wins(String team) {
-    if (team == null || !teamNames.containsKey(team)) {
+    if (team == null || team.length() == 0 || !names.containsKey(team)) {
       throw new IllegalArgumentException();
     }
-    return wins[teamNames.get(team)];
+    return teams[names.get(team)].wins;
   }
 
   /**
@@ -235,10 +247,10 @@ public class LazyBaseballElimination {
    * @return The number of losses for given team.
    */
   public int losses(String team) {
-    if (team == null || !teamNames.containsKey(team)) {
+    if (team == null || team.length() == 0 || !names.containsKey(team)) {
       throw new IllegalArgumentException();
     }
-    return loses[teamNames.get(team)];
+    return teams[names.get(team)].loses;
   }
 
   /**
@@ -246,46 +258,31 @@ public class LazyBaseballElimination {
    * @return number of remaining games for given team.
    */
   public int remaining(String team) {
-    if (team == null || !teamNames.containsKey(team)) {
+    if (team == null || team.length() == 0 || !names.containsKey(team)) {
       throw new IllegalArgumentException();
     }
-    return remainingPerTeam[teamNames.get(team)];
-  }
-
-  /**
-   * @param team1 The selected team.
-   * @param team2 The other team.
-   * @return number of remaining games between team1 and team2.
-   */
-  public int against(String team1, String team2) {
-    if (team1 == null || !teamNames.containsKey(team1)) {
-      throw new IllegalArgumentException();
-    }
-    if (team2 == null || !teamNames.containsKey(team2)) {
-      throw new IllegalArgumentException();
-    }
-    return remainingTeamPairs[teamNames.get(team1)][teamNames.get(team2)];
+    return teams[names.get(team)].remaining;
   }
 
   private void lazyCompute(int teamIndex) {
-    if (!calculated[teamIndex]) {
-      certificateOfEliminations[teamIndex] = computeElimination(teamIndex);
-      calculated[teamIndex] = true;
+    if (!teams[teamIndex].calculated) {
+      teams[teamIndex].certificates = computeElimination(teamIndex);
+      teams[teamIndex].calculated = true;
     }
   }
-  
+
   /**
    * @param team The selected team.
    * @return is given team eliminated?
    */
   public boolean isEliminated(String team) {
-    if (team == null || !teamNames.containsKey(team)) {
+    if (team == null || !names.containsKey(team)) {
       throw new IllegalArgumentException();
     }
 
-    int teamIndex = teamNames.get(team);
+    int teamIndex = names.get(team);
     lazyCompute(teamIndex);
-    return certificateOfEliminations[teamIndex] != null;
+    return teams[teamIndex].certificates != null;
   }
 
   /**
@@ -295,11 +292,27 @@ public class LazyBaseballElimination {
    * @return subset R of teams that eliminates given team; null if not eliminated
    */
   public Iterable<String> certificateOfElimination(String team) {
-    if (team == null || !teamNames.containsKey(team)) {
+    if (team == null || !names.containsKey(team)) {
       throw new IllegalArgumentException();
     }
-    lazyCompute(teamNames.get(team));
-    return certificateOfEliminations[teamNames.get(team)];
+    Integer teamIndex = names.get(team);
+    lazyCompute(teamIndex);
+    return teams[teamIndex].certificates;
+  }
+
+  /**
+   * @param team1 The selected team.
+   * @param team2 The other team.
+   * @return number of remaining games between team1 and team2.
+   */
+  public int against(String team1, String team2) {
+    if (team1 == null || team1.length() == 0 || !names.containsKey(team1)) {
+      throw new IllegalArgumentException();
+    }
+    if (team2 == null || team2.length() == 0 || !names.containsKey(team2)) {
+      throw new IllegalArgumentException();
+    }
+    return teams[names.get(team1)].remainingPerTeam[names.get(team2)];
   }
 
   /**
