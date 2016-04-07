@@ -71,21 +71,6 @@ public class LazyBaseballElimination {
     loadTeamData(inputFile, names, teams);
   }
 
-  private List<String> computeElimination(int team) {
-    List<String> eliminationList = trivialElimination(team);
-    if (eliminationList != null) {
-      return eliminationList;
-    }
-    // Computes the max flow (mathematical eliminations) for team.
-    NetworkSetup setup = buildNetwork(team);
-    FordFulkerson maxflow = new FordFulkerson(setup.network, source, sink);
-    if (maxflow.value() < setup.totalOtherRemaining) {
-      eliminationList = cutElimination(maxflow, team);
-      return eliminationList;
-    }
-    return null;
-  }
-
   /**
    * Builds the flow network.
    */
@@ -120,6 +105,21 @@ public class LazyBaseballElimination {
     int avaliableToWin = teams[mainTeam].wins + teams[mainTeam].remaining - teams[otherTeam].wins;
     network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
   }
+
+  private List<String> computeElimination(int team) {
+    List<String> eliminationList = trivialElimination(team);
+    if (eliminationList != null) {
+      return eliminationList;
+    }
+    // Computes the max flow (mathematical eliminations) for team.
+    NetworkSetup setup = buildNetwork(team);
+    FordFulkerson maxflow = new FordFulkerson(setup.network, source, sink);
+    if (maxflow.value() < setup.totalOtherRemaining) {
+      eliminationList = cutElimination(maxflow, team);
+      return eliminationList;
+    }
+    return null;
+  }
   
   private List<String> trivialElimination(int team) {
     List<String> eliminationNames = null;
@@ -152,6 +152,44 @@ public class LazyBaseballElimination {
     }
     return eliminationNames;
   }
+
+
+  private void lazyComputeElimination(int teamIndex) {
+    if (!teams[teamIndex].calculated) {
+      teams[teamIndex].eliminatedBy = computeElimination(teamIndex);
+      teams[teamIndex].calculated = true;
+    }
+  }
+
+  /**
+   * @param team The selected team.
+   * @return is given team eliminated?
+   */
+  public boolean isEliminated(String team) {
+    if (team == null || !names.containsKey(team)) {
+      throw new IllegalArgumentException();
+    }
+
+    int teamIndex = names.get(team);
+    lazyComputeElimination(teamIndex);
+    return teams[teamIndex].eliminatedBy != null;
+  }
+
+  /**
+   * isEliminated must be called first, otherwise, this will always return null.
+   * 
+   * @param team The selected team.
+   * @return subset R of teams that eliminates given team; null if not eliminated
+   */
+  public Iterable<String> certificateOfElimination(String team) {
+    if (team == null || !names.containsKey(team)) {
+      throw new IllegalArgumentException();
+    }
+    Integer teamIndex = names.get(team);
+    lazyComputeElimination(teamIndex);
+    return teams[teamIndex].eliminatedBy;
+  }
+
 
   /**
    * @return The number of teams.
@@ -199,43 +237,6 @@ public class LazyBaseballElimination {
     }
     return teams[names.get(team)].remaining;
   }
-
-  private void lazyCompute(int teamIndex) {
-    if (!teams[teamIndex].calculated) {
-      teams[teamIndex].eliminatedBy = computeElimination(teamIndex);
-      teams[teamIndex].calculated = true;
-    }
-  }
-
-  /**
-   * @param team The selected team.
-   * @return is given team eliminated?
-   */
-  public boolean isEliminated(String team) {
-    if (team == null || !names.containsKey(team)) {
-      throw new IllegalArgumentException();
-    }
-
-    int teamIndex = names.get(team);
-    lazyCompute(teamIndex);
-    return teams[teamIndex].eliminatedBy != null;
-  }
-
-  /**
-   * isEliminated must be called first, otherwise, this will always return null.
-   * 
-   * @param team The selected team.
-   * @return subset R of teams that eliminates given team; null if not eliminated
-   */
-  public Iterable<String> certificateOfElimination(String team) {
-    if (team == null || !names.containsKey(team)) {
-      throw new IllegalArgumentException();
-    }
-    Integer teamIndex = names.get(team);
-    lazyCompute(teamIndex);
-    return teams[teamIndex].eliminatedBy;
-  }
-
   /**
    * @param team1 The selected team.
    * @param team2 The other team.

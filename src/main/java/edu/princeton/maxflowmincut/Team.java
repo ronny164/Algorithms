@@ -1,6 +1,11 @@
 package edu.princeton.maxflowmincut;
 
-public class Team {
+/**
+ * Not part of any API. Used internally between baseball elimation methods. Package scoped.
+ * @author Ronny A. Pena
+ *
+ */
+class Team {
   int index;
   int wins;
   int loses;
