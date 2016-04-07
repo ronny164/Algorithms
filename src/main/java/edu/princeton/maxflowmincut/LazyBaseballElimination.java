@@ -1,7 +1,8 @@
 package edu.princeton.maxflowmincut;
 
+import static edu.princeton.maxflowmincut.MaxFlowUtil.choose;
+import static edu.princeton.maxflowmincut.MaxFlowUtil.loadTeamData;
 
-import edu.princeton.cs.algs4.Counter;
 import edu.princeton.cs.algs4.FlowEdge;
 import edu.princeton.cs.algs4.FlowNetwork;
 import edu.princeton.cs.algs4.FordFulkerson;
@@ -43,25 +44,6 @@ public class LazyBaseballElimination {
     }
   }
 
-  private static final class Team {
-    private int index;
-    private int wins;
-    private int loses;
-    private int remaining;
-    private int[] remainingPerTeam;
-    private List<String> certificates;
-    private boolean calculated;
-
-    public Team(int index, int wins, int loses, int remaining, int[] remainingPerTeam) {
-      super();
-      this.index = index;
-      this.wins = wins;
-      this.loses = loses;
-      this.remaining = remaining;
-      this.remainingPerTeam = remainingPerTeam;
-    }
-  }
-
   private Map<String, Integer> names;
   private Team[] teams;
 
@@ -76,7 +58,9 @@ public class LazyBaseballElimination {
    * @param filename The file input data.
    */
   public LazyBaseballElimination(String filename) {
-
+    if (filename == null || filename.length() == 0) {
+      throw new IllegalArgumentException();
+    }
     In inputFile = new In(filename);
     int n = Integer.parseInt(inputFile.readLine());
     vertices = n;
@@ -84,21 +68,7 @@ public class LazyBaseballElimination {
     source = vertices;
     sink = vertices + 1;
     names = new LinkedHashMap<>();
-
-    for (int team = 0; inputFile.hasNextLine(); team++) {
-      String line = inputFile.readLine();
-      Counter counter = new Counter("");
-      String name = getNextWord(line, counter);
-      int wins = Integer.parseInt(getNextWord(line, counter));
-      int loses = Integer.parseInt(getNextWord(line, counter));
-      int remaining = Integer.parseInt(getNextWord(line, counter));
-      int[] remainingPerTeam = new int[n];
-      for (int i = 0; i < n; i++) {
-        remainingPerTeam[i] = Integer.parseInt(getNextWord(line, counter));
-      }
-      teams[team] = new Team(team, wins, loses, remaining, remainingPerTeam);
-      names.put(name, team);
-    }
+    loadTeamData(inputFile, names, teams);
   }
 
   private List<String> computeElimination(int team) {
@@ -150,41 +120,7 @@ public class LazyBaseballElimination {
     int avaliableToWin = teams[mainTeam].wins + teams[mainTeam].remaining - teams[otherTeam].wins;
     network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
   }
-
-  /**
-   * Combinations without Repetition.
-   * @param n Things to choose from.
-   * @param r Choosing r of them.
-   * @return The number of possibilities.
-   */
-  private static int choose(int n, int r) {
-    int total = 1;
-    for (int i = 0; i < r; i++) {
-      total = (total * (n - i)) / (i + 1);
-    }
-    return total;
-  }
-
-  /**
-   * @return The next word in the string. Separated by spaces.
-   */
-  static String getNextWord(String line, Counter counter) {
-    if (counter.tally() >= line.length()) {
-      throw new IllegalArgumentException("Reached the end of the string.");
-    }
-    // move to the start of the next word.
-    while (counter.tally() < line.length() && line.charAt(counter.tally()) == ' ') {
-      counter.increment();
-    }
-    int start = counter.tally();
-
-    // find the end of a word
-    while (counter.tally() < line.length() && line.charAt(counter.tally()) != ' ') {
-      counter.increment();
-    }
-    return line.substring(start, counter.tally());
-  }
-
+  
   private List<String> trivialElimination(int team) {
     List<String> eliminationNames = null;
     for (Entry<String, Integer> entry : names.entrySet()) {
@@ -266,7 +202,7 @@ public class LazyBaseballElimination {
 
   private void lazyCompute(int teamIndex) {
     if (!teams[teamIndex].calculated) {
-      teams[teamIndex].certificates = computeElimination(teamIndex);
+      teams[teamIndex].eliminatedBy = computeElimination(teamIndex);
       teams[teamIndex].calculated = true;
     }
   }
@@ -282,7 +218,7 @@ public class LazyBaseballElimination {
 
     int teamIndex = names.get(team);
     lazyCompute(teamIndex);
-    return teams[teamIndex].certificates != null;
+    return teams[teamIndex].eliminatedBy != null;
   }
 
   /**
@@ -297,7 +233,7 @@ public class LazyBaseballElimination {
     }
     Integer teamIndex = names.get(team);
     lazyCompute(teamIndex);
-    return teams[teamIndex].certificates;
+    return teams[teamIndex].eliminatedBy;
   }
 
   /**

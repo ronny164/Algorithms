@@ -1,6 +1,9 @@
 package edu.princeton.maxflowmincut;
 
+
+import static edu.princeton.maxflowmincut.MaxFlowUtil.getNextWord;
 import static org.junit.Assert.assertEquals;
+
 import edu.princeton.cs.algs4.Counter;
 
 import org.junit.Test;
@@ -9,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
 public class BaseballEliminationTest {
 
   private static final class Result {
@@ -40,11 +41,11 @@ public class BaseballEliminationTest {
   public void testNextWord() {
     Counter counter = new Counter("");
     String line = "hi there, you know me?";
-    assertEquals("hi", EagerBaseballElimination.getNextWord(line, counter));
-    assertEquals("there,", EagerBaseballElimination.getNextWord(line, counter));
-    assertEquals("you", EagerBaseballElimination.getNextWord(line, counter));
-    assertEquals("know", EagerBaseballElimination.getNextWord(line, counter));
-    assertEquals("me?", EagerBaseballElimination.getNextWord(line, counter));
+    assertEquals("hi", getNextWord(line, counter));
+    assertEquals("there,", getNextWord(line, counter));
+    assertEquals("you", getNextWord(line, counter));
+    assertEquals("know", getNextWord(line, counter));
+    assertEquals("me?", getNextWord(line, counter));
   }
 
   /**
@@ -111,5 +112,4 @@ public class BaseballEliminationTest {
     assertEquals("[Team0, Team1, Team2, Team3, Team5, Team6, Team7, Team8, Team9, Team10]",
         result.teams.toString());
   }
-
 }
