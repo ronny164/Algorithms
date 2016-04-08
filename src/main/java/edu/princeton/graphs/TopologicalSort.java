@@ -25,13 +25,16 @@ public class TopologicalSort {
   }
 
   private static void dfs(Digraph graph, int v, boolean[] visited, Deque<Integer> ordered) {
+
+    if (visited[v]) { //base case, already visited.s
+      return;
+    }
+    
     visited[v] = true;
     Iterable<Integer> adj = graph.adj(v);
-    if (adj != null) {
+    if (graph.outdegree(v) > 0) { // has children.
       for (int w : adj) {
-        if (!visited[w]) {
-          dfs(graph, w, visited, ordered);
-        }
+        dfs(graph, w, visited, ordered);
       }
     }
     ordered.push(v);

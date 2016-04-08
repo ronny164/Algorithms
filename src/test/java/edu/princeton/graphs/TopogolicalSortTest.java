@@ -20,10 +20,21 @@ public class TopogolicalSortTest {
     }
     return graph;
   }
-  
+
+/*
+ * <pre>
+    (0)----->(1)<-----(2)----->(3) 
+     ^\       ^       ^|\       |  
+     |  \     |      / |  \     |  
+     |    \   |    /   |    \   |  
+     |      \ |  /     |      \ |  
+     |       v|/       v       vv  
+    (4)----->(5)----->(6)<-----(7)
+    </pre>
+ */
   @Test
   public void testBasic() {
-    Digraph graph = createGraph(new int[][]{{1,5},{}, {3,1,6,7},{7}, {0,5}, {6,1,2}, {}, {6}});
+    Digraph graph = createGraph(new int[][]{{1, 5}, {}, {3, 1, 6, 7}, {7}, {0, 5}, {6, 1, 2}, {}, {6}});
     System.out.println(graph);
     assertEquals("[4, 0, 5, 2, 3, 7, 6, 1]", TopologicalSort.sort(graph).toString());
   }
