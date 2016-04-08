@@ -1,6 +1,6 @@
-# Princeton-Algorithms
+# Princeton: algorithms course
 
-Programming exercise from the Princenton algorithms course in Coursera.
+Programming exercise from the course in Coursera.
 
 Covers:
 * Disjoint-sets
