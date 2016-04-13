@@ -1,4 +1,4 @@
-package edu.princeton.shortestpath;
+package edu.princeton.shortestancestor;
 
 import java.util.Collection;
 import java.util.HashMap;

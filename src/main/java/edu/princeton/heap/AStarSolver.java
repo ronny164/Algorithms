@@ -72,7 +72,7 @@ public class AStarSolver {
         SearchNode node = temp;
         while (node != null) {
           path.addFirst(node.board);
-          node = node.previous;
+          node = node.previous; // back tracking
         }
       }
       return path;

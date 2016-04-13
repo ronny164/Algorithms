@@ -1,4 +1,4 @@
-package edu.princeton.shortestpath;
+package edu.princeton.shortestancestor;
 
 import edu.princeton.cs.algs4.Digraph;
 

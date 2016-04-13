@@ -141,8 +141,10 @@ public class EagerBaseballElimination {
   private void createCertificateCut(FordFulkerson maxflow, int currentTeam) {
     List<String> eliminationNames = new LinkedList<>();
     for (Entry<String, Integer> entry : names.entrySet()) {
-      if (maxflow.inCut(entry.getValue())) { // part of the cut
-        eliminationNames.add(entry.getKey());
+      int otherTeam = entry.getValue();
+      if (maxflow.inCut(otherTeam)) { // part of the cut
+        String otherTeamName = entry.getKey();
+        eliminationNames.add(otherTeamName);
       }
     }
     teams[currentTeam].eliminatedBy = eliminationNames;

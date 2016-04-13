@@ -1,4 +1,4 @@
-package edu.princeton.shortestpath;
+package edu.princeton.shortestancestor;
 
 /**
  * Finds words that are outcast in the  wordNet.
