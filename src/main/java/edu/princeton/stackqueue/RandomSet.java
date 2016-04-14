@@ -27,12 +27,11 @@ public class RandomSet<T> {
   }
 
   public void add(T value) {
-    if (value == null) {
-      throw new NullPointerException();
+    if (!contains(value)) {
+      int key = values.size();
+      valueIndexes.put(value, key);
+      values.add(value);
     }
-    int key = values.size();
-    valueIndexes.put(value, key);
-    values.add(value);
   }
 
   public boolean contains(T value) {
@@ -67,7 +66,7 @@ public class RandomSet<T> {
   }
 
   private T deleteValue(int currentIndex) {
-    // remove the current element in the array, swap with the last, 
+    // remove the current element in the array, swap with the last,
     // and update the new index value in the map.
     T currentValue = values.get(currentIndex);
     int lastIndex = values.size() - 1;
