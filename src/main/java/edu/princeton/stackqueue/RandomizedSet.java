@@ -14,13 +14,13 @@ import java.util.Random;
  * @author Ronny A. Pena
  * @param <T>
  */
-public class RandomSet<T> {
+public class RandomizedSet<T> {
 
   private Map<T, Integer> valueIndexes;
   private List<T> values;
   private Random rand;
 
-  public RandomSet() {
+  public RandomizedSet() {
     valueIndexes = new HashMap<>();
     values = new ArrayList<>();
     rand = new Random(System.currentTimeMillis());

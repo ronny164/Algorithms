@@ -4,12 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class RandomSetTest {
+public class RandomizedSetTest {
 
 
   @Test
   public void testBasic() {
-    RandomSet<Character> set = new RandomSet<>();
+    RandomizedSet<Character> set = new RandomizedSet<>();
     for (char val = 'A'; val <= 'Z'; val++) {
       set.add(val);
     }
