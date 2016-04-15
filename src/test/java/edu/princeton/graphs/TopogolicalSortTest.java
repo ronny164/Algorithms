@@ -2,40 +2,33 @@ package edu.princeton.graphs;
 
 import static org.junit.Assert.assertEquals;
 
-import edu.princeton.cs.algs4.Digraph;
-
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class TopogolicalSortTest {
 
-  private static Digraph createGraph(int[][] adjList) {
-    Digraph graph = new Digraph(adjList.length);
-    int v = 0;
-    for (int[] currentVertex : adjList) {
-      for (int i = currentVertex.length - 1; i >= 0; i--) {
-        int w = currentVertex[i];
-        graph.addEdge(v, w);
-      }
-      v++;
-    }
-    return graph;
-  }
-
-/*
- * <pre>
-    (0)----->(1)<-----(2)----->(3) 
-     ^\       ^       ^|\       |  
-     |  \     |      / |  \     |  
-     |    \   |    /   |    \   |  
-     |      \ |  /     |      \ |  
-     |       v|/       v       vv  
-    (4)----->(5)----->(6)<-----(7)
-    </pre>
- */
+  /**
+  <pre>
+      (A)----->(B)<-----(C)----->(D) 
+       ^\       ^       ^|\       |  
+       |  \     |      / |  \     |  
+       |    \   |    /   |    \   |  
+       |      \ |  /     |      \ |  
+       |       v|/       v       vv  
+      (E)----->(F)----->(G)<-----(H)
+  </pre>
+   */
   @Test
   public void testBasic() {
-    Digraph graph = createGraph(new int[][]{{1, 5}, {}, {3, 1, 6, 7}, {7}, {0, 5}, {6, 1, 2}, {}, {6}});
+    MultiMap<Character, Character> graph = new MultiMap<>();
+    graph.put('A', Arrays.asList('B', 'F'));
+    graph.put('C', Arrays.asList('B', 'D', 'G',  'H'));
+    graph.put('D', 'H');
+    graph.put('E', Arrays.asList('A', 'F'));
+    graph.put('F', Arrays.asList('B', 'C', 'G'));
+    graph.put('H', 'G');
     System.out.println(graph);
-    assertEquals("[4, 0, 5, 2, 3, 7, 6, 1]", TopologicalSort.sort(graph).toString());
+    assertEquals("[E, A, F, C, D, H, G, B]", TopologicalSort.sort(graph).toString());
   }
 }

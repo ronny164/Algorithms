@@ -1,42 +1,40 @@
 package edu.princeton.graphs;
 
-import edu.princeton.cs.algs4.Digraph;
-
+import java.util.Collection;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * @author Ronny A. Pena
  */
 public class TopologicalSort {
 
-  public static Iterable<Integer> sort(Digraph graph) {
-    if (graph == null || graph.V() == 0) {
+  public static <V> Iterable<V> sort(MultiMap<V, V> graph) {
+    if (graph == null || graph.size() == 0) {
       throw new IllegalArgumentException();
     }
-    Deque<Integer> ordered = new LinkedList<>();
-    boolean[] visited = new boolean[graph.V()];
-    for (int root = graph.V() - 1; root >= 0; root--) {
-      if (graph.indegree(root) == 0) {
-        dfs(graph, root, visited, ordered);
+    Deque<V> stack = new LinkedList<>();
+    Set<V> visited = new HashSet<>();
+    for (V root : graph.keySet()) {
+      if (!visited.contains(root)) {
+        dfs(root, graph, stack, visited);
       }
     }
-    return ordered;
+    return stack;
   }
 
-  private static void dfs(Digraph graph, int v, boolean[] visited, Deque<Integer> ordered) {
-
-    if (visited[v]) { //base case, already visited.s
-      return;
-    }
-    
-    visited[v] = true;
-    Iterable<Integer> adj = graph.adj(v);
-    if (graph.outdegree(v) > 0) { // has children.
-      for (int w : adj) {
-        dfs(graph, w, visited, ordered);
+  private static <V> void dfs(V root, MultiMap<V, V> graph, Deque<V> stack, Set<V> visited) {
+    visited.add(root);
+    Collection<V> adjVertices = graph.getValues(root);
+    if (adjVertices != null) { // has children.
+      for (V w : adjVertices) {
+        if (!visited.contains(w)) {
+          dfs(w, graph, stack, visited);
+        }
       }
     }
-    ordered.push(v);
+    stack.push(root);
   }
 }
