@@ -14,6 +14,7 @@ class Team {
   boolean eliminated;
   boolean calculated;
   Iterable<String> eliminatedBy;
+
   public Team(int index, int wins, int loses, int remaining, int[] remainingPerTeam) {
     super();
     this.index = index;
@@ -21,5 +22,5 @@ class Team {
     this.loses = loses;
     this.remaining = remaining;
     this.remainingPerTeam = remainingPerTeam;
-  } 
+  }
 }

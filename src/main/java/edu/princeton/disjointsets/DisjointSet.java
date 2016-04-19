@@ -1,4 +1,5 @@
 package edu.princeton.disjointsets;
+
 /**
  * Basic Disjoint-sets data structure with path compression.
  * 
@@ -58,7 +59,7 @@ public class DisjointSet {
   public boolean isConnected(int p, int q) {
     return findRoot(p) == findRoot(q);
   }
-  
+
   /**
    * @return the number of components.
    */

@@ -39,7 +39,7 @@ public class SeamCarver {
 
   private int[] computeShortestPath() {
     // look at the top row, select all the pixels as the starting point
-    // traversal up while looking at the bottom left, bottom, and  bottom right pixel energy 
+    // traversal up while looking at the bottom left, bottom, and bottom right pixel energy
     // and selecting the smallest total accumulated energy in the end.
     int localHeight = internalHeight();
     int localWidth = internalWidth();
@@ -52,7 +52,7 @@ public class SeamCarver {
 
     // In this case, The shortest path is the path with the lowest energy.
     // for current column, compute shortest path to any of the bottom column and keep that.
-    // an edge is this case, is a pair of image pixel. 
+    // an edge is this case, is a pair of image pixel.
     for (int row = 1; row < localHeight; row++) {
       Arrays.fill(distTo[row], Double.POSITIVE_INFINITY);
       int prevRow = row - 1;
@@ -76,8 +76,8 @@ public class SeamCarver {
     return buildSeamFromPath(minVertex, edgeTo);
   }
 
-  private void relaxEdge(double[][] distTo, int[][] edgeTo, 
-      int prevRow, int prevCol, int row, int col) {
+  private void relaxEdge(double[][] distTo, int[][] edgeTo, int prevRow, int prevCol, int row,
+      int col) {
     double prevTotalDistance = distTo[prevRow][prevCol];
     double currentTotalDistance = distTo[row][col];
     double edgeDistance = getEnergy(row, col);
@@ -120,7 +120,7 @@ public class SeamCarver {
 
   private void remove(int[] seam, int newHeight, int newWidth) {
     int localWidth = internalWidth();
-    //validate the seam
+    // validate the seam
     for (int i = 0; i < seam.length; i++) {
       int val = seam[i];
       if (val < 0 || val >= localWidth) {
@@ -131,7 +131,7 @@ public class SeamCarver {
             + Arrays.toString(seam));
       }
     }
-    //shift the array, row-order or col-order
+    // shift the array, row-order or col-order
     int localHeight = internalHeight();
     for (int i = 0; i < localHeight; i++) {
       for (int j = seam[i]; j < localWidth - 1; j++) {
@@ -188,7 +188,7 @@ public class SeamCarver {
     transposed = true;
     remove(seam, height - 1, width);
   }
-  
+
   /**
    * @return The current picture.
    */
@@ -217,6 +217,7 @@ public class SeamCarver {
   private int internalHeight() {
     return (transposed) ? width : height;
   }
+
   private double getEnergy(int row, int col) {
     return (transposed) ? vertices[col][row].energy : vertices[row][col].energy;
   }

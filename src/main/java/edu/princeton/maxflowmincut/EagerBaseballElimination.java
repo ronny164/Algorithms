@@ -43,7 +43,7 @@ public class EagerBaseballElimination {
       this.totalOtherRemaining = totalOtherRemaining;
     }
   }
- 
+
   private Map<String, Integer> names;
   private Team[] teams;
 
@@ -123,7 +123,8 @@ public class EagerBaseballElimination {
     for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != currentTeam) {
-        int avaliableToWin = teams[currentTeam].wins + teams[currentTeam].remaining - teams[otherTeam].wins;
+        int avaliableToWin =
+            teams[currentTeam].wins + teams[currentTeam].remaining - teams[otherTeam].wins;
         if (avaliableToWin < 0) {
           eliminationNames.add(entry.getKey());
         }

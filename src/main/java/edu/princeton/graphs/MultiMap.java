@@ -26,11 +26,11 @@ public class MultiMap<K, V> {
     }
     return values;
   }
-  
+
   public void put(K key, V val) {
     get(key).add(val);
   }
-  
+
   public void put(K key, Collection<V> val) {
     get(key).addAll(val);
   }

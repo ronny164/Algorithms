@@ -30,8 +30,7 @@ public class AStarSolver {
       SearchNode searchNode = minQueue.remove();
       for (Board neighbor : searchNode.board.neighbors()) {
         if (searchNode.previous == null || !searchNode.previous.board.equals(neighbor)) {
-          minQueue.add(new SearchNode(neighbor, searchNode, searchNode.moves + 1,
-              searchNode.twin));
+          minQueue.add(new SearchNode(neighbor, searchNode, searchNode.moves + 1, searchNode.twin));
         }
       }
       // did we find a solution?

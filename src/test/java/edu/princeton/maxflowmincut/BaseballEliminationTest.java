@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 public class BaseballEliminationTest {
 
   private static final class Result {
@@ -71,8 +72,7 @@ public class BaseballEliminationTest {
     Result result = runFile("./src/test/resources/baseball/teams4a.txt");
     assertEquals(2, result.count);
     assertEquals("[Ghaddafi, Bin_Ladin]", result.teams.toString());
-    assertEquals("{Ghaddafi=[CIA, Obama], Bin_Ladin=[Obama]}",
-        result.eliminations.toString());
+    assertEquals("{Ghaddafi=[CIA, Obama], Bin_Ladin=[Obama]}", result.eliminations.toString());
   }
 
   @Test

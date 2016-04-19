@@ -16,7 +16,7 @@ public class Deque<T> implements Iterable<T> {
   private static class Node<T> {
 
     private T val;
-    private Node<T> next; 
+    private Node<T> next;
     private Node<T> previous;
 
     public Node(T item) {

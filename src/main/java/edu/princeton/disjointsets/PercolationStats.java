@@ -65,10 +65,10 @@ public class PercolationStats {
    * @return high endpoint of 95% confidence interval
    */
   public double confidenceHi() {
-        double a = stddev();
-        double u = mean();
-        return u + ((1.96 * a) / Math.sqrt(samples.length));
-    }
+    double a = stddev();
+    double u = mean();
+    return u + ((1.96 * a) / Math.sqrt(samples.length));
+  }
 
   /**
    * test client (described below)

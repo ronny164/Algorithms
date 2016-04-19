@@ -120,7 +120,7 @@ public class LazyBaseballElimination {
     }
     return null;
   }
-  
+
   private List<String> trivialElimination(int team) {
     List<String> eliminationNames = null;
     for (Entry<String, Integer> entry : names.entrySet()) {
@@ -237,6 +237,7 @@ public class LazyBaseballElimination {
     }
     return teams[names.get(team)].remaining;
   }
+
   /**
    * @param team1 The selected team.
    * @param team2 The other team.

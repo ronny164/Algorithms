@@ -122,8 +122,8 @@ public class ShortestAncestralPath {
   }
 
   private void addVertex(Iterable<Integer> vertices, Queue<Vertex> queue, int[] distanceTo) {
-    
-    //adding all the vertices for path search..
+
+    // adding all the vertices for path search..
     for (int vertex : vertices) {
       if (vertex < 0 || vertex >= graph.V()) {
         throw new IndexOutOfBoundsException();
@@ -149,7 +149,7 @@ public class ShortestAncestralPath {
       int vertexIndex = vertex.index;
 
       // Optimization 1, keep track of the ancestor with the minimal distance.
-      if (distanceToV[vertexIndex] != -1 && distanceToW[vertexIndex]  != -1) {
+      if (distanceToV[vertexIndex] != -1 && distanceToW[vertexIndex] != -1) {
         int currentDistance = distanceToV[vertexIndex] + distanceToW[vertexIndex];
         if (currentDistance < minDistance) {
           ancestor = vertexIndex;
@@ -171,7 +171,7 @@ public class ShortestAncestralPath {
       Iterable<Integer> adjs = graph.adj(vertexIndex);
       if (adjs != null) {
         for (int adj : adjs) {
-          if (distanceTo[adj] == -1) { //not visited
+          if (distanceTo[adj] == -1) { // not visited
             distanceTo[adj] = distanceTo[vertexIndex] + 1;
             dirty.add(adj);
             queue.add(new Vertex(adj, distanceTo));

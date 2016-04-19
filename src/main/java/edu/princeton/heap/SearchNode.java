@@ -6,7 +6,7 @@ package edu.princeton.heap;
  * @author Ronny A. Pena
  */
 class SearchNode implements Comparable<SearchNode> {
-  
+
   Board board;
   SearchNode previous;
   int moves;

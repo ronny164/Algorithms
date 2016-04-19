@@ -27,7 +27,7 @@ public class MaxFlowUtil {
       names.put(name, team);
     }
   }
-  
+
   /**
    * @return The next word in the string. Separated by spaces.
    */
@@ -47,7 +47,7 @@ public class MaxFlowUtil {
     }
     return line.substring(start, counter.tally());
   }
-  
+
   /**
    * @return The next int in the string. Separated by spaces.
    */
@@ -55,7 +55,7 @@ public class MaxFlowUtil {
     return Integer.parseInt(getNextWord(line, counter));
   }
 
-  
+
   /**
    * Combinations without Repetition.
    * @param n Things to choose from.
@@ -69,5 +69,5 @@ public class MaxFlowUtil {
     }
     return total;
   }
-  
+
 }

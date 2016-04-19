@@ -23,7 +23,7 @@ public class TopogolicalSortTest {
   public void testBasic() {
     MultiMap<Character, Character> graph = new MultiMap<>();
     graph.put('A', Arrays.asList('B', 'F'));
-    graph.put('C', Arrays.asList('B', 'D', 'G',  'H'));
+    graph.put('C', Arrays.asList('B', 'D', 'G', 'H'));
     graph.put('D', 'H');
     graph.put('E', Arrays.asList('A', 'F'));
     graph.put('F', Arrays.asList('B', 'C', 'G'));

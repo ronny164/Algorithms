@@ -72,8 +72,8 @@ public class RandomizedSet<T> {
     int lastIndex = values.size() - 1;
     T lastVal = values.get(lastIndex);
     Collections.swap(values, currentIndex, lastIndex);
-    valueIndexes.put(lastVal, currentIndex);
     values.remove(lastIndex);
+    valueIndexes.put(lastVal, currentIndex);
     valueIndexes.remove(currentValue);
     return currentValue;
   }
