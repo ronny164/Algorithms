@@ -16,3 +16,4 @@ Covers:
 * Shortest anscestral path
 * Weighted shortest path
 * Max-flow/min-cut
+* Tries
