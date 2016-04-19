@@ -38,6 +38,9 @@ public class ArrayTrie {
    * @param value The string to add.
    */
   public void add(CharSequence value) {
+    if (value == null || value.length() == 0) {
+      throw new IllegalArgumentException();
+    }
     int charIndex = 0;
     TrieNode current = root;
     int arrayIndex = getArrayIndex(value, charIndex);
@@ -59,6 +62,9 @@ public class ArrayTrie {
 
   // Allowing package access to enable BoggleSolver optimizations.
   TrieNode get(CharSequence value) {
+    if (value == null || value.length() == 0) {
+      throw new IllegalArgumentException();
+    }
     int charIndex = 0;
     TrieNode current = root;
     int arrayIndex = getArrayIndex(value, charIndex);
@@ -77,6 +83,9 @@ public class ArrayTrie {
   }
 
   private Iterable<String> collect(CharSequence prefix, TrieNode node) {
+    if (prefix == null) {
+      throw new IllegalArgumentException();
+    }
     List<String> collection = new LinkedList<>();
     StringBuilder sb = new StringBuilder(prefix);
     collect(node, sb, collection);
@@ -87,7 +96,7 @@ public class ArrayTrie {
     if (current.isWord) {
       collection.add(sb.toString());
     }
-    if (current.children != null && current.children.length > 0) {
+    if (current.children != null) {
       int n = current.children.length;
       for (int i = 0; i < n; i++) {
         TrieNode entry = current.children[i];

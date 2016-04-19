@@ -24,6 +24,9 @@ public class BoggleSolver {
   // Initializes the data structure using the given array of strings as the dictionary.
   // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
   public BoggleSolver(String[] dictionary) {
+    if (dictionary == null || dictionary.length == 0) {
+      throw new IllegalArgumentException();
+    }
     this.dict = new ArrayTrie('Z' + 1 - 'A', 'A');
     for (String word : dictionary) {
       if (word.length() >= 3) {
@@ -34,6 +37,9 @@ public class BoggleSolver {
 
   // Returns the set of all valid words in the given Boggle board, as an Iterable.
   public Iterable<String> getAllValidWords(BoggleBoard board) {
+    if (board == null || (board.rows() == 0 && board.cols() == 0)) {
+      throw new IllegalArgumentException();
+    }
     int m = board.rows();
     int n = board.cols();
     Collection<String> paths = new HashSet<>();
@@ -109,20 +115,20 @@ public class BoggleSolver {
   // Returns the score of the given word if it is in the dictionary, zero otherwise.
   // (You can assume the word contains only the uppercase letters A through Z.)
   public int scoreOf(String word) {
-    if (dict.contains(word)) {
+    if (word != null) {
       int n = word.length();
-      if (n <= 2) {
-        return 0;
-      } else if (n <= 4) {
-        return 1;
-      } else if (n == 5) {
-        return 2;
-      } else if (n == 6) {
-        return 3;
-      } else if (n == 7) {
-        return 5;
-      } else {
-        return 11;
+      if (n > 2 && dict.contains(word)) {
+        if (n <= 4) {
+          return 1;
+        } else if (n == 5) {
+          return 2;
+        } else if (n == 6) {
+          return 3;
+        } else if (n == 7) {
+          return 5;
+        } else {
+          return 11;
+        }
       }
     }
     return 0;
