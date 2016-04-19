@@ -22,7 +22,8 @@ public class ArrayTrie {
   private char lowerBound;
 
   /**
-   * @param radix The range of possible characters. Example: ('Z' + 1) - 'A' to fit 26 character alphabet.
+   * @param radix The range of possible characters. Example: ('Z' + 1) - 'A' to fit 26 character 
+   *        alphabet.
    * @param lowerBound Character could be 'a' for lowercase alphabet, 'A' for uppercase, or '0' for
    *        a numeric alphabet. 
    */
@@ -32,10 +33,14 @@ public class ArrayTrie {
     this.lowerBound = lowerBound;
   }
 
-  public void add(CharSequence key) {
+  /**
+   * Adds the string to the trie. 
+   * @param value The string to add.
+   */
+  public void add(CharSequence value) {
     int charIndex = 0;
     TrieNode current = root;
-    int arrayIndex = getArrayIndex(key, charIndex);
+    int arrayIndex = getArrayIndex(value, charIndex);
     while (arrayIndex != -1) {
       if (current.children == null) {
         current.children = new TrieNode[radix];
@@ -47,15 +52,16 @@ public class ArrayTrie {
         current.children[arrayIndex] = child;
       }
       current = child;
-      arrayIndex = getArrayIndex(key, ++charIndex);
+      arrayIndex = getArrayIndex(value, ++charIndex);
     }
     current.isWord = true;
   }
 
-  TrieNode get(CharSequence key) {
+  // Allowing package access to enable BoggleSolver optimizations.
+  TrieNode get(CharSequence value) {
     int charIndex = 0;
     TrieNode current = root;
-    int arrayIndex = getArrayIndex(key, charIndex);
+    int arrayIndex = getArrayIndex(value, charIndex);
     while (arrayIndex != -1) {
       if (current.children == null) {
         return null;
@@ -65,7 +71,7 @@ public class ArrayTrie {
         return null;
       }
       current = child;
-      arrayIndex = getArrayIndex(key, ++charIndex);
+      arrayIndex = getArrayIndex(value, ++charIndex);
     }
     return current;
   }
@@ -94,28 +100,28 @@ public class ArrayTrie {
     }
   }
 
-  public boolean contains(CharSequence key) {
-    TrieNode node = get(key);
+  public boolean contains(CharSequence value) {
+    TrieNode node = get(value);
     return node != null && node.isWord;
   }
 
-  public boolean containsPrefix(CharSequence key) {
-    return get(key) != null;
+  public boolean containsPrefix(CharSequence value) {
+    return get(value) != null;
   }
 
-  public Iterable<String> keysWithPrefix(CharSequence prefix) {
+  public Iterable<String> valuesWithPrefix(CharSequence prefix) {
     return collect(prefix, get(prefix));
   }
 
-  public Iterable<String> keys() {
+  public Iterable<String> values() {
     return collect("", root);
   }
 
-  private int getArrayIndex(CharSequence key, int charIndex) {
-    if (charIndex == key.length()) {
+  private int getArrayIndex(CharSequence value, int charIndex) {
+    if (charIndex == value.length()) {
       return -1;
     }
-    return key.charAt(charIndex) - lowerBound;
+    return value.charAt(charIndex) - lowerBound;
   }
 
   private char getCharFromInt(int i) {

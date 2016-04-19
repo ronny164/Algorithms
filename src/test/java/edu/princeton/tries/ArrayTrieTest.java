@@ -15,12 +15,12 @@ public class ArrayTrieTest {
     ArrayTrie set = new ArrayTrie('z' + 1 - 'a', 'a');
     assertFalse(set.contains("ronny"));
     set.add("ronny");
-    assertEquals("[ronny]", set.keys().toString());
+    assertEquals("[ronny]", set.values().toString());
     assertTrue(set.contains("ronny"));
     assertFalse(set.contains("ronn"));
     assertFalse(set.contains("other"));
     set.add("ronnie");
-    assertEquals("[ronnie, ronny]", set.keys().toString());
+    assertEquals("[ronnie, ronny]", set.values().toString());
     assertTrue(set.contains("ronny"));
     assertFalse(set.contains("ronn"));
     assertFalse(set.contains("ronnypena"));
@@ -33,7 +33,7 @@ public class ArrayTrieTest {
     assertTrue(set.contains("equation"));
     assertTrue(set.contains("equations"));
     assertTrue(set.contains("flatten"));
-    assertEquals("[ronnie, ronny]", set.keysWithPrefix("ron").toString());
-    assertEquals("[cat, equation, equations, flat, flatten, ronnie, ronny]", set.keys().toString());
+    assertEquals("[ronnie, ronny]", set.valuesWithPrefix("ron").toString());
+    assertEquals("[cat, equation, equations, flat, flatten, ronnie, ronny]", set.values().toString());
   }
 }
