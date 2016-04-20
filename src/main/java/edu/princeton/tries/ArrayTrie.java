@@ -11,13 +11,13 @@ import java.util.List;
  */
 public class ArrayTrie {
 
-  // Allowing package access to enable BoggleSolver optimizations.
+  // Purposely allowing package access to enable BoggleSolver optimizations.
   static class TrieNode {
     TrieNode[] children;
     boolean isWord;
   }
 
-  private TrieNode root;
+  TrieNode root;
   private int radix;
   private char lowerBound;
 

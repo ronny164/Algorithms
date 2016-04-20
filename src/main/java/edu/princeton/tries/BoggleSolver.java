@@ -1,5 +1,7 @@
 package edu.princeton.tries;
 
+import edu.princeton.tries.ArrayTrie.TrieNode;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -20,6 +22,7 @@ import java.util.HashSet;
 public class BoggleSolver {
 
   private ArrayTrie dict;
+  private char lowerBound = 'A';
 
   // Initializes the data structure using the given array of strings as the dictionary.
   // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
@@ -27,7 +30,8 @@ public class BoggleSolver {
     if (dictionary == null || dictionary.length == 0) {
       throw new IllegalArgumentException();
     }
-    this.dict = new ArrayTrie('Z' + 1 - 'A', 'A');
+    
+    this.dict = new ArrayTrie('Z' + 1 - lowerBound, lowerBound);
     for (String word : dictionary) {
       if (word.length() >= 3) {
         dict.add(word);
@@ -48,65 +52,64 @@ public class BoggleSolver {
     // Optimization todo: build an adjacency list and traverse the using bfs.
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
-        dfs(board, i, j, path, paths, visited);
+        dfs(board, i, j, path, paths, visited, dict.root);
       }
     }
     return paths;
   }
 
   private void dfs(BoggleBoard board, int row, int col, StringBuilder path,
-      Collection<String> paths, boolean[][] visited) {
+      Collection<String> paths, boolean[][] visited, TrieNode parent) {
 
     // with in the boundary of the game or the location has been only used once.
     if (row < 0 || col < 0 || row >= board.rows() || col >= board.cols() || visited[row][col]) {
       return;
     }
 
-    // build the current word
-    char letter = board.getLetter(row, col);
-    push(path, letter);
-
-    // Optimization todo: pass the trieNode by reference
-    // and compute the new child based on current letter.
-
-    if (path.length() >= 3) {
-      // Optimization: if this is word is not part of the dictionary,
-      // don't go down that path
-      ArrayTrie.TrieNode node = dict.get(path);
-      if (node == null) {
-        pop(path, letter);
+    // Optimization: if this is word is not part of the dictionary, don't go down that path
+    if (parent == null || parent.children == null) {
         return;
-      }
-      // collect the word if its found in the board and it part of the dictionary
-      if (node.isWord) {
+    }
+    
+    char letter = board.getLetter(row, col);
+    TrieNode child = parent.children[letter - lowerBound];
+    if (child == null) {
+        return;
+    }
+    // build the current word
+    child = push(path, letter, child);
+    
+    // collect the word if its found in the board and it part of the dictionary
+    if (child != null && child.isWord) {
         paths.add(path.toString());
-      }
     }
 
     visited[row][col] = true;
     // following all adjacent squares.
-    dfs(board, row - 1, col - 1, path, paths, visited);
-    dfs(board, row - 1, col    , path, paths, visited);
-    dfs(board, row - 1, col + 1, path, paths, visited);
-    dfs(board, row    , col + 1, path, paths, visited);
-    dfs(board, row + 1, col + 1, path, paths, visited);
-    dfs(board, row + 1, col    , path, paths, visited);
-    dfs(board, row + 1, col - 1, path, paths, visited);
-    dfs(board, row    , col - 1, path, paths, visited);
+    dfs(board, row - 1, col - 1, path, paths, visited, child);
+    dfs(board, row - 1, col    , path, paths, visited, child);
+    dfs(board, row - 1, col + 1, path, paths, visited, child);
+    dfs(board, row    , col + 1, path, paths, visited, child);
+    dfs(board, row + 1, col + 1, path, paths, visited, child);
+    dfs(board, row + 1, col    , path, paths, visited, child);
+    dfs(board, row + 1, col - 1, path, paths, visited, child);
+    dfs(board, row    , col - 1, path, paths, visited, child);
     visited[row][col] = false;
     pop(path, letter);
 
   }
 
-  private void push(StringBuilder currentPath, char letter) {
-    currentPath.append(letter);
-    if (letter == 'Q') {
-      currentPath.append('U');
+private ArrayTrie.TrieNode push(StringBuilder path, char letter, ArrayTrie.TrieNode child) {
+    path.append(letter);
+    if (letter == 'Q') { // special Qu case.
+        path.append('U');
+        return child.children['U' - lowerBound];
     }
-  }
+    return child;
+}
 
   private void pop(StringBuilder currentPath, char letter) {
-    if (letter == 'Q') {
+    if (letter == 'Q') {  // special Qu case.
       currentPath.setLength(currentPath.length() - 1);
     }
     currentPath.setLength(currentPath.length() - 1);
