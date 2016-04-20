@@ -30,7 +30,6 @@ public class BoggleSolver {
     if (dictionary == null || dictionary.length == 0) {
       throw new IllegalArgumentException();
     }
-    
     this.dict = new ArrayTrie('Z' + 1 - lowerBound, lowerBound);
     for (String word : dictionary) {
       if (word.length() >= 3) {
@@ -99,7 +98,7 @@ public class BoggleSolver {
 
   }
 
-private ArrayTrie.TrieNode push(StringBuilder path, char letter, ArrayTrie.TrieNode child) {
+private TrieNode push(StringBuilder path, char letter, TrieNode child) {
     path.append(letter);
     if (letter == 'Q') { // special Qu case.
         path.append('U');

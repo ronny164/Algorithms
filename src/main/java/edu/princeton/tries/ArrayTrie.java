@@ -60,8 +60,7 @@ public class ArrayTrie {
     current.isWord = true;
   }
 
-  // Allowing package access to enable BoggleSolver optimizations.
-  TrieNode get(CharSequence value) {
+  private TrieNode get(CharSequence value) {
     if (value == null || value.length() == 0) {
       throw new IllegalArgumentException();
     }
