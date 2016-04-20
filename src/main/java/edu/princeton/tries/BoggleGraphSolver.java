@@ -1,9 +1,11 @@
 package edu.princeton.tries;
 
+import edu.princeton.graphs.MultiMap;
 import edu.princeton.tries.ArrayTrie.TrieNode;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * The Boggle game. Boggle is a word game designed by Allan Turoff and distributed by Hasbro. 
@@ -19,14 +21,14 @@ import java.util.HashSet;
  *  
  * @author Ronny A. Pena
  */
-public class BoggleSolver {
+public class BoggleGraphSolver {
 
   private ArrayTrie dict;
   private char lowerBound = 'A';
 
   // Initializes the data structure using the given array of strings as the dictionary.
   // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
-  public BoggleSolver(String[] dictionary) {
+  public BoggleGraphSolver(String[] dictionary) {
     if (dictionary == null || dictionary.length == 0) {
       throw new IllegalArgumentException();
     }
@@ -48,66 +50,97 @@ public class BoggleSolver {
     Collection<String> paths = new HashSet<>();
     boolean[][] visited = new boolean[m][n];
     StringBuilder path = new StringBuilder();
+    MultiMap<Vertex, Vertex> graph = new MultiMap<>();
+    // Optimization: build an adjacency list and traverse the using dfs.
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
-        dfs(board, i, j, path, paths, visited, dict.root);
+        graph.put(new Vertex(i, j), getAdj(i, j, m, n));
       }
+    }
+    for (Vertex vertex : graph.keySet()) {
+      dfs(vertex, graph, visited, path, paths, board, dict.root);
     }
     return paths;
   }
 
-  private void dfs(BoggleBoard board, int row, int col, StringBuilder path,
-      Collection<String> paths, boolean[][] visited, TrieNode parent) {
-
-    // with in the boundary of the game or the location has been only used once.
-    if (row < 0 || col < 0 || row >= board.rows() || col >= board.cols() || visited[row][col]) {
+  private void dfs(Vertex vertex, MultiMap<Vertex, Vertex> graph, boolean[][] visited,
+      StringBuilder path, Collection<String> paths, BoggleBoard board, TrieNode parent) {
+    int row = vertex.row;
+    int col = vertex.col;
+    if (visited[row][col]) {
       return;
     }
 
     // Optimization: if this is word is not part of the dictionary, don't go down that path
     if (parent == null || parent.children == null) {
-        return;
+      return;
     }
-    
+
     char letter = board.getLetter(row, col);
     TrieNode child = parent.children[letter - lowerBound];
     if (child == null) {
-        return;
+      return;
     }
     // build the current word
     child = push(path, letter, child);
-    
+
     // collect the word if its found in the board and it part of the dictionary
     if (child != null && child.isWord) {
-        paths.add(path.toString());
+      paths.add(path.toString());
     }
 
     visited[row][col] = true;
     // following all adjacent squares.
-    dfs(board, row - 1, col - 1, path, paths, visited, child);
-    dfs(board, row - 1, col    , path, paths, visited, child);
-    dfs(board, row - 1, col + 1, path, paths, visited, child);
-    dfs(board, row    , col + 1, path, paths, visited, child);
-    dfs(board, row + 1, col + 1, path, paths, visited, child);
-    dfs(board, row + 1, col    , path, paths, visited, child);
-    dfs(board, row + 1, col - 1, path, paths, visited, child);
-    dfs(board, row    , col - 1, path, paths, visited, child);
+    Collection<Vertex> ajd = graph.getValues(vertex);
+    if (ajd != null) {
+      for (Vertex childVertex : ajd) {
+        dfs(childVertex, graph, visited, path, paths, board, child);
+      }
+    }
     visited[row][col] = false;
     pop(path, letter);
-
   }
 
-private TrieNode push(StringBuilder path, char letter, TrieNode child) {
+  private Collection<Vertex> getAdj(int row, int col, int rowLimit, int colLimit) {
+    Collection<Vertex> adj = new LinkedList<>();
+    if (row - 1 >= 0) {
+      if (col - 1 >= 0) {
+        adj.add(new Vertex(row - 1, col - 1));
+      }
+      adj.add(new Vertex(row - 1, col));
+      if (col + 1 < colLimit) {
+        adj.add(new Vertex(row - 1, col + 1));
+      }
+    }
+    if (row + 1 < rowLimit) {
+      if (col + 1 < colLimit) {
+        adj.add(new Vertex(row + 1, col + 1));
+      }
+      adj.add(new Vertex(row + 1, col));
+      if (col - 1 >= 0) {
+        adj.add(new Vertex(row + 1, col - 1));
+      }
+    }
+    if (col + 1 < colLimit) {
+      adj.add(new Vertex(row, col + 1));
+    }
+    if (col - 1 >= 0) {
+      adj.add(new Vertex(row, col - 1));
+    }
+    return adj;
+  }
+
+  private TrieNode push(StringBuilder path, char letter, TrieNode child) {
     path.append(letter);
     if (letter == 'Q') { // special Qu case.
-        path.append('U');
-        return child.children['U' - lowerBound];
+      path.append('U');
+      return child.children['U' - lowerBound];
     }
     return child;
-}
+  }
 
   private void pop(StringBuilder currentPath, char letter) {
-    if (letter == 'Q') {  // special Qu case.
+    if (letter == 'Q') { // special Qu case.
       currentPath.setLength(currentPath.length() - 1);
     }
     currentPath.setLength(currentPath.length() - 1);
@@ -134,4 +167,46 @@ private TrieNode push(StringBuilder path, char letter, TrieNode child) {
     }
     return 0;
   }
+}
+
+final class Vertex {
+  int row;
+  int col;
+
+  public Vertex(int row, int col) {
+    super();
+    this.row = row;
+    this.col = col;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + col;
+    result = prime * result + row;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Vertex other = (Vertex) obj;
+    if (col != other.col) {
+      return false;
+    }
+    if (row != other.row) {
+      return false;
+    }
+    return true;
+  }
+
 }
