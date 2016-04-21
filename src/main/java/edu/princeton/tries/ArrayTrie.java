@@ -18,6 +18,7 @@ public class ArrayTrie {
   }
 
   TrieNode root;
+  int maxWordSize;
   private int radix;
   private char lowerBound;
 
@@ -54,6 +55,7 @@ public class ArrayTrie {
         child = new TrieNode();
         current.children[arrayIndex] = child;
       }
+      maxWordSize = Math.max(maxWordSize, value.length());
       current = child;
       arrayIndex = getArrayIndex(value, ++charIndex);
     }

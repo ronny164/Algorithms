@@ -12,7 +12,6 @@ import java.util.Random;
  * All operations work in constant time.
  * 
  * @author Ronny A. Pena
- * @param <T>
  */
 public class RandomizedSet<T> {
 
@@ -28,8 +27,8 @@ public class RandomizedSet<T> {
 
   public void add(T value) {
     if (!contains(value)) {
-      int key = values.size();
-      valueIndexes.put(value, key);
+      int lastIndex = values.size();
+      valueIndexes.put(value, lastIndex);
       values.add(value);
     }
   }
@@ -72,6 +71,7 @@ public class RandomizedSet<T> {
     int lastIndex = values.size() - 1;
     T lastVal = values.get(lastIndex);
     Collections.swap(values, currentIndex, lastIndex);
+    // removing the last element is constant
     values.remove(lastIndex);
     valueIndexes.put(lastVal, currentIndex);
     valueIndexes.remove(currentValue);

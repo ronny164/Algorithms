@@ -18,7 +18,6 @@ public class RandomizedSetTest {
     }
     System.out.println();
     assertEquals(0, set.size());
-    assertEquals(0, set.size());
 
     for (char val = 'A'; val <= 'Z'; val++) {
       set.add(val);
@@ -27,7 +26,6 @@ public class RandomizedSetTest {
       System.out.print(set.delete(val));
     }
     System.out.println();
-    assertEquals(0, set.size());
     assertEquals(0, set.size());
   }
 }

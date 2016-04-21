@@ -25,9 +25,18 @@ public class BoggleGraphSolver {
 
   private ArrayTrie dict;
   private char lowerBound = 'A';
+  //storing all these variables in global scope to reduce the size of the stack frame when using dfs.
+  private Collection<String> paths;
+  private int m;
+  private int n;
+  private boolean[][] visited;
+  private BoggleBoard board;
+  private MultiMap<Vertex, Vertex> graph;
 
-  // Initializes the data structure using the given array of strings as the dictionary.
-  // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
+  /** 
+   * Initializes the data structure using the given array of strings as the dictionary.
+   * (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
+   */
   public BoggleGraphSolver(String[] dictionary) {
     if (dictionary == null || dictionary.length == 0) {
       throw new IllegalArgumentException();
@@ -40,17 +49,20 @@ public class BoggleGraphSolver {
     }
   }
 
-  // Returns the set of all valid words in the given Boggle board, as an Iterable.
-  public Iterable<String> getAllValidWords(BoggleBoard board) {
+  /**
+   *  Returns the set of all valid words in the given Boggle board, as an Iterable.
+   */
+  public Iterable<String> getAllValidWords(BoggleBoard inputBoard) {
     if (board == null || (board.rows() == 0 && board.cols() == 0)) {
       throw new IllegalArgumentException();
     }
-    int m = board.rows();
-    int n = board.cols();
-    Collection<String> paths = new HashSet<>();
-    boolean[][] visited = new boolean[m][n];
-    StringBuilder path = new StringBuilder();
-    MultiMap<Vertex, Vertex> graph = new MultiMap<>();
+    board = inputBoard;
+    m = board.rows();
+    n = board.cols();
+    paths = new HashSet<>();
+    visited = new boolean[m][n];
+    StringBuilder path = new StringBuilder(dict.maxWordSize);
+    graph = new MultiMap<>();
     // Optimization: build an adjacency list and traverse the using dfs.
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
@@ -58,13 +70,12 @@ public class BoggleGraphSolver {
       }
     }
     for (Vertex vertex : graph.keySet()) {
-      dfs(vertex, graph, visited, path, paths, board, dict.root);
+      dfs(vertex, dict.root, path);
     }
     return paths;
   }
 
-  private void dfs(Vertex vertex, MultiMap<Vertex, Vertex> graph, boolean[][] visited,
-      StringBuilder path, Collection<String> paths, BoggleBoard board, TrieNode parent) {
+  private void dfs(Vertex vertex, TrieNode parent, StringBuilder path) {
     int row = vertex.row;
     int col = vertex.col;
     if (visited[row][col]) {
@@ -94,7 +105,7 @@ public class BoggleGraphSolver {
     Collection<Vertex> ajd = graph.getValues(vertex);
     if (ajd != null) {
       for (Vertex childVertex : ajd) {
-        dfs(childVertex, graph, visited, path, paths, board, child);
+        dfs(childVertex, child, path);
       }
     }
     visited[row][col] = false;
@@ -146,19 +157,21 @@ public class BoggleGraphSolver {
     currentPath.setLength(currentPath.length() - 1);
   }
 
-  // Returns the score of the given word if it is in the dictionary, zero otherwise.
-  // (You can assume the word contains only the uppercase letters A through Z.)
+  /** 
+   * Returns the score of the given word if it is in the dictionary, zero otherwise.
+   * (You can assume the word contains only the uppercase letters A through Z.)
+   */
   public int scoreOf(String word) {
     if (word != null) {
-      int n = word.length();
-      if (n > 2 && dict.contains(word)) {
-        if (n <= 4) {
+      int l = word.length();
+      if (l > 2 && dict.contains(word)) {
+        if (l <= 4) {
           return 1;
-        } else if (n == 5) {
+        } else if (l == 5) {
           return 2;
-        } else if (n == 6) {
+        } else if (l == 6) {
           return 3;
-        } else if (n == 7) {
+        } else if (l == 7) {
           return 5;
         } else {
           return 11;

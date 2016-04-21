@@ -4,6 +4,7 @@ import edu.princeton.tries.ArrayTrie.TrieNode;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * The Boggle game. Boggle is a word game designed by Allan Turoff and distributed by Hasbro. 
@@ -23,9 +24,18 @@ public class BoggleSolver {
 
   private ArrayTrie dict;
   private char lowerBound = 'A';
+  
+  //storing all these variables in global scope to reduce the size of the stack frame when using dfs.
+  private Collection<String> paths;
+  private int m;
+  private int n;
+  private boolean[][] visited;
+  private BoggleBoard board;
 
-  // Initializes the data structure using the given array of strings as the dictionary.
-  // (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
+  /** 
+   * Initializes the data structure using the given array of strings as the dictionary.
+   * (You can assume each word in the dictionary contains only the uppercase letters A through Z.)
+   */
   public BoggleSolver(String[] dictionary) {
     if (dictionary == null || dictionary.length == 0) {
       throw new IllegalArgumentException();
@@ -38,29 +48,31 @@ public class BoggleSolver {
     }
   }
 
-  // Returns the set of all valid words in the given Boggle board, as an Iterable.
-  public Iterable<String> getAllValidWords(BoggleBoard board) {
+  /**
+   *  Returns the set of all valid words in the given Boggle board, as an Iterable.
+   */
+  public Iterable<String> getAllValidWords(BoggleBoard inputBoard) {
     if (board == null || (board.rows() == 0 && board.cols() == 0)) {
       throw new IllegalArgumentException();
     }
-    int m = board.rows();
-    int n = board.cols();
-    Collection<String> paths = new HashSet<>();
-    boolean[][] visited = new boolean[m][n];
-    StringBuilder path = new StringBuilder();
+    board = inputBoard;
+    m = board.rows();
+    n = board.cols();
+    paths = new LinkedList<>();
+    visited = new boolean[m][n];
+    StringBuilder path = new StringBuilder(dict.maxWordSize);
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
-        dfs(board, i, j, path, paths, visited, dict.root);
+        dfs(i, j, dict.root, path);
       }
     }
-    return paths;
+    return new HashSet<>(paths); // remove duplicates.
   }
 
-  private void dfs(BoggleBoard board, int row, int col, StringBuilder path,
-      Collection<String> paths, boolean[][] visited, TrieNode parent) {
+  private void dfs(int row, int col, TrieNode parent, StringBuilder path) {
 
     // with in the boundary of the game or the location has been only used once.
-    if (row < 0 || col < 0 || row >= board.rows() || col >= board.cols() || visited[row][col]) {
+    if (row < 0 || col < 0 || row >= m || col >= n || visited[row][col]) {
       return;
     }
 
@@ -76,25 +88,28 @@ public class BoggleSolver {
     }
     // build the current word
     child = push(path, letter, child);
+    if (child == null) {
+        pop(path, letter);
+        return;
+    }
     
     // collect the word if its found in the board and it part of the dictionary
-    if (child != null && child.isWord) {
+    if (child.isWord) {
         paths.add(path.toString());
     }
 
     visited[row][col] = true;
     // following all adjacent squares.
-    dfs(board, row - 1, col - 1, path, paths, visited, child);
-    dfs(board, row - 1, col    , path, paths, visited, child);
-    dfs(board, row - 1, col + 1, path, paths, visited, child);
-    dfs(board, row    , col + 1, path, paths, visited, child);
-    dfs(board, row + 1, col + 1, path, paths, visited, child);
-    dfs(board, row + 1, col    , path, paths, visited, child);
-    dfs(board, row + 1, col - 1, path, paths, visited, child);
-    dfs(board, row    , col - 1, path, paths, visited, child);
+    dfs(row - 1, col - 1, child, path);
+    dfs(row - 1, col    , child, path);
+    dfs(row - 1, col + 1, child, path);
+    dfs(row,     col + 1, child, path);
+    dfs(row + 1, col + 1, child, path);
+    dfs(row + 1, col    , child, path);
+    dfs(row + 1, col - 1, child, path);
+    dfs(row,     col - 1, child, path);
     visited[row][col] = false;
     pop(path, letter);
-
   }
 
 private TrieNode push(StringBuilder path, char letter, TrieNode child) {
@@ -113,19 +128,21 @@ private TrieNode push(StringBuilder path, char letter, TrieNode child) {
     currentPath.setLength(currentPath.length() - 1);
   }
 
-  // Returns the score of the given word if it is in the dictionary, zero otherwise.
-  // (You can assume the word contains only the uppercase letters A through Z.)
+  /** 
+   * Returns the score of the given word if it is in the dictionary, zero otherwise.
+   * (You can assume the word contains only the uppercase letters A through Z.)
+   */
   public int scoreOf(String word) {
     if (word != null) {
-      int n = word.length();
-      if (n > 2 && dict.contains(word)) {
-        if (n <= 4) {
+      int l = word.length();
+      if (l > 2 && dict.contains(word)) {
+        if (l <= 4) {
           return 1;
-        } else if (n == 5) {
+        } else if (l == 5) {
           return 2;
-        } else if (n == 6) {
+        } else if (l == 6) {
           return 3;
-        } else if (n == 7) {
+        } else if (l == 7) {
           return 5;
         } else {
           return 11;
