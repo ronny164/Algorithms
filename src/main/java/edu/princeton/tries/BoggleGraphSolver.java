@@ -53,7 +53,7 @@ public class BoggleGraphSolver {
    *  Returns the set of all valid words in the given Boggle board, as an Iterable.
    */
   public Iterable<String> getAllValidWords(BoggleBoard inputBoard) {
-    if (board == null || (board.rows() == 0 && board.cols() == 0)) {
+    if (inputBoard == null || (inputBoard.rows() == 0 && inputBoard.cols() == 0)) {
       throw new IllegalArgumentException();
     }
     board = inputBoard;
