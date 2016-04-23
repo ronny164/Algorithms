@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class BinarySearch {
 
-  public <T extends Comparable> int indexOf(T[] arr, T search) {
+  public static <T extends Comparable> int indexOf(T[] arr, T search) {
 
     if (arr == null) {
       return -1;

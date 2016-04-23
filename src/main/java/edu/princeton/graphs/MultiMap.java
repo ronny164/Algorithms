@@ -6,8 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Data structure for maintaining many-to-many relationships.
- * Bidirectional map with Multi-valued support.
+ * Data structure for Multi-valued support. Useful for representing an adjacency list.
  *
  * @author Ronny A. Pena
  *
