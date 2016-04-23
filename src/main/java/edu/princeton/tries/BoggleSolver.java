@@ -24,8 +24,9 @@ public class BoggleSolver {
 
   private ArrayTrieSet dict;
   private char lowerBound = 'A';
-  
-  //storing all these variables in global scope to reduce the size of the stack frame when using dfs.
+
+  // storing all these variables in global scope to reduce the size of the stack frame when using
+  // dfs.
   private Collection<String> paths;
   private int m;
   private int n;
@@ -74,14 +75,14 @@ public class BoggleSolver {
     if (row < 0 || col < 0 || row >= m || col >= n || visited[row][col]) {
       return;
     }
-    
-    //build up the current word as we go.
+
+    // build up the current word as we go.
     char letter = board.getLetter(row, col);
     TrieNode child = getChild(parent, letter);
     if (child == null) {
       return;
     }
-    
+
     // collect the word if its found in the board and it part of the dictionary
     if (child.word != null) {
       paths.add(child.word);
@@ -89,20 +90,23 @@ public class BoggleSolver {
 
     // Optimization: if this is word is not part of the dictionary, don't go down that path
     if (child.children == null) {
-        return;
+      return;
     }
-    
 
     visited[row][col] = true;
     // following all adjacent squares.
-    dfs(row - 1, col - 1, child);
-    dfs(row - 1, col    , child);
-    dfs(row - 1, col + 1, child);
-    dfs(row,     col + 1, child);
-    dfs(row + 1, col + 1, child);
-    dfs(row + 1, col    , child);
-    dfs(row + 1, col - 1, child);
-    dfs(row,     col - 1, child);
+    int up = row + 1;
+    int down = row - 1;
+    int left = col - 1;
+    int right = col + 1;
+    dfs(down, left, child);
+    dfs(down, col, child);
+    dfs(down, right, child);
+    dfs(row, right, child);
+    dfs(up, right, child);
+    dfs(up, col, child);
+    dfs(up, left, child);
+    dfs(row, left, child);
     visited[row][col] = false;
   }
 
@@ -110,7 +114,7 @@ public class BoggleSolver {
     TrieNode child = parent.children[letter - lowerBound];
     if (child != null) {
       if (letter == 'Q') { // special Qu case.
-          child =  child.children['U' - lowerBound];
+        child = child.children['U' - lowerBound];
       }
     }
     return child;
