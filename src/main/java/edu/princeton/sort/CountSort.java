@@ -1,11 +1,5 @@
 package edu.princeton.sort;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.Random;
 
 public class CountSort {
 
@@ -18,7 +12,7 @@ public class CountSort {
     }
     int n = arr.length;
     int[] aux = new int[n];
-    int[] count = new int[range];
+    int[] count = new int[range + 1];
 
     // count
     for (int i = 0; i < n; i++) {
@@ -29,7 +23,7 @@ public class CountSort {
       count[val + 1]++;
     }
     // accumulate
-    for (int i = 1; i < range; i++) {
+    for (int i = 1; i <= range; i++) {
       count[i] += count[i - 1];
     }
     // copy to aux
@@ -71,21 +65,5 @@ public class CountSort {
     for (int i = 0; i < n; i++) {
       arr[i] = aux[i];
     }
-  }
-
-  @Test
-  public void testSort() {
-    int n = 15;
-    int[] arr1 = new int[n];
-    Random rand = new Random();
-    for (int i = 0; i < arr1.length; i++) {
-      arr1[i] = rand.nextInt(n);
-    }
-    System.out.println(Arrays.toString(arr1));
-    int[] arr2 = Arrays.copyOf(arr1, n);
-    CountSort.sort(arr1, 50);
-    System.out.println(Arrays.toString(arr1));
-    Arrays.sort(arr2);
-    assertEquals(Arrays.toString(arr2), Arrays.toString(arr1));
   }
 }

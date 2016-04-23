@@ -1,8 +1,5 @@
 package edu.princeton;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
 
 public class BinarySearch {
 
@@ -26,14 +23,5 @@ public class BinarySearch {
       }
     }
     return -1;
-  }
-
-  @Test
-  public void testBinarySearch() {
-    Integer[] nodes = new Integer[] {2, 3, 5, 6, 7, 8, 10};
-    assertEquals(4,indexOf(nodes, 7));
-    nodes = new Integer[] {2, 3, 5, 6, 7, 8, 10, 11, 20, 30};
-    assertEquals(1,indexOf(nodes, 3));
-    assertEquals(-1,indexOf(nodes, 50));
   }
 }
