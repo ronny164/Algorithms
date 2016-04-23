@@ -9,16 +9,15 @@ import java.util.List;
  * 
  * @author Ronny A. Pena
  */
-public class ArrayTrie {
+public class ArrayTrieSet {
 
   // Purposely allowing package access to enable BoggleSolver optimizations.
   static class TrieNode {
     TrieNode[] children;
-    boolean isWord;
+    public String word;
   }
 
   TrieNode root;
-  int maxWordSize;
   private int radix;
   private char lowerBound;
 
@@ -28,7 +27,7 @@ public class ArrayTrie {
    * @param lowerBound Character could be 'a' for lowercase alphabet, 'A' for uppercase, or '0' for
    *        a numeric alphabet. 
    */
-  public ArrayTrie(int radix, char lowerBound) {
+  public ArrayTrieSet(int radix, char lowerBound) {
     root = new TrieNode();
     this.radix = radix;
     this.lowerBound = lowerBound;
@@ -38,7 +37,7 @@ public class ArrayTrie {
    * Adds the string to the trie. 
    * @param value The string to add.
    */
-  public void add(CharSequence value) {
+  public void add(String value) {
     if (value == null || value.length() == 0) {
       throw new IllegalArgumentException();
     }
@@ -55,14 +54,13 @@ public class ArrayTrie {
         child = new TrieNode();
         current.children[arrayIndex] = child;
       }
-      maxWordSize = Math.max(maxWordSize, value.length());
       current = child;
       arrayIndex = getArrayIndex(value, ++charIndex);
     }
-    current.isWord = true;
+    current.word = value;
   }
 
-  private TrieNode get(CharSequence value) {
+  private TrieNode get(String value) {
     if (value == null || value.length() == 0) {
       throw new IllegalArgumentException();
     }
@@ -83,51 +81,48 @@ public class ArrayTrie {
     return current;
   }
 
-  private Iterable<String> collect(CharSequence prefix, TrieNode node) {
-    if (prefix == null) {
+  private Iterable<String> collect(TrieNode node) {
+    if (node == null) {
       throw new IllegalArgumentException();
     }
     List<String> collection = new LinkedList<>();
-    StringBuilder sb = new StringBuilder(prefix);
-    collect(node, sb, collection);
+    collect(node, collection);
     return collection;
   }
 
-  private void collect(TrieNode current, StringBuilder sb, List<String> collection) {
-    if (current.isWord) {
-      collection.add(sb.toString());
+  private void collect(TrieNode current, List<String> collection) {
+    if (current.word != null) {
+      collection.add(current.word);
     }
     if (current.children != null) {
       int n = current.children.length;
       for (int i = 0; i < n; i++) {
         TrieNode entry = current.children[i];
         if (entry != null) {
-          sb.append(getCharFromInt(i));
-          collect(entry, sb, collection);
-          sb.setLength(sb.length() - 1);
+          collect(entry, collection);
         }
       }
     }
   }
 
-  public boolean contains(CharSequence value) {
+  public boolean contains(String value) {
     TrieNode node = get(value);
-    return node != null && node.isWord;
+    return node != null && node.word != null;
   }
 
-  public boolean containsPrefix(CharSequence value) {
+  public boolean containsPrefix(String value) {
     return get(value) != null;
   }
 
-  public Iterable<String> valuesWithPrefix(CharSequence prefix) {
-    return collect(prefix, get(prefix));
+  public Iterable<String> valuesWithPrefix(String prefix) {
+    return collect(get(prefix));
   }
 
   public Iterable<String> values() {
-    return collect("", root);
+    return collect(root);
   }
 
-  private int getArrayIndex(CharSequence value, int charIndex) {
+  private int getArrayIndex(String value, int charIndex) {
     if (charIndex == value.length()) {
       return -1;
     }

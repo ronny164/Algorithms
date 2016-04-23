@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import edu.princeton.cs.algs4.In;
-import edu.princeton.tries.BoggleBoard;
-import edu.princeton.tries.BoggleSolver;
 
 import org.junit.Test;
 
@@ -18,8 +16,11 @@ public class BoggleSolverTest {
 
   @Test
   public void testBoard4x4() {
-    char[][] a =
-        { {'A', 'T', 'E', 'E'}, {'A', 'P', 'Y', 'O'}, {'T', 'I', 'N', 'U'}, {'E', 'D', 'S', 'E'}};
+    char[][] a ={ 
+        {'A', 'T', 'E', 'E'}, 
+        {'A', 'P', 'Y', 'O'}, 
+        {'T', 'I', 'N', 'U'}, 
+        {'E', 'D', 'S', 'E'}};
     BoggleBoard board3 = new BoggleBoard(a);
     String[] dictionary = getDictionary("dictionary-algs4.txt");
     BoggleSolver solver = new BoggleSolver(dictionary);
@@ -35,8 +36,11 @@ public class BoggleSolverTest {
   @Test
   public void testBoardQ() {
     String[] dictionary = getDictionary("dictionary-algs4.txt");
-    char[][] a =
-        { {'S', 'N', 'R', 'T'}, {'O', 'I', 'E', 'L'}, {'E', 'Q', 'T', 'T'}, {'R', 'S', 'A', 'T'}};
+    char[][] a = { 
+        {'S', 'N', 'R', 'T'}, 
+        {'O', 'I', 'E', 'L'}, 
+        {'E', 'Q', 'T', 'T'}, 
+        {'R', 'S', 'A', 'T'}};
     BoggleBoard board3 = new BoggleBoard(a);
     BoggleSolver solver = new BoggleSolver(dictionary);
     Iterable<String> allValidWords = solver.getAllValidWords(board3);

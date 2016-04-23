@@ -1,6 +1,6 @@
 package edu.princeton.tries;
 
-import edu.princeton.tries.ArrayTrie;
+import edu.princeton.tries.ArrayTrieSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,7 +12,7 @@ public class ArrayTrieTest {
 
   @Test
   public void testBasic() {
-    ArrayTrie set = new ArrayTrie('z' + 1 - 'a', 'a');
+    ArrayTrieSet set = new ArrayTrieSet('z' + 1 - 'a', 'a');
     assertFalse(set.contains("ronny"));
     set.add("ronny");
     assertEquals("[ronny]", set.values().toString());

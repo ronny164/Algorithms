@@ -1,6 +1,6 @@
 package edu.princeton.tries;
 
-import edu.princeton.tries.ArrayTrie.TrieNode;
+import edu.princeton.tries.ArrayTrieSet.TrieNode;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,7 +22,7 @@ import java.util.LinkedList;
  */
 public class BoggleSolver {
 
-  private ArrayTrie dict;
+  private ArrayTrieSet dict;
   private char lowerBound = 'A';
   
   //storing all these variables in global scope to reduce the size of the stack frame when using dfs.
@@ -40,7 +40,7 @@ public class BoggleSolver {
     if (dictionary == null || dictionary.length == 0) {
       throw new IllegalArgumentException();
     }
-    this.dict = new ArrayTrie('Z' + 1 - lowerBound, lowerBound);
+    this.dict = new ArrayTrieSet('Z' + 1 - lowerBound, lowerBound);
     for (String word : dictionary) {
       if (word.length() >= 3) {
         dict.add(word);
@@ -60,72 +60,60 @@ public class BoggleSolver {
     n = board.cols();
     paths = new LinkedList<>();
     visited = new boolean[m][n];
-    StringBuilder path = new StringBuilder(dict.maxWordSize);
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
-        dfs(i, j, dict.root, path);
+        dfs(i, j, dict.root);
       }
     }
     return new HashSet<>(paths); // remove duplicates.
   }
 
-  private void dfs(int row, int col, TrieNode parent, StringBuilder path) {
+  private void dfs(int row, int col, TrieNode parent) {
 
     // with in the boundary of the game or the location has been only used once.
     if (row < 0 || col < 0 || row >= m || col >= n || visited[row][col]) {
       return;
     }
-
-    // Optimization: if this is word is not part of the dictionary, don't go down that path
-    if (parent == null || parent.children == null) {
-        return;
-    }
     
+    //build up the current word as we go.
     char letter = board.getLetter(row, col);
-    TrieNode child = parent.children[letter - lowerBound];
+    TrieNode child = getChild(parent, letter);
     if (child == null) {
-        return;
-    }
-    // build the current word
-    child = push(path, letter, child);
-    if (child == null) {
-        pop(path, letter);
-        return;
+      return;
     }
     
     // collect the word if its found in the board and it part of the dictionary
-    if (child.isWord) {
-        paths.add(path.toString());
+    if (child.word != null) {
+      paths.add(child.word);
     }
+
+    // Optimization: if this is word is not part of the dictionary, don't go down that path
+    if (child.children == null) {
+        return;
+    }
+    
 
     visited[row][col] = true;
     // following all adjacent squares.
-    dfs(row - 1, col - 1, child, path);
-    dfs(row - 1, col    , child, path);
-    dfs(row - 1, col + 1, child, path);
-    dfs(row,     col + 1, child, path);
-    dfs(row + 1, col + 1, child, path);
-    dfs(row + 1, col    , child, path);
-    dfs(row + 1, col - 1, child, path);
-    dfs(row,     col - 1, child, path);
+    dfs(row - 1, col - 1, child);
+    dfs(row - 1, col    , child);
+    dfs(row - 1, col + 1, child);
+    dfs(row,     col + 1, child);
+    dfs(row + 1, col + 1, child);
+    dfs(row + 1, col    , child);
+    dfs(row + 1, col - 1, child);
+    dfs(row,     col - 1, child);
     visited[row][col] = false;
-    pop(path, letter);
   }
 
-private TrieNode push(StringBuilder path, char letter, TrieNode child) {
-    path.append(letter);
-    if (letter == 'Q') { // special Qu case.
-        path.append('U');
-        return child.children['U' - lowerBound];
+  private TrieNode getChild(TrieNode parent, char letter) {
+    TrieNode child = parent.children[letter - lowerBound];
+    if (child != null) {
+      if (letter == 'Q') { // special Qu case.
+          child =  child.children['U' - lowerBound];
+      }
     }
     return child;
-}
-
-  private void pop(StringBuilder currentPath, char letter) {
-    if (letter == 'Q') {  // special Qu case.
-      currentPath.setLength(currentPath.length() - 1);
-    }
-    currentPath.setLength(currentPath.length() - 1);
   }
 
   /** 
