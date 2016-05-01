@@ -1,9 +1,8 @@
 package edu.princeton.stackqueue;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import edu.princeton.list.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
@@ -16,7 +15,7 @@ import java.util.Random;
 public class RandomizedSet<T> {
 
   private Map<T, Integer> valueIndexes;
-  private List<T> values;
+  private ArrayList<T> values;
   private Random rand;
 
   public RandomizedSet() {
@@ -70,7 +69,7 @@ public class RandomizedSet<T> {
     T currentValue = values.get(currentIndex);
     int lastIndex = values.size() - 1;
     T lastVal = values.get(lastIndex);
-    Collections.swap(values, currentIndex, lastIndex);
+    ArrayList.swap(values, currentIndex, lastIndex);
     // removing the last element is constant
     values.remove(lastIndex);
     valueIndexes.put(lastVal, currentIndex);

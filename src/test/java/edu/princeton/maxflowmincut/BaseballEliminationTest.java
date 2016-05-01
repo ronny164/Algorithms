@@ -5,19 +5,18 @@ import static edu.princeton.maxflowmincut.MaxFlowUtil.getNextWord;
 import static org.junit.Assert.assertEquals;
 
 import edu.princeton.cs.algs4.Counter;
+import edu.princeton.list.ArrayList;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BaseballEliminationTest {
 
   private static final class Result {
     private int count = 0;
-    private List<String> teams = new ArrayList<>();
+    private ArrayList<String> teams = new ArrayList<>();
     private Map<String, Iterable<String>> eliminations = new HashMap<>();
   }
 

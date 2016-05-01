@@ -79,6 +79,8 @@ public class BoggleSolver {
     // build up the current word as we go.
     char letter = board.getLetter(row, col);
     TrieNode child = getChild(parent, letter);
+
+    // Optimization: if this is word is not part of the dictionary, don't go down that path
     if (child == null) {
       return;
     }
@@ -88,7 +90,6 @@ public class BoggleSolver {
       paths.add(child.word);
     }
 
-    // Optimization: if this is word is not part of the dictionary, don't go down that path
     if (child.children == null) {
       return;
     }
@@ -99,14 +100,14 @@ public class BoggleSolver {
     int down = row - 1;
     int left = col - 1;
     int right = col + 1;
-    dfs(down, left, child);
-    dfs(down, col, child);
-    dfs(down, right, child);
     dfs(row, right, child);
-    dfs(up, right, child);
-    dfs(up, col, child);
-    dfs(up, left, child);
+    dfs(down, right, child);
+    dfs(down, col, child);
+    dfs(down, left, child);
     dfs(row, left, child);
+    dfs(up, left, child);
+    dfs(up, col, child);
+    dfs(up, right, child);
     visited[row][col] = false;
   }
 

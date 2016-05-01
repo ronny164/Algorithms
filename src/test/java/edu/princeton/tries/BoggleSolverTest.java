@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import edu.princeton.cs.algs4.In;
+import edu.princeton.list.ArrayList;
 
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,7 +131,7 @@ public class BoggleSolverTest {
       int expectedScore, List<String> list) {
     int count = 0;
     int score = 0;
-    List<String> output = new ArrayList<>();
+    ArrayList<String> output = new ArrayList<>();
     for (String word : allValidWords) {
       System.out.println(word);
       output.add(word);

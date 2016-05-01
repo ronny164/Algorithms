@@ -1,4 +1,4 @@
-package edu.princeton.stackqueue;
+package edu.princeton.list;
 
 import java.util.Iterator;
 
@@ -7,65 +7,27 @@ import java.util.Iterator;
  *
  * @param <T> The type of object to store.
  */
-public class Deque<T> implements Iterable<T> {
-
-  private Node<T> head;
-  private Node<T> tail;
-  private int size;
+public class DoublyLinkedList<T> implements Iterable<T> {
 
   private static class Node<T> {
-
-    private T val;
+    protected T val;
     private Node<T> next;
     private Node<T> previous;
 
-    public Node(T item) {
+    public Node(Node<T> previous, T item, Node<T> next) {
       this.val = item;
-    }
-
-    public T getVal() {
-      return val;
-    }
-
-    public Node<T> getNext() {
-      return next;
-    }
-
-    public void setNext(Node<T> next) {
+      this.previous = previous;
       this.next = next;
     }
-
-    public Node<T> getPrevious() {
-      return previous;
-    }
-
-    public void setPrevious(Node<T> previous) {
-      this.previous = previous;
-    }
-
-    @Override
-    public String toString() {
-      T nextVal = null;
-      T previousVal = null;
-      if (next != null) {
-        nextVal = next.getVal();
-      }
-      if (previous != null) {
-        previousVal = previous.getVal();
-      }
-
-      return previousVal + " <- " + this.getVal().toString() + " -> " + nextVal;
-    }
-
   }
 
-  private class DequeueIterator<T> implements Iterator<T> {
+  private static class ListIterator<T> implements Iterator<T> {
 
     private Node<T> current;
     private int index;
     private int size;
 
-    public DequeueIterator(Node<T> first, int size) {
+    public ListIterator(Node<T> first, int size) {
       this.current = first;
       this.size = size;
     }
@@ -80,19 +42,17 @@ public class Deque<T> implements Iterable<T> {
       if (!hasNext()) {
         throw new java.util.NoSuchElementException();
       }
-      T val = this.current.getVal();
-      this.current = this.current.getNext();
+      T val = this.current.val;
+      this.current = this.current.next;
       index++;
       return val;
     }
-
-    @Override
-    public void remove() {
-      throw new java.lang.UnsupportedOperationException();
-    }
   }
+  protected Node<T> head;
+  private Node<T> tail;
+  private int size;
 
-  public Deque() { // construct an empty deque
+  public DoublyLinkedList() { // construct an empty deque
   }
 
   public boolean isEmpty() { // is the deque empty?
@@ -108,12 +68,11 @@ public class Deque<T> implements Iterable<T> {
       throw new java.lang.NullPointerException();
     }
 
-    Node<T> newFirst = new Node<>(item);
+    Node<T> newFirst = new Node<>(null, item, head);
     if (size == 0) {
       addInitial(newFirst);
     } else {
-      head.setPrevious(newFirst);
-      newFirst.setNext(head);
+      head.previous = newFirst;
       head = newFirst;
     }
     size++;
@@ -124,12 +83,11 @@ public class Deque<T> implements Iterable<T> {
       throw new java.lang.NullPointerException();
     }
 
-    Node<T> newLast = new Node<>(item);
+    Node<T> newLast = new Node<>(tail, item, null);
     if (size == 0) {
       addInitial(newLast);
     } else {
-      tail.setNext(newLast);
-      newLast.setPrevious(tail);
+      tail.next = newLast;
       tail = newLast;
     }
     size++;
@@ -138,13 +96,13 @@ public class Deque<T> implements Iterable<T> {
   private void addInitial(Node<T> newItem) {
     tail = newItem;
     head = newItem;
-    head.setNext(tail);
-    tail.setPrevious(head);
+    head.next = tail;
+    tail.previous = head;
   }
 
   private void removeInitial() {
-    tail.setNext(null);
-    head.setPrevious(null);
+    tail.next = null;
+    head.previous = null;
     head = null;
     tail = null;
   }
@@ -155,15 +113,15 @@ public class Deque<T> implements Iterable<T> {
     }
     T val = null;
     if (size == 1) {
-      val = head.getVal();
+      val = head.val;
       removeInitial();
     } else {
       Node<T> oldfirst = head;
-      val = oldfirst.getVal();
-      head = oldfirst.getNext();
-      head.setPrevious(null);
-      oldfirst.setNext(null);
-      oldfirst.setPrevious(null);
+      val = oldfirst.val;
+      head = oldfirst.next;
+      head.previous = null;
+      oldfirst.next = null;
+      oldfirst.previous = null;
     }
     size--;
     return val;
@@ -175,22 +133,26 @@ public class Deque<T> implements Iterable<T> {
     }
     T val = null;
     if (size == 1) {
-      val = tail.getVal();
+      val = tail.val;
       removeInitial();
     } else {
       Node<T> oldlast = tail;
-      val = oldlast.getVal();
-      tail = oldlast.getPrevious();
-      tail.setNext(null);
-      oldlast.setPrevious(null);
-      oldlast.setNext(null);
+      val = oldlast.val;
+      tail = oldlast.previous;
+      tail.next = null;
+      oldlast.previous = null;
+      oldlast.next = null;
     }
     size--;
     return val;
   }
+  
+  protected T first() {
+    return head.val;
+  }
 
   @Override
   public Iterator<T> iterator() { // return an iterator over items in order from front to end
-    return new DequeueIterator<>(head, size);
+    return new ListIterator<>(head, size);
   }
 }

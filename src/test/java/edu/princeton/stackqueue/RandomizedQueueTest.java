@@ -4,10 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
+import edu.princeton.list.ArrayList;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.junit.Test;
 
 public class RandomizedQueueTest {
 
@@ -17,7 +16,7 @@ public class RandomizedQueueTest {
     assertTrue(q.isEmpty());
 
     int sampleSize = 8;
-    List<String> sample = getSample(sampleSize);
+    ArrayList<String> sample = getSample(sampleSize);
 
     q.enqueue(sample.get(0));
     assertEquals(sample.get(0), q.sample());
@@ -41,8 +40,8 @@ public class RandomizedQueueTest {
     assertEquals(0, q.size());
   }
 
-  private List<String> getSample(int sampleSize) {
-    List<String> sample = new ArrayList<>();
+  private ArrayList<String> getSample(int sampleSize) {
+    ArrayList<String> sample = new ArrayList<>();
     for (int i = 0; i < sampleSize; i++) {
       sample.add(i + "");
     }
@@ -53,7 +52,7 @@ public class RandomizedQueueTest {
   public void testRadomizedQueueIterator() {
     RandomizedQueue<String> q = new RandomizedQueue<>();
     int sampleSize = 8;
-    List<String> sample = getSample(sampleSize);
+    ArrayList<String> sample = getSample(sampleSize);
 
     for (int i = 0; i < sampleSize; i++) {
       q.enqueue(sample.get(i));

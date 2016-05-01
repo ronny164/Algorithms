@@ -1,10 +1,9 @@
 package edu.princeton.heap;
 
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.list.ArrayList;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Ronny A. Pena
@@ -158,7 +157,7 @@ public class Board {
    * @return All neighboring boards.
    */
   public Iterable<Board> neighbors() {
-    List<Board> neighbors = new ArrayList<>();
+    ArrayList<Board> neighbors = new ArrayList<>();
 
     // up
     int newLocation = location - dimension;

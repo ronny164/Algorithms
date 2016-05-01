@@ -1,4 +1,4 @@
-package edu.princeton.stackqueue;
+package edu.princeton.list;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,7 +11,7 @@ public class DequeTest {
   @Test
   public void testAddFirstRemoveFirst() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
 
     // invoke code
     d.addFirst("a");
@@ -39,7 +39,7 @@ public class DequeTest {
     assertEquals(0, d.size());
   }
 
-  private void checkIterator(Deque<String> d) {
+  private void checkIterator(DoublyLinkedList<String> d) {
     int size = d.size();
     for (String s : d) {
       System.out.println(s);
@@ -51,7 +51,7 @@ public class DequeTest {
   @Test
   public void testAddFirstRemoveLast() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
 
     // invoke code
     d.addFirst("a");
@@ -75,7 +75,7 @@ public class DequeTest {
   @Test
   public void testAddLastRemoveFirst() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
 
     // invoke code
     d.addLast("a");
@@ -100,7 +100,7 @@ public class DequeTest {
   @Test
   public void testAddLastRemoveLast() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
 
     // invoke code
     d.addLast("a");
@@ -124,7 +124,7 @@ public class DequeTest {
   @Test
   public void testAddFirstRemoveLastOne() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
     assertTrue(d.isEmpty());
 
     // invoke code
@@ -141,7 +141,7 @@ public class DequeTest {
   @Test
   public void testAddLastRemoveFirstOne() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
     assertTrue(d.isEmpty());
 
     // invoke code
@@ -158,7 +158,7 @@ public class DequeTest {
   @Test
   public void testAddFirstAddLastRemoveFirst() {
     // dummy data
-    Deque<String> d = new Deque<>();
+    DoublyLinkedList<String> d = new DoublyLinkedList<>();
     assertTrue(d.isEmpty());
 
     // invoke code
