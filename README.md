@@ -4,7 +4,7 @@ Programming exercise from the course in Coursera.
 
 Covers:
 * Disjoint-sets
-* Stacks, Queues, Deque
+* LinkedList, ArrayList, Stacks, Queues, Deque
 * Heap (Priority Queue)
 * Red-black BST
 * Hashtables
