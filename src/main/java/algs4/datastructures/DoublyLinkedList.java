@@ -47,6 +47,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
       return val;
     }
   }
+
   private Node<T> tail;
   private Node<T> head;
   private int size;
@@ -145,7 +146,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     size--;
     return val;
   }
-  
+
   protected T first() {
     return head.val;
   }

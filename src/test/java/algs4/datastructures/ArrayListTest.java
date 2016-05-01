@@ -8,7 +8,7 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 public class ArrayListTest {
-  
+
   @Test
   public void testBasic() {
     ArrayList<Integer> list = new ArrayList<>();
@@ -23,7 +23,7 @@ public class ArrayListTest {
     assertFalse(list.contains(25));
     assertEquals(27, list.get(25).intValue());
     assertEquals(49, list.size());
-    for (int val: list) {
+    for (int val : list) {
       System.out.print(val + " ");
     }
     System.out.println();

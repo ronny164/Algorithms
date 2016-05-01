@@ -1,10 +1,11 @@
 package algs4.datastructures;
 
-public class Hashtable<K,V> {
-  private static final class Node<K,V> {
+public class Hashtable<K, V> {
+  private static final class Node<K, V> {
     private K key;
     private V val;
-    private Node<K,V> next;
+    private Node<K, V> next;
+
     public Node(K key, V val, Node<K, V> next) {
       super();
       this.key = key;
@@ -12,15 +13,16 @@ public class Hashtable<K,V> {
       this.next = next;
     }
   }
+
   private static final int THRESHOLD = 16;
-  private Node<K,V>[] table;
+  private Node<K, V>[] table;
   private int capacity = THRESHOLD;
   private int size = THRESHOLD;
-  
+
   public Hashtable() {
     table = (Node[]) new Object[THRESHOLD];
   }
-  
+
   public Hashtable(int initCapacity) {
     if (initCapacity < 0) {
       throw new IllegalArgumentException();
@@ -43,29 +45,30 @@ public class Hashtable<K,V> {
     System.arraycopy(table, 0, newArr, 0, size);
     this.table = newArr;
   }
-  
+
   public void put(K key, V val) {
     int bucket = getBucket(key);
     boolean newlyAdded = add(bucket, key, val);
-    if(newlyAdded) {
+    if (newlyAdded) {
       amortized(size + 1);
       size++;
     }
   }
+
   private int getBucket(K key) {
     int hashcode = key.hashCode();
     return hashcode % capacity;
   }
-  
+
   private boolean add(int bucket, K key, V val) {
-    Node<K,V> current = table[bucket];
+    Node<K, V> current = table[bucket];
     if (current == null) {
       current = new Node<>(key, val, null);
       table[bucket] = current;
       return true;
     }
-    
-    while (current.next != null) {  
+
+    while (current.next != null) {
       if (current.key.equals(key)) {
         current.val = val;
         return false;
@@ -75,10 +78,10 @@ public class Hashtable<K,V> {
     current.next = new Node<>(key, val, null);
     return true;
   }
-  
+
   public V get(K key) {
     int bucket = getBucket(key);
-    Node<K,V> node = table[bucket];
+    Node<K, V> node = table[bucket];
     while (node != null) {
       if (node.key.equals(key)) {
         return node.val;
@@ -87,7 +90,7 @@ public class Hashtable<K,V> {
     }
     return null;
   }
-  
+
   public boolean containsKey(K key) {
     return get(key) != null;
   }

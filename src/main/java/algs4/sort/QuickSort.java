@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class QuickSort {
-  
+
   public static <T> T findKth(T[] arr, int k, Comparator<T> cmp) {
     if (arr == null || arr.length == 0 || k < 0 || k >= arr.length || cmp == null) {
       throw new IllegalArgumentException();
@@ -30,7 +30,7 @@ public class QuickSort {
     }
     sort(arr, 0, arr.length - 1, cmp);
   }
-  
+
   private static <T> void sort(T[] arr, int start, int end, Comparator<T> cmp) {
     if (start >= end) {
       return;
@@ -39,7 +39,7 @@ public class QuickSort {
     sort(arr, start, pivot - 1, cmp);
     sort(arr, pivot + 1, end, cmp);
   }
-  
+
   private static <T> int partition(T[] arr, int start, int end, Comparator<T> cmp) {
     int pivot = start;
     T pivotVal = arr[pivot];
@@ -62,7 +62,7 @@ public class QuickSort {
     System.out.println(Arrays.toString(arr));
     return j;
   }
-  
+
   private static <T> void swap(T[] arr, int i, int j) {
     T temp = arr[i];
     arr[i] = arr[j];

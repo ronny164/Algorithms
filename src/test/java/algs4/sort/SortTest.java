@@ -19,7 +19,7 @@ public class SortTest {
     System.out.println(Arrays.toString(nums));
     assertTrue(Arrays.equals(nums, sorted));
   }
-  
+
   @Test
   public void testCountingSort() {
     int n = 15;
@@ -49,26 +49,36 @@ public class SortTest {
     String[] arr = new String[] {"127", "761", "302", "250", "327"};
     return arr;
   }
-  
+
   @Test
   public void testMergeSort() throws Exception {
-    Integer[] arr = new Integer[]{10, 5, 3, 4, 6, 8, 11, 9, 2};
-    MergeSort.sort(arr, (o1, o2) -> {return o1 - o2;});
+    Integer[] arr = new Integer[] {10, 5, 3, 4, 6, 8, 11, 9, 2};
+    MergeSort.sort(arr, (o1, o2) -> {
+      return o1 - o2;
+    });
     assertEquals("[2, 3, 4, 5, 6, 8, 9, 10, 11]", Arrays.toString(arr));
   }
-  
+
   @Test
   public void testQuickSort() throws Exception {
-    Integer[] arr = new Integer[]{7, 1, 15, 10, 3, 5, 2, 9, 13, 4};
-    QuickSort.sort(arr, (o1, o2) -> {return o1 - o2;});
+    Integer[] arr = new Integer[] {7, 1, 15, 10, 3, 5, 2, 9, 13, 4};
+    QuickSort.sort(arr, (o1, o2) -> {
+      return o1 - o2;
+    });
     assertEquals("[1, 2, 3, 4, 5, 7, 9, 10, 13, 15]", Arrays.toString(arr));
   }
-  
+
   @Test
   public void testFindKth() throws Exception {
-    Integer[] arr = new Integer[]{7, 1, 15, 10, 3, 5, 2, 9, 13, 4};
-    assertEquals(4, QuickSort.findKth(arr, 3, (o1, o2) -> {return o1 - o2;}).intValue());
-    assertEquals(2, QuickSort.findKth(arr, 1, (o1, o2) -> {return o1 - o2;}).intValue());
-    assertEquals(10, QuickSort.findKth(arr, 7, (o1, o2) -> {return o1 - o2;}).intValue());
+    Integer[] arr = new Integer[] {7, 1, 15, 10, 3, 5, 2, 9, 13, 4};
+    assertEquals(4, QuickSort.findKth(arr, 3, (o1, o2) -> {
+      return o1 - o2;
+    }).intValue());
+    assertEquals(2, QuickSort.findKth(arr, 1, (o1, o2) -> {
+      return o1 - o2;
+    }).intValue());
+    assertEquals(10, QuickSort.findKth(arr, 7, (o1, o2) -> {
+      return o1 - o2;
+    }).intValue());
   }
 }

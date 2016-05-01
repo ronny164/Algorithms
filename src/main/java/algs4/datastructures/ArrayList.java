@@ -47,26 +47,26 @@ public class ArrayList<T> implements Iterable<T> {
       System.arraycopy(arr, index, arr, index + 1, size - (index + 1));
     }
   }
-  
+
   private void shiftLeft(int index) {
     if (index != size - 1) {
       System.arraycopy(arr, index + 1, arr, index, size - (index + 1));
     }
   }
-  
+
   public void add(T val) {
-      amortized(size + 1);
-      arr[size++] = val;
+    amortized(size + 1);
+    arr[size++] = val;
   }
 
   public void add(int index, T val) {
-    validateIndex(index); 
+    validateIndex(index);
     amortized(size + 1);
     shiftRight(index);
     arr[index] = val;
     size++;
   }
-  
+
   public void remove(int index) {
     validateIndex(index);
     T temp = arr[index];
@@ -77,7 +77,7 @@ public class ArrayList<T> implements Iterable<T> {
 
   public boolean remove(T val) {
     int index = indexOf(val);
-    if (index == -1) { 
+    if (index == -1) {
       return false;
     }
     remove(index);
@@ -106,7 +106,7 @@ public class ArrayList<T> implements Iterable<T> {
   public int size() {
     return size;
   }
-  
+
   public int capacity() {
     return capacity;
   }
@@ -115,7 +115,7 @@ public class ArrayList<T> implements Iterable<T> {
     validateIndex(index);
     return arr[index];
   }
-  
+
   public static <T> void swap(ArrayList<T> list, int i, int j) {
     T temp = list.arr[i];
     list.arr[i] = list.arr[j];
@@ -126,6 +126,7 @@ public class ArrayList<T> implements Iterable<T> {
     private int index;
     private int size;
     private ArrayList<T> list;
+
     public ListIterator(ArrayList<T> arrayList) {
       this.list = arrayList;
       this.index = 0;
@@ -147,19 +148,19 @@ public class ArrayList<T> implements Iterable<T> {
   public String toString() {
 
     Iterator<T> it = iterator();
-    if (! it.hasNext()) {
+    if (!it.hasNext()) {
       return "[]";
     }
 
     StringBuilder sb = new StringBuilder();
     sb.append('[');
     for (;;) {
-        T e = it.next();
-        sb.append(e == this ? "(this Collection)" : e);
-        if (! it.hasNext()) {
-          return sb.append(']').toString();
-        }
-        sb.append(',').append(' ');
+      T e = it.next();
+      sb.append(e == this ? "(this Collection)" : e);
+      if (!it.hasNext()) {
+        return sb.append(']').toString();
+      }
+      sb.append(',').append(' ');
     }
   }
 }

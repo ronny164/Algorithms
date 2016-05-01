@@ -34,6 +34,7 @@ public class ArrayTrieTest {
     assertTrue(set.contains("equations"));
     assertTrue(set.contains("flatten"));
     assertEquals("[ronnie, ronny]", set.valuesWithPrefix("ron").toString());
-    assertEquals("[cat, equation, equations, flat, flatten, ronnie, ronny]", set.values().toString());
+    assertEquals("[cat, equation, equations, flat, flatten, ronnie, ronny]", set.values()
+        .toString());
   }
 }
