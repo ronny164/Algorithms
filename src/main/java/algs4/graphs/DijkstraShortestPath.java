@@ -9,13 +9,34 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+/**
+ * Using a regular Heap instead of a IndexHeap. 
+ * @author Ronny A. Pena
+ */
 public class DijkstraShortestPath<T> {
 
+  static class Graph<T> {
+    private HashMap<T, ArrayList<WeightedEdge<T>>> adjList;
+    private Graph(ArrayList<WeightedEdge<T>> edges) {
+      if (edges == null || edges.size() == 0) {
+        throw new IllegalArgumentException();
+      }
+      adjList = new HashMap<>();
+      for (WeightedEdge<T> weightedEdge : edges) {
+        ArrayList<WeightedEdge<T>> adj = adjList.get(weightedEdge.from);
+        if (adj == null) {
+          adj = new ArrayList<>();
+          adjList.put(weightedEdge.from, adj);
+        }
+        adj.add(weightedEdge);
+      }
+    }
+  }
+  
   static class WeightedEdge<T> {
     private T from;
     private T to;
     private int weight;
-
     public WeightedEdge(T from, T to, int weight) {
       super();
       this.from = from;
@@ -28,7 +49,10 @@ public class DijkstraShortestPath<T> {
   private HashMap<T, Integer> distanceTo = new HashMap<>();
   private HashMap<T, T> edgeTo = new HashMap<>();
 
-  public Iterable<T> computeShorteshPath(HashMap<T, ArrayList<WeightedEdge<T>>> graph, T start, T target) {
+  public Iterable<T> computeShorteshPath(Graph<T> graph, T start, T target) {
+    if (graph == null || graph.adjList.isEmpty() || start == null || target == null) {
+      throw new IllegalArgumentException();
+    }
     distanceTo.clear();
     distanceTo.put(start, 0);
     edgeTo.clear();
@@ -36,11 +60,11 @@ public class DijkstraShortestPath<T> {
     PriorityQueue<WeightedEdge<T>> pq = new PriorityQueue<>((o1, o2) -> {
       return o1.weight - o2.weight;
     });
-    addEdges(graph.get(start), pq);
+    addEdges(graph.adjList.get(start), pq);
     while (!pq.isEmpty()) {
       WeightedEdge<T> smallest = pq.remove();
       relax(smallest);
-      addEdges(graph.get(smallest.to), pq);
+      addEdges(graph.adjList.get(smallest.to), pq);
     }
     return buildPath(target);
   }
@@ -81,20 +105,6 @@ public class DijkstraShortestPath<T> {
     }
   }
 
-  private <T> HashMap<T, ArrayList<WeightedEdge<T>>> createGraph(
-      ArrayList<WeightedEdge<T>> edges) {
-    HashMap<T, ArrayList<WeightedEdge<T>>> graph = new HashMap<>();
-    for (WeightedEdge<T> weightedEdge : edges) {
-      ArrayList<WeightedEdge<T>> adj = graph.get(weightedEdge.from);
-      if (adj == null) {
-        adj = new ArrayList<>();
-        graph.put(weightedEdge.from, adj);
-      }
-      adj.add(weightedEdge);
-    }
-    return graph;
-  }
-
 /**
 <pre>
     (A)<-----16-----(B)<-----1------(C)------34---->(D) 
@@ -133,13 +143,11 @@ public class DijkstraShortestPath<T> {
             new WeightedEdge<>('F', 'G', 11),
             new WeightedEdge<>('G', 'C', 07),
             new WeightedEdge<>('G', 'H', 80));
-    HashMap<Character, ArrayList<WeightedEdge<Character>>> graph = createGraph(edges);
-
+    Graph<Character> graph = new Graph<>(edges);
     DijkstraShortestPath<Character> algo = new DijkstraShortestPath<>();
     assertEquals("[F, G, C, D, H]", algo.computeShorteshPath(graph, 'F', 'H').toString());
     assertEquals(82, algo.distanceTo.get('H').intValue());
   }
-  
 
   @Test
   public void testLectureExample() {
@@ -161,7 +169,7 @@ public class DijkstraShortestPath<T> {
             new WeightedEdge<>(5, 6, 13),
             new WeightedEdge<>(7, 5,  6),
             new WeightedEdge<>(7, 2,  7));
-    HashMap<Integer, ArrayList<WeightedEdge<Integer>>> graph = createGraph(edges);
+    Graph<Integer> graph = new Graph<>(edges);
     DijkstraShortestPath<Integer> algo = new DijkstraShortestPath<>();
     assertEquals("[0, 4, 5, 2, 6]", algo.computeShorteshPath(graph, 0, 6).toString());
     assertEquals(25, algo.distanceTo.get(6).intValue());
