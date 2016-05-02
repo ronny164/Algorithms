@@ -63,7 +63,6 @@ public class DijkstraShortestPath<T> {
     addEdges(graph.adjList.get(start), pq);
     while (!pq.isEmpty()) {
       WeightedEdge<T> smallest = pq.remove();
-      relax(smallest);
       addEdges(graph.adjList.get(smallest.to), pq);
     }
     return buildPath(target);
@@ -100,7 +99,9 @@ public class DijkstraShortestPath<T> {
   private void addEdges(ArrayList<WeightedEdge<T>> edges, PriorityQueue<WeightedEdge<T>> pq) {
     if(edges != null) {
       for (int i = 0; i < edges.size(); i++) {
-        pq.add(edges.get(i));
+        WeightedEdge<T> edge = edges.get(i);
+        pq.add(edge);
+        relax(edge);
       }
     }
   }
