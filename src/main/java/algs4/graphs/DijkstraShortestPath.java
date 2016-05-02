@@ -81,11 +81,11 @@ public class DijkstraShortestPath<T> {
     }
   }
 
-  private HashMap<Character, ArrayList<WeightedEdge<Character>>> createGraph(
-      ArrayList<WeightedEdge<Character>> edges) {
-    HashMap<Character, ArrayList<WeightedEdge<Character>>> graph = new HashMap<>();
-    for (WeightedEdge<Character> weightedEdge : edges) {
-      ArrayList<WeightedEdge<Character>> adj = graph.get(weightedEdge.from);
+  private <T> HashMap<T, ArrayList<WeightedEdge<T>>> createGraph(
+      ArrayList<WeightedEdge<T>> edges) {
+    HashMap<T, ArrayList<WeightedEdge<T>>> graph = new HashMap<>();
+    for (WeightedEdge<T> weightedEdge : edges) {
+      ArrayList<WeightedEdge<T>> adj = graph.get(weightedEdge.from);
       if (adj == null) {
         adj = new ArrayList<>();
         graph.put(weightedEdge.from, adj);
@@ -122,27 +122,27 @@ public class DijkstraShortestPath<T> {
 
   @Test
   public void testLectureExample() {
-    ArrayList<WeightedEdge<Character>> edges =
+    ArrayList<WeightedEdge<Integer>> edges =
         ArrayList.asList(
-            new WeightedEdge<>('0', '1',  5),
-            new WeightedEdge<>('0', '4',  9),
-            new WeightedEdge<>('0', '7',  8),
-            new WeightedEdge<>('1', '2', 12),
-            new WeightedEdge<>('1', '3', 15),
-            new WeightedEdge<>('1', '7',  4),
-            new WeightedEdge<>('2', '3', 03),
-            new WeightedEdge<>('2', '6', 11),
-            new WeightedEdge<>('3', '6',  9),
-            new WeightedEdge<>('4', '5', 04),
-            new WeightedEdge<>('4', '6', 20),
-            new WeightedEdge<>('4', '7', 05),
-            new WeightedEdge<>('5', '2', 01),
-            new WeightedEdge<>('5', '6', 13),
-            new WeightedEdge<>('7', '5',  6),
-            new WeightedEdge<>('7', '2',  7));
-    HashMap<Character, ArrayList<WeightedEdge<Character>>> graph = createGraph(edges);
-    DijkstraShortestPath<Character> algo = new DijkstraShortestPath<>();
-    assertEquals("[0, 4, 5, 2, 6]", algo.computeShorteshPath(graph, '0', '6').toString());
-    assertEquals(25, algo.distanceTo.get('6').intValue());
+            new WeightedEdge<>(0, 1,  5),
+            new WeightedEdge<>(0, 4,  9),
+            new WeightedEdge<>(0, 7,  8),
+            new WeightedEdge<>(1, 2, 12),
+            new WeightedEdge<>(1, 3, 15),
+            new WeightedEdge<>(1, 7,  4),
+            new WeightedEdge<>(2, 3, 03),
+            new WeightedEdge<>(2, 6, 11),
+            new WeightedEdge<>(3, 6,  9),
+            new WeightedEdge<>(4, 5, 04),
+            new WeightedEdge<>(4, 6, 20),
+            new WeightedEdge<>(4, 7, 05),
+            new WeightedEdge<>(5, 2, 01),
+            new WeightedEdge<>(5, 6, 13),
+            new WeightedEdge<>(7, 5,  6),
+            new WeightedEdge<>(7, 2,  7));
+    HashMap<Integer, ArrayList<WeightedEdge<Integer>>> graph = createGraph(edges);
+    DijkstraShortestPath<Integer> algo = new DijkstraShortestPath<>();
+    assertEquals("[0, 4, 5, 2, 6]", algo.computeShorteshPath(graph, 0, 6).toString());
+    assertEquals(25, algo.distanceTo.get(6).intValue());
   }
 }

@@ -164,6 +164,7 @@ public class ArrayList<T> implements Iterable<T> {
     }
   }
 
+  @SafeVarargs
   public static <T> ArrayList<T> asList(T... input) {
     ArrayList<T> list = new ArrayList<>();
     for (T t : input) {
