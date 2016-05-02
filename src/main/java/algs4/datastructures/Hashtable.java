@@ -1,6 +1,7 @@
 package algs4.datastructures;
 
 public class Hashtable<K, V> {
+  
   private static final class Node<K, V> {
     private K key;
     private V val;
@@ -20,14 +21,14 @@ public class Hashtable<K, V> {
   private int size = THRESHOLD;
 
   public Hashtable() {
-    table = (Node[]) new Object[THRESHOLD];
+    table =  new Node[THRESHOLD];
   }
 
   public Hashtable(int initCapacity) {
     if (initCapacity < 0) {
       throw new IllegalArgumentException();
     }
-    table = (Node[]) new Object[initCapacity];
+    table = new Node[initCapacity];
   }
 
   private void amortized(int newSize) {
@@ -41,7 +42,7 @@ public class Hashtable<K, V> {
   }
 
   private void move() {
-    Node[] newArr = (Node[]) new Object[capacity];
+    Node[] newArr = new Node[capacity];
     System.arraycopy(table, 0, newArr, 0, size);
     this.table = newArr;
   }

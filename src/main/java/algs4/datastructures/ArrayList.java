@@ -163,4 +163,12 @@ public class ArrayList<T> implements Iterable<T> {
       sb.append(',').append(' ');
     }
   }
+
+  public static <T> ArrayList<T> asList(T... input) {
+    ArrayList<T> list = new ArrayList<>();
+    for (T t : input) {
+      list.add(t);
+    }
+    return list;
+  }
 }

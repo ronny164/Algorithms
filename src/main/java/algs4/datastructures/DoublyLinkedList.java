@@ -155,4 +155,23 @@ public class DoublyLinkedList<T> implements Iterable<T> {
   public Iterator<T> iterator() { // return an iterator over items in order from front to end
     return new ListIterator<>(head, size);
   }
+  
+  @Override
+  public String toString() {
+    Iterator<T> it = iterator();
+    if (!it.hasNext()) {
+      return "[]";
+    }
+    StringBuilder sb = new StringBuilder();
+    sb.append('[');
+    for (;;) {
+      T e = it.next();
+      sb.append(e == this ? "(this Collection)" : e);
+      if (!it.hasNext()) {
+        return sb.append(']').toString();
+      }
+      sb.append(',').append(' ');
+    }
+  }
+
 }
