@@ -95,6 +95,27 @@ public class DijkstraShortestPath<T> {
     return graph;
   }
 
+/**
+<pre>
+    (A)<-----16-----(B)<-----1------(C)------34---->(D) 
+     ^              ^^              ^^\              |  
+     |             / |             / | \             |  
+     |            /  |            /  |  \            |  
+     |           /   |           /   |   \           |  
+     |          /    |          /    |    \          |  
+     |         /     |         /     |     \         |  
+     |        /      |        /      |      \        |  
+     20      6       12      21      7       71      30 
+     |      /        |      /        |        \      |  
+     |     /         |     /         |         \     |  
+     |    /          |    /          |          \    |  
+     |   /           |   /           |           \   |  
+     |  /            |  /            |            \  |  
+     | /             | /             |             \ |  
+     |/              |/              |              vv  
+    (E)<-----4------(F)------11---->(G)------80---->(H) 
+</pre>
+ */
   @Test
   public void testHomeworkAssignment() {
     ArrayList<WeightedEdge<Character>> edges =
