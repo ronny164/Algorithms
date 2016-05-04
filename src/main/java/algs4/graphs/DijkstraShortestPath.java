@@ -1,9 +1,6 @@
 package algs4.graphs;
 
-import static org.junit.Assert.assertEquals;
 import algs4.datastructures.ArrayList;
-
-import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,7 +14,7 @@ public class DijkstraShortestPath<T> {
 
   static class Graph<T> {
     private HashMap<T, ArrayList<WeightedEdge<T>>> adjList;
-    private Graph(ArrayList<WeightedEdge<T>> edges) {
+    public Graph(ArrayList<WeightedEdge<T>> edges) {
       if (edges == null || edges.size() == 0) {
         throw new IllegalArgumentException();
       }
@@ -43,7 +40,6 @@ public class DijkstraShortestPath<T> {
       this.to = to;
       this.weight = weight;
     }
-
   }
   
   private HashMap<T, Integer> distanceTo = new HashMap<>();
@@ -61,6 +57,7 @@ public class DijkstraShortestPath<T> {
       return o1.weight - o2.weight;
     });
     addEdges(graph.adjList.get(start), pq);
+    // to handle cyclic graphs, we could use a 'Set<Vertex> visited' to mark the visited vertices. 
     while (!pq.isEmpty()) {
       WeightedEdge<T> smallest = pq.remove();
       addEdges(graph.adjList.get(smallest.to), pq);
@@ -84,15 +81,17 @@ public class DijkstraShortestPath<T> {
 
   private void relax(WeightedEdge<T> edge) {
     int fromDistance = distanceTo.get(edge.from);
-    if (!edgeTo.containsKey(edge.to)) {
-      distanceTo.put(edge.to, fromDistance + edge.weight);
-      edgeTo.put(edge.to, edge.from);
-    } else {
+    if (edgeTo.containsKey(edge.to)) {
       int toDistance = distanceTo.get(edge.to);
       if (toDistance > fromDistance + edge.weight) {
         distanceTo.put(edge.to, fromDistance + edge.weight);
         edgeTo.put(edge.to, edge.from);
       }
+    } else {
+      // initial, we don't have to use infinity because we are using sets. 
+      // if vertices don't exist, that's the equivalent of infinity.
+      distanceTo.put(edge.to, fromDistance + edge.weight);
+      edgeTo.put(edge.to, edge.from);
     }
   }
 
@@ -105,74 +104,11 @@ public class DijkstraShortestPath<T> {
       }
     }
   }
-
-/**
-<pre>
-    (A)<-----16-----(B)<-----1------(C)------34---->(D) 
-     ^              ^^              ^^\              |  
-     |             / |             / | \             |  
-     |            /  |            /  |  \            |  
-     |           /   |           /   |   \           |  
-     |          /    |          /    |    \          |  
-     |         /     |         /     |     \         |  
-     |        /      |        /      |      \        |  
-     20      6       12      21      7       71      30 
-     |      /        |      /        |        \      |  
-     |     /         |     /         |         \     |  
-     |    /          |    /          |          \    |  
-     |   /           |   /           |           \   |  
-     |  /            |  /            |            \  |  
-     | /             | /             |             \ |  
-     |/              |/              |              vv  
-    (E)<-----4------(F)------11---->(G)------80---->(H) 
-</pre>
- */
-  @Test
-  public void testHomeworkAssignment() {
-    ArrayList<WeightedEdge<Character>> edges =
-        ArrayList.asList(
-            new WeightedEdge<>('B', 'A', 16),
-            new WeightedEdge<>('C', 'B', 01),
-            new WeightedEdge<>('C', 'D', 34),
-            new WeightedEdge<>('C', 'H', 71),
-            new WeightedEdge<>('D', 'H', 30),
-            new WeightedEdge<>('E', 'A', 20),
-            new WeightedEdge<>('E', 'B', 06),
-            new WeightedEdge<>('F', 'B', 12),
-            new WeightedEdge<>('F', 'C', 21),
-            new WeightedEdge<>('F', 'E', 04),
-            new WeightedEdge<>('F', 'G', 11),
-            new WeightedEdge<>('G', 'C', 07),
-            new WeightedEdge<>('G', 'H', 80));
-    Graph<Character> graph = new Graph<>(edges);
-    DijkstraShortestPath<Character> algo = new DijkstraShortestPath<>();
-    assertEquals("[F, G, C, D, H]", algo.computeShorteshPath(graph, 'F', 'H').toString());
-    assertEquals(82, algo.distanceTo.get('H').intValue());
-  }
-
-  @Test
-  public void testLectureExample() {
-    ArrayList<WeightedEdge<Integer>> edges =
-        ArrayList.asList(
-            new WeightedEdge<>(0, 1,  5),
-            new WeightedEdge<>(0, 4,  9),
-            new WeightedEdge<>(0, 7,  8),
-            new WeightedEdge<>(1, 2, 12),
-            new WeightedEdge<>(1, 3, 15),
-            new WeightedEdge<>(1, 7,  4),
-            new WeightedEdge<>(2, 3, 03),
-            new WeightedEdge<>(2, 6, 11),
-            new WeightedEdge<>(3, 6,  9),
-            new WeightedEdge<>(4, 5, 04),
-            new WeightedEdge<>(4, 6, 20),
-            new WeightedEdge<>(4, 7, 05),
-            new WeightedEdge<>(5, 2, 01),
-            new WeightedEdge<>(5, 6, 13),
-            new WeightedEdge<>(7, 5,  6),
-            new WeightedEdge<>(7, 2,  7));
-    Graph<Integer> graph = new Graph<>(edges);
-    DijkstraShortestPath<Integer> algo = new DijkstraShortestPath<>();
-    assertEquals("[0, 4, 5, 2, 6]", algo.computeShorteshPath(graph, 0, 6).toString());
-    assertEquals(25, algo.distanceTo.get(6).intValue());
+  
+  public int getTotalDistance(T vertex){
+    if (vertex == null || !distanceTo.containsKey(vertex)) {
+      throw new IllegalArgumentException();
+    }
+    return distanceTo.get(vertex).intValue();
   }
 }

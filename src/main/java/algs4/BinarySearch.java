@@ -1,6 +1,5 @@
 package algs4;
 
-
 public class BinarySearch {
 
   public static <T extends Comparable> int indexOf(T[] arr, T search) {

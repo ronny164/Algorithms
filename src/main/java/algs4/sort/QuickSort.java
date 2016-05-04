@@ -1,6 +1,5 @@
 package algs4.sort;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 public class QuickSort {
@@ -41,26 +40,26 @@ public class QuickSort {
   }
 
   private static <T> int partition(T[] arr, int start, int end, Comparator<T> cmp) {
-    int pivot = start;
+    int pivot = start; // use the first one as the pivot
     T pivotVal = arr[pivot];
-    int i = start + 1;
-    int j = end;
-    System.out.println("i: " + i + ", j: " + j);
+    int left = pivot + 1;
+    int right = end;
     while (true) {
-      while (i < end && cmp.compare(arr[i], pivotVal) < 0) {
-        i++;
+      // find left
+      while (left < end && cmp.compare(arr[left], pivotVal) < 0) { 
+        left++;
       }
-      while (j > start && cmp.compare(pivotVal, arr[j]) < 0) {
-        j--;
+      // find right
+      while (right > start && cmp.compare(pivotVal, arr[right]) < 0) {
+        right--;
       }
-      if (i >= j) {
+      if (left >= right) { // they crossed each other, stop
         break;
       }
-      swap(arr, i, j);
+      swap(arr, left, right); // found one set of elements that break the rule.
     }
-    swap(arr, pivot, j);
-    System.out.println(Arrays.toString(arr));
-    return j;
+    swap(arr, pivot, right); //swap the right with the pivot
+    return right; // and now return the right as the partition point.
   }
 
   private static <T> void swap(T[] arr, int i, int j) {

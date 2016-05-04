@@ -1,5 +1,7 @@
 package algs4.datastructures;
 
+import java.util.Arrays;
+
 public class Hashtable<K, V> {
   
   private static final class Node<K, V> {
@@ -18,7 +20,7 @@ public class Hashtable<K, V> {
   private static final int THRESHOLD = 16;
   private Node<K, V>[] table;
   private int capacity = THRESHOLD;
-  private int size = THRESHOLD;
+  private int size;
 
   public Hashtable() {
     table =  new Node[THRESHOLD];
@@ -57,8 +59,7 @@ public class Hashtable<K, V> {
   }
 
   private int getBucket(K key) {
-    int hashcode = key.hashCode();
-    return hashcode % capacity;
+    return (key.hashCode() & 0x7fffffff) % capacity;
   }
 
   private boolean add(int bucket, K key, V val) {
@@ -94,5 +95,14 @@ public class Hashtable<K, V> {
 
   public boolean containsKey(K key) {
     return get(key) != null;
+  }
+
+  public void clear() {
+    Arrays.fill(table, null);
+    size = 0;
+  }
+
+  public boolean isEmpty() {
+    return size == 0;
   }
 }
