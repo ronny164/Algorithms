@@ -24,7 +24,10 @@ public class HashtableTest {
       list.add(c);
     }
     System.out.println("count: " + list.size());
-
     assertEquals(table.size(), list.size());
+    for (char c = '0'; c <= 'z'; c++) {
+      table.remove(c);
+    }
+    assertEquals(0, table.size());
   }
 }

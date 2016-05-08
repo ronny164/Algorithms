@@ -2,6 +2,7 @@ package algs4.datastructures;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author Ronny A. Pena
@@ -10,25 +11,7 @@ import java.util.Iterator;
  * @param <V> The value type.
  */
 public class Hashtable<K, V> {
-
-  static final class Node<K, V> {
-    private K key;
-    private V val;
-    private Node<K, V> next;
-
-    public Node(K key, V val, Node<K, V> next) {
-      super();
-      this.key = key;
-      this.val = val;
-      this.next = next;
-    }
-
-    @Override
-    public String toString() {
-      return "{" + key + "=" + val + ", hasNext=" + (next != null) + "}";
-    }
-  }
-
+  
   private static final int THRESHOLD = 16;
   private Node<K, V>[] table;
   private int capacity = THRESHOLD;
@@ -48,11 +31,11 @@ public class Hashtable<K, V> {
 
   private void amortized(int newSize) {
     if (newSize > capacity) {
-      move(capacity * 2);
+      resize(capacity * 2);
     }
   }
 
-  private void move(int newCapacity) {
+  private void resize(int newCapacity) {
     Hashtable<K, V> temp = new Hashtable<>(newCapacity);
     for (K key : this.keySet()) {
       temp.put(key, this.get(key));
@@ -149,6 +132,24 @@ public class Hashtable<K, V> {
   public Iterable<K> keySet() {
     return () -> new CustomIterator<>(table);
   }
+  
+  private static final class Node<K, V> {
+    private K key;
+    private V val;
+    private Node<K, V> next;
+
+    public Node(K key, V val, Node<K, V> next) {
+      super();
+      this.key = key;
+      this.val = val;
+      this.next = next;
+    }
+
+    @Override
+    public String toString() {
+      return "{" + key + "=" + val + ", hasNext=" + (next != null) + "}";
+    }
+  }
 
   private static final class CustomIterator<K> implements Iterator<K> {
 
@@ -163,6 +164,7 @@ public class Hashtable<K, V> {
 
     @Override
     public boolean hasNext() {
+      // cache the next value.
       if (cached == null) {
         cached = nextNode();
       }
@@ -176,16 +178,20 @@ public class Hashtable<K, V> {
         if (local == null) {
           return null;
         }
+        // clears the cache if there no more entries;
         cached = cached.next;
         return local.key;
       }
-      return null;
+      // users should call hasNext() first.
+      throw new NoSuchElementException();
     }
 
     public Node<K, ?> nextNode() {
+      //move to the next item in the link, if already on a linkedList.
       if (cached != null) {
         cached = cached.next;
       }
+      // if not on a linkedList, check the table.
       while (index < table.length && cached == null) {
         cached = table[index++];
       }
