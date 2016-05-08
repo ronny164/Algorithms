@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class MultiMap<K, V> {
 
-  private Hashtable<K, DoublyLinkedList<V>> keyValueMap = new Hashtable<>();
+  private HashMap<K, DoublyLinkedList<V>> keyValueMap = new HashMap<>();
 
   private DoublyLinkedList<V> get(K key) {
     DoublyLinkedList<V> values = keyValueMap.get(key);

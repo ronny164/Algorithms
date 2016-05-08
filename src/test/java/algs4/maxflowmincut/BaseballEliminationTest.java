@@ -4,7 +4,7 @@ package algs4.maxflowmincut;
 import static algs4.maxflowmincut.MaxFlowUtil.getNextWord;
 import static org.junit.Assert.assertEquals;
 import algs4.datastructures.ArrayList;
-import algs4.datastructures.Hashtable;
+import algs4.datastructures.HashMap;
 
 import edu.princeton.cs.algs4.Counter;
 
@@ -15,7 +15,7 @@ public class BaseballEliminationTest {
   private static final class Result {
     private int count = 0;
     private ArrayList<String> teams = new ArrayList<>();
-    private Hashtable<String, Iterable<String>> eliminations = new Hashtable<>();
+    private HashMap<String, Iterable<String>> eliminations = new HashMap<>();
   }
 
   private Result runFile(String fileName) {

@@ -10,12 +10,12 @@ import java.util.Random;
  */
 public class RandomizedSet<T> {
 
-  private Hashtable<T, Integer> valueIndexes;
+  private HashMap<T, Integer> valueIndexes;
   private ArrayList<T> values;
   private Random rand;
 
   public RandomizedSet() {
-    valueIndexes = new Hashtable<>();
+    valueIndexes = new HashMap<>();
     values = new ArrayList<>();
     rand = new Random(System.currentTimeMillis());
   }

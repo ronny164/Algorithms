@@ -10,7 +10,7 @@ public class HashtableTest {
 
   @Test
   public void testBasic() {
-    Hashtable<Character, Integer> table = new Hashtable<>();
+    HashMap<Character, Integer> table = new HashMap<>();
     for (char c = '0'; c <= 'z'; c++) {
       table.put(c, c - '0' + 1);
     }

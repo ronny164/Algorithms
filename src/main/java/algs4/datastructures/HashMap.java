@@ -10,18 +10,18 @@ import java.util.NoSuchElementException;
  * @param <K> The key type.
  * @param <V> The value type.
  */
-public class Hashtable<K, V> {
+public class HashMap<K, V> {
   
   private static final int THRESHOLD = 16;
   private Node<K, V>[] table;
   private int capacity = THRESHOLD;
   private int size;
 
-  public Hashtable() {
+  public HashMap() {
     table = new Node[THRESHOLD];
   }
 
-  public Hashtable(int initCapacity) {
+  public HashMap(int initCapacity) {
     if (initCapacity < 0) {
       throw new IllegalArgumentException();
     }
@@ -29,14 +29,8 @@ public class Hashtable<K, V> {
     this.table = new Node[initCapacity];
   }
 
-  private void amortized(int newSize) {
-    if (newSize > capacity) {
-      resize(capacity * 2);
-    }
-  }
-
   private void resize(int newCapacity) {
-    Hashtable<K, V> temp = new Hashtable<>(newCapacity);
+    HashMap<K, V> temp = new HashMap<>(newCapacity);
     for (K key : this.keySet()) {
       temp.put(key, this.get(key));
     }
@@ -131,6 +125,13 @@ public class Hashtable<K, V> {
 
   public Iterable<K> keySet() {
     return () -> new CustomIterator<>(table);
+  }
+
+  private void amortized(int newSize) {
+    if (newSize > capacity) {
+      resize(capacity * 2);
+    }
+    //TODO: reduce size when size is at 1/4 of the capacity
   }
   
   private static final class Node<K, V> {

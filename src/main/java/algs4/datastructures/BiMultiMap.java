@@ -12,8 +12,8 @@ package algs4.datastructures;
  */
 public class BiMultiMap<K, V> {
 
-  private Hashtable<K, DoublyLinkedList<V>> keyValueMap = new Hashtable<>();
-  private Hashtable<V, DoublyLinkedList<K>> valueKeyMap = new Hashtable<>();
+  private HashMap<K, DoublyLinkedList<V>> keyValueMap = new HashMap<>();
+  private HashMap<V, DoublyLinkedList<K>> valueKeyMap = new HashMap<>();
 
   public void put(K key, V val) {
     DoublyLinkedList<V> values = keyValueMap.get(key);
