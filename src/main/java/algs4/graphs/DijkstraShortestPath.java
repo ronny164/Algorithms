@@ -1,9 +1,9 @@
 package algs4.graphs;
 
 import algs4.datastructures.ArrayList;
+import algs4.datastructures.Stack;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import algs4.datastructures.Hashtable;
 import java.util.PriorityQueue;
 
 /**
@@ -13,12 +13,12 @@ import java.util.PriorityQueue;
 public class DijkstraShortestPath<T> {
 
   static class Graph<T> {
-    private HashMap<T, ArrayList<WeightedEdge<T>>> adjList;
+    private Hashtable<T, ArrayList<WeightedEdge<T>>> adjList;
     public Graph(ArrayList<WeightedEdge<T>> edges) {
       if (edges == null || edges.size() == 0) {
         throw new IllegalArgumentException();
       }
-      adjList = new HashMap<>();
+      adjList = new Hashtable<>();
       for (WeightedEdge<T> weightedEdge : edges) {
         ArrayList<WeightedEdge<T>> adj = adjList.get(weightedEdge.from);
         if (adj == null) {
@@ -42,8 +42,8 @@ public class DijkstraShortestPath<T> {
     }
   }
   
-  private HashMap<T, Integer> distanceTo = new HashMap<>();
-  private HashMap<T, T> edgeTo = new HashMap<>();
+  private Hashtable<T, Integer> distanceTo = new Hashtable<>();
+  private Hashtable<T, T> edgeTo = new Hashtable<>();
 
   public Iterable<T> computeShorteshPath(Graph<T> graph, T start, T target) {
     if (graph == null || graph.adjList.isEmpty() || start == null || target == null) {
@@ -66,7 +66,7 @@ public class DijkstraShortestPath<T> {
   }
 
   private Iterable<T> buildPath(T target) {
-    LinkedList<T> path = new LinkedList<>();
+    Stack<T> path = new Stack<>();
     T current = target;
     path.push(current);
     while (current != null) {

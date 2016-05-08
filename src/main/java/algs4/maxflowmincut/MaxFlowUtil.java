@@ -59,12 +59,12 @@ public class MaxFlowUtil {
   /**
    * Combinations without Repetition.
    * @param n Things to choose from.
-   * @param r Choosing r of them.
+   * @param k Choosing r of them.
    * @return The number of possibilities.
    */
-  static int choose(int n, int r) {
+  static int choose(int n, int k) {
     int total = 1;
-    for (int i = 0; i < r; i++) {
+    for (int i = 0; i < k; i++) {
       total = (total * (n - i)) / (i + 1);
     }
     return total;

@@ -2,6 +2,7 @@ package algs4.maxflowmincut;
 
 import static algs4.maxflowmincut.MaxFlowUtil.choose;
 import static algs4.maxflowmincut.MaxFlowUtil.loadTeamData;
+import algs4.datastructures.DoublyLinkedList;
 
 import edu.princeton.cs.algs4.FlowEdge;
 import edu.princeton.cs.algs4.FlowNetwork;
@@ -9,10 +10,7 @@ import edu.princeton.cs.algs4.FordFulkerson;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
@@ -44,7 +42,7 @@ public class LazyBaseballElimination {
     }
   }
 
-  private Map<String, Integer> names;
+  private HashMap<String, Integer> names;
   private Team[] teams;
 
   // vertices The number of teams.
@@ -67,7 +65,7 @@ public class LazyBaseballElimination {
     requiredNetworkVertices = choose(vertices - 1, 2) + vertices + 2;
     source = vertices;
     sink = vertices + 1;
-    names = new LinkedHashMap<>();
+    names = new HashMap<>();
     loadTeamData(inputFile, names, teams);
   }
 
@@ -106,8 +104,8 @@ public class LazyBaseballElimination {
     network.addEdge(new FlowEdge(otherTeam, sink, avaliableToWin));
   }
 
-  private List<String> computeElimination(int team) {
-    List<String> eliminationList = trivialElimination(team);
+  private DoublyLinkedList<String> computeElimination(int team) {
+    DoublyLinkedList<String> eliminationList = trivialElimination(team);
     if (eliminationList != null) {
       return eliminationList;
     }
@@ -121,15 +119,15 @@ public class LazyBaseballElimination {
     return null;
   }
 
-  private List<String> trivialElimination(int team) {
-    List<String> eliminationNames = null;
+  private DoublyLinkedList<String> trivialElimination(int team) {
+    DoublyLinkedList<String> eliminationNames = null;
     for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != team) {
         int avaliableToWin = teams[team].wins + teams[team].remaining - teams[otherTeam].wins;
         if (avaliableToWin < 0) {
           if (eliminationNames == null) {
-            eliminationNames = new LinkedList<>();
+            eliminationNames = new DoublyLinkedList<>();
           }
           eliminationNames.add(entry.getKey());
         }
@@ -139,13 +137,13 @@ public class LazyBaseballElimination {
   }
 
 
-  private List<String> cutElimination(FordFulkerson maxflow, int team) {
-    List<String> eliminationNames = null;
+  private DoublyLinkedList<String> cutElimination(FordFulkerson maxflow, int team) {
+    DoublyLinkedList<String> eliminationNames = null;
     for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != team && maxflow.inCut(otherTeam)) { // part of the cut
         if (eliminationNames == null) {
-          eliminationNames = new LinkedList<>();
+          eliminationNames = new DoublyLinkedList<>();
         }
         eliminationNames.add(entry.getKey());
       }

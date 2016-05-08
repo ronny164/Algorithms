@@ -1,7 +1,5 @@
 package algs4.datastructures;
 
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Standard ArrayTrie, Could be extended to work as a Map. Uses iteration instead of recursion for
@@ -85,12 +83,12 @@ public class ArrayTrieSet {
     if (node == null) {
       throw new IllegalArgumentException();
     }
-    List<String> collection = new LinkedList<>();
+    DoublyLinkedList<String> collection = new DoublyLinkedList<>();
     collect(node, collection);
     return collection;
   }
 
-  private void collect(TrieNode current, List<String> collection) {
+  private void collect(TrieNode current, DoublyLinkedList<String> collection) {
     if (current.word != null) {
       collection.add(current.word);
     }

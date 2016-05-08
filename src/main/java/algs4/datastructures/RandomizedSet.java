@@ -1,7 +1,5 @@
 package algs4.datastructures;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -12,12 +10,12 @@ import java.util.Random;
  */
 public class RandomizedSet<T> {
 
-  private Map<T, Integer> valueIndexes;
+  private Hashtable<T, Integer> valueIndexes;
   private ArrayList<T> values;
   private Random rand;
 
   public RandomizedSet() {
-    valueIndexes = new HashMap<>();
+    valueIndexes = new Hashtable<>();
     values = new ArrayList<>();
     rand = new Random(System.currentTimeMillis());
   }

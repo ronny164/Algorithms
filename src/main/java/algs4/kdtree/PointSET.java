@@ -1,12 +1,12 @@
 package algs4.kdtree;
 
+import algs4.datastructures.DoublyLinkedList;
+
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class PointSET {
@@ -53,7 +53,7 @@ public class PointSET {
     if (rect == null) {
       throw new NullPointerException();
     }
-    List<Point2D> selection = new LinkedList<>();
+    DoublyLinkedList<Point2D> selection = new DoublyLinkedList<>();
     for (Point2D point2d : setOfPoints) {
       if (rect.contains(point2d)) {
         selection.add(point2d);

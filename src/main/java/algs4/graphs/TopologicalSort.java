@@ -1,11 +1,9 @@
 package algs4.graphs;
 
 import algs4.datastructures.MultiMap;
+import algs4.datastructures.Stack;
 
-import java.util.Collection;
-import java.util.Deque;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Set;
 
 /**
@@ -17,7 +15,7 @@ public class TopologicalSort {
     if (graph == null || graph.size() == 0) {
       throw new IllegalArgumentException();
     }
-    Deque<V> stack = new LinkedList<>();
+    Stack<V> stack = new Stack<>();
     Set<V> visited = new HashSet<>();
     for (V root : graph.keySet()) {
       if (!visited.contains(root)) {
@@ -27,9 +25,9 @@ public class TopologicalSort {
     return stack;
   }
 
-  private static <V> void dfs(V root, MultiMap<V, V> graph, Deque<V> stack, Set<V> visited) {
+  private static <V> void dfs(V root, MultiMap<V, V> graph, Stack<V> stack, Set<V> visited) {
     visited.add(root);
-    Collection<V> adjVertices = graph.getValues(root);
+    Iterable<V> adjVertices = graph.getValues(root);
     if (adjVertices != null) { // has children.
       for (V w : adjVertices) {
         if (!visited.contains(w)) {

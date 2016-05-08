@@ -2,6 +2,7 @@ package algs4.maxflowmincut;
 
 import static algs4.maxflowmincut.MaxFlowUtil.choose;
 import static algs4.maxflowmincut.MaxFlowUtil.loadTeamData;
+import algs4.datastructures.DoublyLinkedList;
 
 import edu.princeton.cs.algs4.FlowEdge;
 import edu.princeton.cs.algs4.FlowNetwork;
@@ -9,10 +10,7 @@ import edu.princeton.cs.algs4.FordFulkerson;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 /**
@@ -44,7 +42,7 @@ public class EagerBaseballElimination {
     }
   }
 
-  private Map<String, Integer> names;
+  private HashMap<String, Integer> names;
   private Team[] teams;
 
   /**
@@ -58,7 +56,7 @@ public class EagerBaseballElimination {
     In inputFile = new In(filename);
     int n = Integer.parseInt(inputFile.readLine());
     teams = new Team[n];
-    names = new LinkedHashMap<>();
+    names = new HashMap<>();
     loadTeamData(inputFile, names, teams);
     computeEliminations(n);
   }
@@ -119,7 +117,7 @@ public class EagerBaseballElimination {
   }
 
   private boolean isTrivial(int currentTeam) {
-    List<String> eliminationNames = new LinkedList<>();
+    DoublyLinkedList<String> eliminationNames = new DoublyLinkedList<>();
     for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (otherTeam != currentTeam) {
@@ -140,7 +138,7 @@ public class EagerBaseballElimination {
 
 
   private void createCertificateCut(FordFulkerson maxflow, int currentTeam) {
-    List<String> eliminationNames = new LinkedList<>();
+    DoublyLinkedList<String> eliminationNames = new DoublyLinkedList<>();
     for (Entry<String, Integer> entry : names.entrySet()) {
       int otherTeam = entry.getValue();
       if (maxflow.inCut(otherTeam)) { // part of the cut

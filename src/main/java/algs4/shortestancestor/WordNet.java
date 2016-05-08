@@ -1,14 +1,14 @@
 package algs4.shortestancestor;
 
-import edu.princeton.cs.algs4.Digraph;
-import edu.princeton.cs.algs4.In;
 import algs4.datastructures.BiMultiMap;
 
-import java.util.Deque;
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
+
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * WordNet is a semantic lexicon for the English language that is used extensively by computational
@@ -82,7 +82,7 @@ public class WordNet {
   private void validateGraph(Digraph dag, Set<Integer> startVertices) {
 
     // Using depth first search.
-    Deque<Integer> stack = new LinkedList<>();
+    Stack<Integer> stack = new Stack<>();
     boolean[] visited = new boolean[dag.V()];
     Set<Integer> roots = new HashSet<>();
     for (int v : startVertices) {

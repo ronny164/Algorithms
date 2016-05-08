@@ -1,6 +1,6 @@
 package algs4.heap;
 
-import java.util.LinkedList;
+import algs4.datastructures.DoublyLinkedList;
 import java.util.PriorityQueue;
 
 /**
@@ -65,7 +65,7 @@ public class AStarSolver {
    */
   public Iterable<Board> solution() {
     if (this.solvable) {
-      LinkedList<Board> path = new LinkedList<>();
+      DoublyLinkedList<Board> path = new DoublyLinkedList<>();
       SearchNode temp = this.solution;
       if (temp != null) {
         SearchNode node = temp;

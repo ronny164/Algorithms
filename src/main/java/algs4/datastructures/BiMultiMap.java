@@ -1,9 +1,5 @@
 package algs4.datastructures;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * Data structure for maintaining many-to-many relationships.
@@ -16,29 +12,29 @@ import java.util.Map;
  */
 public class BiMultiMap<K, V> {
 
-  private Map<K, Collection<V>> keyValueMap = new HashMap<>();
-  private Map<V, Collection<K>> valueKeyMap = new HashMap<>();
+  private Hashtable<K, DoublyLinkedList<V>> keyValueMap = new Hashtable<>();
+  private Hashtable<V, DoublyLinkedList<K>> valueKeyMap = new Hashtable<>();
 
   public void put(K key, V val) {
-    Collection<V> values = keyValueMap.get(key);
-    Collection<K> keys = valueKeyMap.get(val);
+    DoublyLinkedList<V> values = keyValueMap.get(key);
+    DoublyLinkedList<K> keys = valueKeyMap.get(val);
     if (keys == null) {
-      keys = new LinkedList<>();
+      keys = new DoublyLinkedList<>();
       valueKeyMap.put(val, keys);
     }
     if (values == null) {
-      values = new LinkedList<>();
+      values = new DoublyLinkedList<>();
       keyValueMap.put(key, values);
     }
     values.add(val);
     keys.add(key);
   }
 
-  public Collection<V> getValues(K key) {
+  public Iterable<V> getValues(K key) {
     return keyValueMap.get(key);
   }
 
-  public Collection<K> getKeys(V val) {
+  public Iterable<K> getKeys(V val) {
     return valueKeyMap.get(val);
   }
 

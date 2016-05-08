@@ -1,9 +1,6 @@
 package algs4.datastructures;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * Data structure for Multi-valued support. Useful for representing an adjacency list.
@@ -15,12 +12,12 @@ import java.util.Map;
  */
 public class MultiMap<K, V> {
 
-  private Map<K, Collection<V>> keyValueMap = new HashMap<>();
+  private Hashtable<K, DoublyLinkedList<V>> keyValueMap = new Hashtable<>();
 
-  private Collection<V> get(K key) {
-    Collection<V> values = keyValueMap.get(key);
+  private DoublyLinkedList<V> get(K key) {
+    DoublyLinkedList<V> values = keyValueMap.get(key);
     if (values == null) {
-      values = new LinkedList<>();
+      values = new DoublyLinkedList<>();
       keyValueMap.put(key, values);
     }
     return values;
@@ -34,7 +31,7 @@ public class MultiMap<K, V> {
     get(key).addAll(val);
   }
 
-  public Collection<V> getValues(K key) {
+  public Iterable<V> getValues(K key) {
     return keyValueMap.get(key);
   }
 

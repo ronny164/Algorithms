@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class DequeTest {
+public class DoublyLinkedListTest {
 
   @Test
   public void testAddFirstRemoveFirst() {

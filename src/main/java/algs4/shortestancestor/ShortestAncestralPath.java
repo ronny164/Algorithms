@@ -1,12 +1,12 @@
 package algs4.shortestancestor;
 
+import algs4.datastructures.Queue;
+
 import edu.princeton.cs.algs4.Digraph;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * An ancestral path between two vertices v and w in a directed graph is a directed path from v to
@@ -137,14 +137,14 @@ public class ShortestAncestralPath {
   private int bsf(Iterable<Integer> verticesV, Iterable<Integer> verticesW) {
 
     reset();
-    Queue<Vertex> queue = new LinkedList<>();
+    Queue<Vertex> queue = new Queue<>();
     addVertex(verticesV, queue, distanceToV);
     addVertex(verticesW, queue, distanceToW);
     int ancestor = -1;
     int minDistance = Integer.MAX_VALUE;
 
     while (!queue.isEmpty()) {
-      Vertex vertex = queue.remove();
+      Vertex vertex = queue.dequeue();
       int[] distanceTo = vertex.distanceTo;
       int vertexIndex = vertex.index;
 

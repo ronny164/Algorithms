@@ -1,5 +1,6 @@
 package algs4.datastructures;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -166,7 +167,7 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     sb.append('[');
     for (;;) {
       T e = it.next();
-      sb.append(e == this ? "(this Collection)" : e);
+      sb.append(e == this ? "" : e);
       if (!it.hasNext()) {
         return sb.append(']').toString();
       }
@@ -174,4 +175,13 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     }
   }
 
+  public void add(T item) {
+    addLast(item);
+  }
+  
+  public void addAll(Collection<T> vals) {
+    for (T val : vals) {
+      addLast(val);
+    }
+  }
 }

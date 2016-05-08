@@ -2,10 +2,9 @@ package algs4.tries;
 
 import algs4.datastructures.ArrayTrieSet;
 import algs4.datastructures.ArrayTrieSet.TrieNode;
+import algs4.datastructures.DoublyLinkedList;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
 
 /**
  * The Boggle game. Boggle is a word game designed by Allan Turoff and distributed by Hasbro. 
@@ -28,7 +27,7 @@ public class BoggleSolver {
 
   // storing all these variables in global scope to reduce the size of the stack frame when using
   // dfs.
-  private Collection<String> paths;
+  private DoublyLinkedList<String> paths;
   private int m;
   private int n;
   private boolean[][] visited;
@@ -60,14 +59,19 @@ public class BoggleSolver {
     board = inputBoard;
     m = board.rows();
     n = board.cols();
-    paths = new LinkedList<>();
+    paths = new DoublyLinkedList<>();
     visited = new boolean[m][n];
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
         dfs(i, j, dict.root);
       }
     }
-    return new HashSet<>(paths); // remove duplicates.
+    
+    HashSet<String> hashSet = new HashSet<>();
+    for (String path : paths) {
+      hashSet.add(path);
+    }
+    return hashSet; // remove duplicates.
   }
 
   private void dfs(int row, int col, ArrayTrieSet.TrieNode parent) {
