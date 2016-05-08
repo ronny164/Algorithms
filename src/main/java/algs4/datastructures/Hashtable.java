@@ -3,6 +3,12 @@ package algs4.datastructures;
 import java.util.Arrays;
 import java.util.Iterator;
 
+/**
+ * @author Ronny A. Pena
+ *
+ * @param <K> The key type.
+ * @param <V> The value type.
+ */
 public class Hashtable<K, V> {
 
   static final class Node<K, V> {
@@ -28,8 +34,6 @@ public class Hashtable<K, V> {
   private int capacity = THRESHOLD;
   private int size;
 
-  // private int maxBucketSize;
-
   public Hashtable() {
     table = new Node[THRESHOLD];
   }
@@ -46,9 +50,6 @@ public class Hashtable<K, V> {
     if (newSize > capacity) {
       move(capacity * 2);
     }
-    // else if (newSize < (capacity / 4) && newSize > THRESHOLD) {
-    // move(capacity / 2);
-    // }
   }
 
   private void move(int newCapacity) {
@@ -57,7 +58,6 @@ public class Hashtable<K, V> {
       temp.put(key, this.get(key));
     }
     this.capacity = newCapacity;
-    // this.maxBucketSize = temp.maxBucketSize;
     this.table = temp.table;
   }
 
@@ -100,7 +100,6 @@ public class Hashtable<K, V> {
 
   private boolean add(int bucket, K key, V val) {
     Node<K, V> current = table[bucket];
-    // int count = 1;
     if (current == null) {
       current = new Node<>(key, val, null);
       table[bucket] = current;
@@ -112,13 +111,8 @@ public class Hashtable<K, V> {
         current.val = val;
         return false;
       }
-      // count++;
       current = current.next;
     }
-    // if (count > maxBucketSize) {
-    // System.out.println("depth: " + count);
-    // maxBucketSize = count;
-    // }
     current.next = new Node<>(key, val, null);
     return true;
   }
@@ -159,6 +153,7 @@ public class Hashtable<K, V> {
   private static final class CustomIterator<K> implements Iterator<K> {
 
     private Node<K, ?>[] table;
+    //saving the next element in the hashtable.
     private int index;
     private Node<K, ?> cached;
 

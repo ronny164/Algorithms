@@ -2,6 +2,11 @@ package algs4.datastructures;
 
 import java.util.Iterator;
 
+/**
+ * @author Ronny A. Pena
+ *
+ * @param <T> The type of object to store.
+ */
 public class ArrayList<T> implements Iterable<T> {
   private static final int THRESHOLD = 16;
   private T[] arr;

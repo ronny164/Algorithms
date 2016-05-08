@@ -1,6 +1,8 @@
 package algs4.datastructures;
 
-
+/**
+ * @author Ronny A. Pena
+ */
 public class Queue<T> extends DoublyLinkedList<T> {
 
   public void enqueue(T val) {
