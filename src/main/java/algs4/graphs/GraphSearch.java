@@ -87,11 +87,13 @@ public class GraphSearch {
     graph.put('S', 'X');
     graph.put('X', 'Y');
     graph.put('Y', 'T');
+    
     graph.put('S', 'A');
     graph.put('A', 'B');
     graph.put('B', 'C');
     graph.put('C', 'D');
     graph.put('D', 'T');
+    
     graph.put('T', 'S');
     assertEquals("[S, X, Y, T]", findPathBfs(graph, 'S', 'T').toString());
     assertEquals("[S, A, B, C, D, T]", findPathDfs(graph, 'S', 'T').toString());
