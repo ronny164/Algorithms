@@ -84,9 +84,9 @@ public class GraphSearch {
   @Test
   public void testSearch() throws Exception {
     MultiMap<Character, Character> graph = new MultiMap<>();
-    graph.put('S', 'X');
-    graph.put('X', 'Y');
-    graph.put('Y', 'T');
+    graph.put('S', 'U');
+    graph.put('U', 'V');
+    graph.put('V', 'T');
     
     graph.put('S', 'A');
     graph.put('A', 'B');
@@ -95,7 +95,7 @@ public class GraphSearch {
     graph.put('D', 'T');
     
     graph.put('T', 'S');
-    assertEquals("[S, X, Y, T]", findPathBfs(graph, 'S', 'T').toString());
+    assertEquals("[S, U, V, T]", findPathBfs(graph, 'S', 'T').toString());
     assertEquals("[S, A, B, C, D, T]", findPathDfs(graph, 'S', 'T').toString());
   }
 }
