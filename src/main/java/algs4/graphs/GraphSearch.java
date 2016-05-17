@@ -17,7 +17,7 @@ import java.util.Set;
 public class GraphSearch {
 
   public static <Vertex> Iterable<Vertex> findPathDfs(MultiMap<Vertex, Vertex> graph, Vertex start,
-      Vertex end) {
+      Vertex target) {
 
     Stack<Vertex> stack = new Stack<>();
     Set<Vertex> visited = new HashSet<>();
@@ -31,8 +31,8 @@ public class GraphSearch {
         for (Vertex to : adj) {
           if (!visited.contains(to)) {
             edgeTo.put(to, from);
-            if (to.equals(end)) {
-              return buildPath(edgeTo, end);
+            if (to.equals(target)) {
+              return buildPath(edgeTo, target);
             }
             stack.push(to);
           }
@@ -43,7 +43,7 @@ public class GraphSearch {
   }
 
   public static <Vertex> Iterable<Vertex> findPathBfs(MultiMap<Vertex, Vertex> graph, Vertex start,
-      Vertex end) {
+      Vertex target) {
     Queue<Vertex> queue = new Queue<>();
     Set<Vertex> visited = new HashSet<>();
     Map<Vertex, Vertex> edgeTo = new HashMap<>();
@@ -56,8 +56,8 @@ public class GraphSearch {
         for (Vertex to : adj) {
           if (!visited.contains(to)) {
             edgeTo.put(to, from);
-            if (to.equals(end)) {
-              return buildPath(edgeTo, end);
+            if (to.equals(target)) {
+              return buildPath(edgeTo, target);
             }
             queue.enqueue(to);
           }
@@ -67,10 +67,10 @@ public class GraphSearch {
     return Collections.emptyList();
   }
 
-  private static <Vertex> Iterable<Vertex> buildPath(Map<Vertex, Vertex> edgeTo, Vertex end) {
+  private static <Vertex> Iterable<Vertex> buildPath(Map<Vertex, Vertex> edgeTo, Vertex target) {
     DoublyLinkedList<Vertex> path = new DoublyLinkedList<>();
-    path.addFirst(end);
-    Vertex to = end;
+    path.addFirst(target);
+    Vertex to = target;
     while (true) {
       Vertex from = edgeTo.get(to);
       if (from == null) {
