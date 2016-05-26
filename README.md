@@ -8,7 +8,7 @@ Covers:
 * Heap (Priority Queue)
 * Red-black BST
 * Hashtables
-* Sorting (selection sort, insertion sort, mergesort, quicksort, counting sort, radix sort, bucket sort)
+* Sorting (selection, insertion, merge, quick, heap, counting, radix, bucket)
 * Kd-Tree (2d Nearest neighbor search & range search)
 * Graphs (undirected, directed, weighted, etc)
 * BFS (breadth first search), DFS (depth first search)
