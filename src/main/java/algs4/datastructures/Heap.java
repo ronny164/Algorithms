@@ -1,6 +1,5 @@
 package algs4.datastructures;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -32,7 +31,6 @@ public class Heap<T extends Comparable<T>> {
       throw new IllegalArgumentException();
     }
     init();
-    this.cmp = cmp;
     for (T t : initial) {
       arr[size++] = t;
     }
@@ -57,7 +55,6 @@ public class Heap<T extends Comparable<T>> {
     arr[size] = val; // add to the last
     swim(arr, cmp, size); // and swim it up if necessary.
     size++;
-    System.out.println(Arrays.toString(arr));
   }
 
   public T remove() {
@@ -69,7 +66,6 @@ public class Heap<T extends Comparable<T>> {
     swap(arr, 0, size - 1); // move the last one to the top
     sink(arr, cmp, 0, size - 1); // sink the new first if it breaks the heap ordering.
     size--;
-    System.out.println(Arrays.toString(arr));
     return val;
   }
 
@@ -81,6 +77,7 @@ public class Heap<T extends Comparable<T>> {
 
     while (2 * parentIdx + 1 <= limit) {
       int leftIdx = 2 * parentIdx + 1;
+      int rightIdx = 2 * parentIdx + 2;
       T parent = arr[parentIdx];
 
       T left = arr[leftIdx];
@@ -88,7 +85,6 @@ public class Heap<T extends Comparable<T>> {
         return;
       }
 
-      int rightIdx = 2 * parentIdx + 2;
       if (rightIdx > limit || arr[rightIdx] == null) { // the right child is invalid
         if (cmp.compare(left, parent) < 0) {
           swap(arr, parentIdx, leftIdx);
@@ -96,16 +92,17 @@ public class Heap<T extends Comparable<T>> {
         return;
       }
       T right = arr[rightIdx];
-      if ((cmp.compare(left, parent) < 0) || (cmp.compare(right, parent) < 0)) {
-        if (cmp.compare(left, right) < 0) {
-          swap(arr, parentIdx, leftIdx);
-          parentIdx = leftIdx;
-        } else {
-          swap(arr, parentIdx, rightIdx);
-          parentIdx = rightIdx;
-        }
-      } else {
+      // if the heap ordering is correct, exit.
+      if (cmp.compare(left, parent) > 0 && cmp.compare(right, parent) > 0) {
         return;
+      }
+
+      if (cmp.compare(left, right) < 0) {
+        swap(arr, parentIdx, leftIdx);
+        parentIdx = leftIdx;
+      } else {
+        swap(arr, parentIdx, rightIdx);
+        parentIdx = rightIdx;
       }
     }
   }
@@ -119,12 +116,11 @@ public class Heap<T extends Comparable<T>> {
       int parentIdx = (childIdx - 1) / 2;
       T child = arr[childIdx];
       T parent = arr[parentIdx];
-      if (child != null && parent != null && (cmp.compare(parent, child) > 0)) {
-        swap(arr, childIdx, parentIdx);
-        childIdx = parentIdx; // the current parent becomes the child
-      } else {
+      if (child == null || parent == null || cmp.compare(parent, child) < 0) {
         return;
       }
+      swap(arr, childIdx, parentIdx);
+      childIdx = parentIdx; // the current parent becomes the child
     }
   }
 
