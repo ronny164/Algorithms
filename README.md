@@ -14,6 +14,7 @@ Covers:
 * Graphs (undirected, directed, weighted, etc)
 * BFS (breadth first search), DFS (depth first search)
 * A* algorithm (best first search), game tree
+* Backtracking
 * Shortest anscestral path
 * Weighted shortest path
 * Max-flow/min-cut
