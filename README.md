@@ -7,7 +7,7 @@ Covers:
 * LinkedList, ArrayList, Stacks, Queues, Deque
 * Heap (Priority Queue)
 * Red-black BST
-* Hashtables
+* Hashtables, Multi-value map, bidirectional map.
 * Sorting (selection, insertion, merge, quick, heap, counting, radix, bucket)
 * Kd-Tree (2d Nearest neighbor search & range search)
 * Graphs (undirected, directed, weighted, etc)
