@@ -6,7 +6,6 @@ import org.junit.Test;
 
 public class BinarySearchTest {
 
-
   @Test
   public void testBinarySearch() {
     Integer[] nodes = new Integer[] {2, 3, 5, 6, 7, 8, 10};

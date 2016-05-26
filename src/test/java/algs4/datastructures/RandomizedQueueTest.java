@@ -4,9 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import algs4.datastructures.ArrayList;
-import algs4.datastructures.RandomizedQueue;
-
 import org.junit.Test;
 
 public class RandomizedQueueTest {
@@ -17,7 +14,7 @@ public class RandomizedQueueTest {
     assertTrue(q.isEmpty());
 
     int sampleSize = 8;
-    ArrayList<String> sample = getSample(sampleSize);
+    ArrayList<String> sample = TestUtils.getSample(sampleSize);
 
     q.enqueue(sample.get(0));
     assertEquals(sample.get(0), q.sample());
@@ -41,19 +38,11 @@ public class RandomizedQueueTest {
     assertEquals(0, q.size());
   }
 
-  private ArrayList<String> getSample(int sampleSize) {
-    ArrayList<String> sample = new ArrayList<>();
-    for (int i = 0; i < sampleSize; i++) {
-      sample.add(i + "");
-    }
-    return sample;
-  }
-
   @Test
   public void testRadomizedQueueIterator() {
     RandomizedQueue<String> q = new RandomizedQueue<>();
     int sampleSize = 8;
-    ArrayList<String> sample = getSample(sampleSize);
+    ArrayList<String> sample = TestUtils.getSample(sampleSize);
 
     for (int i = 0; i < sampleSize; i++) {
       q.enqueue(sample.get(i));

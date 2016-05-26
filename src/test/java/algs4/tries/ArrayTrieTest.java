@@ -1,10 +1,9 @@
 package algs4.tries;
 
-import algs4.datastructures.ArrayTrieSet;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import algs4.datastructures.ArrayTrieSet;
 
 import org.junit.Test;
 

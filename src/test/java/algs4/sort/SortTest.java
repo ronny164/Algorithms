@@ -1,34 +1,27 @@
 package algs4.sort;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import algs4.datastructures.HeapTest;
+import algs4.datastructures.TestUtils;
 
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Random;
 
 public class SortTest {
-
 
   @Test
   public void testInsertionSort() {
     int[] nums = new int[] {38, 27, 43, 3, 9, 82, 10};
-    int[] sorted = new int[] {3, 9, 10, 27, 38, 43, 82};
+    int[] sorted = new int[] {};
     InsertionSort.sort(nums);
     System.out.println(Arrays.toString(nums));
-    assertTrue(Arrays.equals(nums, sorted));
+    assertEquals("[3, 9, 10, 27, 38, 43, 82]", Arrays.toString(nums));
   }
 
   @Test
   public void testCountingSort() {
     int n = 15;
-    int[] arr1 = new int[n];
-    Random rand = new Random();
-    for (int i = 0; i < arr1.length; i++) {
-      arr1[i] = rand.nextInt(n);
-    }
+    int[] arr1 = TestUtils.generateRandom(n);
     System.out.println(Arrays.toString(arr1));
     int[] arr2 = Arrays.copyOf(arr1, n);
     CountingSort.sort(arr1, n);
@@ -39,16 +32,11 @@ public class SortTest {
 
   @Test
   public void testRadisSort() {
-    String[] arr1 = arr();
+    String[] arr1 = new String[] {"127", "761", "302", "250", "327"};
     RadixSort.sort(arr1);
-    String[] arr2 = arr();
+    String[] arr2 = new String[] {"127", "761", "302", "250", "327"};
     Arrays.sort(arr2);
     assertEquals(Arrays.toString(arr1), Arrays.toString(arr2));
-  }
-
-  static String[] arr() {
-    String[] arr = new String[] {"127", "761", "302", "250", "327"};
-    return arr;
   }
 
   @Test
@@ -107,7 +95,7 @@ public class SortTest {
 
   @Test
   public void testHeapSortOnRandomArray() {
-    int[] arr = HeapTest.generateRandom(20);
+    int[] arr = TestUtils.generateRandom(20);
     Integer[] arr2 = new Integer[arr.length];
     int i = 0;
     for (int val : arr) {
