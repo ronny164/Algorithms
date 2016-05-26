@@ -35,7 +35,9 @@ public class Heap<T extends Comparable<T>> {
     this.cmp = cmp;
     for (T t : initial) {
       arr[size++] = t;
-      swim(arr, cmp, size);
+    }
+    for (int i = size / 2; i >= 0; i--) {
+      sink(arr, cmp, i, size - 1);
     }
   }
 
@@ -76,16 +78,16 @@ public class Heap<T extends Comparable<T>> {
    * depending on their values to maintain the heap ordering. 
    */
   public static <T> void sink(T[] arr, Comparator<T> cmp, int parentIdx, int limit) {
-    
+
     while (2 * parentIdx + 1 <= limit) {
       int leftIdx = 2 * parentIdx + 1;
       T parent = arr[parentIdx];
-      
+
       T left = arr[leftIdx];
       if (parent == null || left == null) {
         return;
       }
-      
+
       int rightIdx = 2 * parentIdx + 2;
       if (rightIdx > limit || arr[rightIdx] == null) { // the right child is invalid
         if (cmp.compare(left, parent) < 0) {
@@ -114,8 +116,8 @@ public class Heap<T extends Comparable<T>> {
    */
   public static <T> void swim(T[] arr, Comparator<T> cmp, int childIdx) {
     while (childIdx > 0) {
-      T child = arr[childIdx];
       int parentIdx = (childIdx - 1) / 2;
+      T child = arr[childIdx];
       T parent = arr[parentIdx];
       if (child != null && parent != null && (cmp.compare(parent, child) > 0)) {
         swap(arr, childIdx, parentIdx);

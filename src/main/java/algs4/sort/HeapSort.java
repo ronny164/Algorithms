@@ -21,8 +21,10 @@ public class HeapSort {
     Comparator<T> maxCmp = Collections.reverseOrder();
 
     // create a max heap
-    for (int i = 1; i < n; i++) { // heapfy the arrax to a max heap.
-      Heap.swim(arr, maxCmp, i);
+    // heapfy the arrax to a max heap. 
+    // sink all the nodes in the top half.
+    for (int i = n / 2; i >= 0; i--) { 
+      Heap.sink(arr, maxCmp, i, n - 1);
     }
 
     for (int i = n - 1; i >= 0; i--) {

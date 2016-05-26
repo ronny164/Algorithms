@@ -82,13 +82,12 @@ public class SortTest {
       return o1 - o2;
     }).intValue());
   }
-  
-
 
   @Test
   public void testHeapSortOnSmallExample() {
     Integer[] arr = new Integer[] {3, 7, 4, 2, 5, 9, 6, 1, 8};
     HeapSort.sort(arr);
+    System.out.println(Arrays.toString(arr));
     assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]", Arrays.toString(arr));
   }
 
@@ -101,6 +100,7 @@ public class SortTest {
       arr2[i++] = val;
     }
     HeapSort.sort(arr2);
+    System.out.println(Arrays.toString(arr2));
     assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]", Arrays.toString(arr2));
   }
 }
