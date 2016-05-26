@@ -2,6 +2,7 @@ package algs4.sort;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import algs4.datastructures.HeapTest;
 
 import org.junit.Test;
 
@@ -80,5 +81,26 @@ public class SortTest {
     assertEquals(10, QuickSort.findKth(arr, 7, (o1, o2) -> {
       return o1 - o2;
     }).intValue());
+  }
+  
+
+
+  @Test
+  public void testHeapSortOnSmallExample() {
+    Integer[] arr = new Integer[] {3, 7, 4, 2, 5, 9, 6, 1, 8};
+    HeapSort.sort(arr);
+    assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]", Arrays.toString(arr));
+  }
+
+  @Test
+  public void testHeapSortOnRandomArray() {
+    int[] arr = HeapTest.generateRandom(20);
+    Integer[] arr2 = new Integer[arr.length];
+    int i = 0;
+    for (int val : arr) {
+      arr2[i++] = val;
+    }
+    HeapSort.sort(arr2);
+    assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]", Arrays.toString(arr2));
   }
 }
