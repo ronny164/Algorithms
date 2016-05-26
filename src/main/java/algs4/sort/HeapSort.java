@@ -19,14 +19,14 @@ public class HeapSort {
     }
     int n = arr.length;
     Comparator<T> maxCmp = Collections.reverseOrder();
-    
+
     // create a max heap
     for (int i = 1; i < n; i++) { // heapfy the arrax to a max heap.
-      Heap.swim(arr, maxCmp, i );
+      Heap.swim(arr, maxCmp, i);
     }
 
     for (int i = n - 1; i >= 0; i--) {
-      // move the max element to the end, 
+      // move the max element to the end,
       // replace it with the current value at the current location
       // put that value at the root
       Heap.swap(arr, 0, i);
