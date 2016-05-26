@@ -1,11 +1,16 @@
 package algs4.sort;
 
-
-public class CountSort {
+/**
+ * @author Ronny A. Pena
+ */
+public class CountingSort {
 
   private static int lowerBound = '0';
   private static int radix = 'z' + 1 - lowerBound; // lower case, upper case, and digits in ASCII.
 
+  /**
+   * Stable, O(n + r) time and space, 4n + r estimated runtime.
+   */
   public static void sort(int[] arr, int range) {
     if (arr == null || arr.length < 1 || range < 0) {
       return;

@@ -11,7 +11,7 @@ import java.util.Comparator;
 public class HeapSort {
 
   /**
-   * In-place, unstable, 2(n log n) runtime. 
+   * unstable, O(1) space, and O(n log n) time, 2(n log n) estimated runtime. 
    */
   public static <T> void sort(T[] arr) {
     if (arr == null || arr.length == 0) {

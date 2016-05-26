@@ -1,11 +1,6 @@
 package algs4.sort;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +9,10 @@ import java.util.List;
  */
 public class BucketSort {
   /**
+   * O(n + k) time avg case.
+   * O(n^2 + k) time worst case.
+   * stable when using insertion sort to sort the buckets.
+   * 
    * @param arr the input array.
    * @param k The number of buckets to use.
    */
@@ -48,19 +47,5 @@ public class BucketSort {
         }
       }
     }
-  }
-
-  @Test
-  public void testSort() {
-    int[] arr = new int[] {2, 10, 5, 9, 3, 4, 15, 20, 21, 18};
-    sort(arr, 5);
-    assertEquals("[2, 3, 4, 5, 9, 10, 15, 18, 20, 21]", Arrays.toString(arr));
-
-    arr = new int[] {2, 10, 5, 9, 3, 4, 15, 20, 21, 18, 3, 4, 8, 2, 
-        8, 8, 2, 14, 5, 6, 7, 8, 4, 2, 4, 7, 8, 4, 2, 5, 6, 9, 8, 5, 22};
-    sort(arr, 5);
-    assertEquals(
-        "[2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 8, 8, 8, 8, 8, 8, 9, "
-            + "9, 10, 14, 15, 18, 20, 21, 22]", Arrays.toString(arr));
   }
 }

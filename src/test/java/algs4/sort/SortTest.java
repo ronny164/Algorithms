@@ -31,7 +31,7 @@ public class SortTest {
     }
     System.out.println(Arrays.toString(arr1));
     int[] arr2 = Arrays.copyOf(arr1, n);
-    CountSort.sort(arr1, n);
+    CountingSort.sort(arr1, n);
     System.out.println(Arrays.toString(arr1));
     Arrays.sort(arr2);
     assertEquals(Arrays.toString(arr2), Arrays.toString(arr1));
@@ -81,6 +81,20 @@ public class SortTest {
     assertEquals(10, QuickSort.findKth(arr, 7, (o1, o2) -> {
       return o1 - o2;
     }).intValue());
+  }
+
+  @Test
+  public void testBucketSort() {
+    int[] arr = new int[] {2, 10, 5, 9, 3, 4, 15, 20, 21, 18};
+    BucketSort.sort(arr, 5);
+    assertEquals("[2, 3, 4, 5, 9, 10, 15, 18, 20, 21]", Arrays.toString(arr));
+
+    arr = new int[] {2, 10, 5, 9, 3, 4, 15, 20, 21, 18, 3, 4, 8, 2, 
+        8, 8, 2, 14, 5, 6, 7, 8, 4, 2, 4, 7, 8, 4, 2, 5, 6, 9, 8, 5, 22};
+    BucketSort.sort(arr, 5);
+    assertEquals(
+        "[2, 2, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 8, 8, 8, 8, 8, 8, 9, "
+            + "9, 10, 14, 15, 18, 20, 21, 22]", Arrays.toString(arr));
   }
 
   @Test

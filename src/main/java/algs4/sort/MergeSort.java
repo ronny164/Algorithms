@@ -2,8 +2,14 @@ package algs4.sort;
 
 import java.util.Comparator;
 
+/**
+ * @author Ronny A. Pena
+ */
 public class MergeSort {
 
+  /**
+   * Stable, O(n + log n) space complexity, O(n log n) time.
+   */
   public static <T> void sort(T[] arr, Comparator<T> cmp) {
     if (arr == null || arr.length == 0 || cmp == null) {
       return;
