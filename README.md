@@ -1,6 +1,6 @@
 # Princeton: algorithms course
 
-Programming exercise from the course in Coursera.
+Programming exercise from the course in Coursera. Implemented all of them on my own by watching lecture and reading their book.
 
 Covers:
 * Disjoint-sets (UnionFind)
