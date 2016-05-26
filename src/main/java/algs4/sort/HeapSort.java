@@ -27,13 +27,14 @@ public class HeapSort {
       Heap.sink(arr, maxCmp, i, n - 1);
     }
 
-    for (int i = n - 1; i >= 0; i--) {
+    int root = 0;
+    for (int last = n - 1; last >= 0; last--) {
       // move the max element to the end,
       // replace it with the current value at the current location
       // put that value at the root
-      Heap.swap(arr, 0, i);
+      Heap.swap(arr, root, last);
       // now sink the new root
-      Heap.sink(arr, maxCmp, 0, i - 1);
+      Heap.sink(arr, maxCmp, root, last - 1);
     }
   }
 }
