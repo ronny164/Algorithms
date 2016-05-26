@@ -16,6 +16,6 @@ Covers:
 * A* algorithm (best first search), game tree
 * Backtracking
 * Shortest anscestral path
-* Weighted shortest path
+* Weighted shortest path (Dijkstra’s algorithm and Acyclic shortest path)
 * Max-flow/min-cut
 * Trie (Radix Tree)
