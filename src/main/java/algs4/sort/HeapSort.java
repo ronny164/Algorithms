@@ -5,11 +5,13 @@ import algs4.datastructures.Heap;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * @author Ronny A. Pena
+ */
 public class HeapSort {
 
   /**
    * In-place, unstable, 2(n log n) runtime. 
-   * @param arr
    */
   public static <T> void sort(T[] arr) {
     if (arr == null || arr.length == 0) {
