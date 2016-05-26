@@ -5,6 +5,7 @@ Programming exercise from the course in Coursera.
 Covers:
 * Disjoint-sets (UnionFind)
 * LinkedList, ArrayList, Stacks, Queues, Deque
+* Randomized Queue, and Set.
 * Heap (Priority Queue)
 * Red-black BST
 * Hashtables, Multi-value map, bidirectional map.
