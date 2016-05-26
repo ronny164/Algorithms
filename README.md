@@ -3,7 +3,7 @@
 Programming exercise from the course in Coursera.
 
 Covers:
-* Disjoint-sets
+* Disjoint-sets (UnionFind)
 * LinkedList, ArrayList, Stacks, Queues, Deque
 * Heap (Priority Queue)
 * Red-black BST
@@ -16,4 +16,4 @@ Covers:
 * Shortest anscestral path
 * Weighted shortest path
 * Max-flow/min-cut
-* Tries
+* Tries (Radix Tree)
