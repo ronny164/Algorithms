@@ -1,4 +1,4 @@
-package algs4.heap;
+package algs4.astar;
 
 import edu.princeton.cs.algs4.StdRandom;
 import algs4.datastructures.ArrayList;

@@ -1,5 +1,7 @@
-package algs4.heap;
+package algs4.astar;
 
+import algs4.astar.AStarSolver;
+import algs4.astar.Board;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

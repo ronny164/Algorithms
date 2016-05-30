@@ -1,7 +1,5 @@
 package algs4.datastructures;
 
-import algs4.datastructures.DisjointSet;
-
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package algs4.heap;
+package algs4.astar;
 
 import algs4.datastructures.DoublyLinkedList;
 import java.util.PriorityQueue;

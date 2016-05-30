@@ -31,7 +31,7 @@ public class SortTest {
   }
 
   @Test
-  public void testRadisSort() {
+  public void testRadixSort() {
     String[] arr1 = new String[] {"127", "761", "302", "250", "327"};
     RadixSort.sort(arr1);
     String[] arr2 = new String[] {"127", "761", "302", "250", "327"};

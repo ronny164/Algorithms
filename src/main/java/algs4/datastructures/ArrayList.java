@@ -16,7 +16,7 @@ public class ArrayList<T> implements Iterable<T> {
   public ArrayList() {
     this(THRESHOLD);
   }
-
+  
   public ArrayList(int initCapacity) {
     if (initCapacity < 0) {
       throw new IllegalArgumentException();

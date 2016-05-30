@@ -1,4 +1,4 @@
-package algs4.heap;
+package algs4.astar;
 
 /**
  * This class is only used by the solver. Allowing package fields since is not public.

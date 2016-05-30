@@ -2,7 +2,6 @@ package algs4.datastructures;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -13,7 +12,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Ronny A. Pena
  */
-public class Heap<T extends Comparable<T>> implements Iterable<T> {
+public class Heap<T> {
   private int size;
   private T[] arr;
   private Comparator<T> cmp;
@@ -149,25 +148,6 @@ public class Heap<T extends Comparable<T>> implements Iterable<T> {
       T[] temp = (T[]) new Comparable[n * 2];
       System.arraycopy(arr, 0, temp, 0, n);
       arr = temp;
-    }
-  }
-
-  @Override
-  public Iterator<T> iterator() {
-    return new CustomIterator<T>(arr);
-  }
-  private static final class CustomIterator<T> implements Iterator<T>{
-    private T[] arr;
-    public CustomIterator(T[] arr2) {
-      this.arr = arr2;
-    }
-    @Override
-    public boolean hasNext() {
-      return false;
-    }
-    @Override
-    public T next() {
-      return null;
     }
   }
 }

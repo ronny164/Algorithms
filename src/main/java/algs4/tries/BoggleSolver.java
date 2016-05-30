@@ -101,18 +101,18 @@ public class BoggleSolver {
 
     visited[row][col] = true;
     // following all adjacent squares.
-    int up = row + 1;
-    int down = row - 1;
+    int up = row - 1;
+    int down = row + 1;
     int left = col - 1;
     int right = col + 1;
     dfs(row, right, child);
-    dfs(down, right, child);
-    dfs(down, col, child);
-    dfs(down, left, child);
-    dfs(row, left, child);
-    dfs(up, left, child);
-    dfs(up, col, child);
     dfs(up, right, child);
+    dfs(up, col, child);
+    dfs(up, left, child);
+    dfs(row, left, child);
+    dfs(down, left, child);
+    dfs(down, col, child);
+    dfs(down, right, child);
     visited[row][col] = false;
   }
 
