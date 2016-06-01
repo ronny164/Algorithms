@@ -34,9 +34,11 @@ public class BalancedBST<T> implements Iterable<T> {
     if(root == null) {
       size++;
       root = new TreeNode<>(val);
+      root.isRed = false;
       return;
     }
     root = add(root, val);
+    root.isRed = false;
   }
 
   private TreeNode<T> add(TreeNode<T> parent, T val) {
@@ -71,19 +73,19 @@ public class BalancedBST<T> implements Iterable<T> {
 
   private TreeNode<T> rotateLeft(TreeNode<T> oldParent) {
     TreeNode<T> newParent = oldParent.right;
-    oldParent.right = oldParent.right.left;
-    oldParent.isRed = true;
+    oldParent.right = newParent.left;
     newParent.left = oldParent;
-    newParent.isRed = false;
+    newParent.isRed = oldParent.isRed;
+    oldParent.isRed = true;
     return newParent;
   }
 
   private TreeNode<T> rotateRight(TreeNode<T> oldParent) {
     TreeNode<T> newParent = oldParent.left;
-    oldParent.left = oldParent.left.right;
-    oldParent.isRed = true;
+    oldParent.left = newParent.right;
     newParent.right = oldParent;
-    newParent.isRed = false;
+    newParent.isRed = oldParent.isRed;
+    oldParent.isRed = true;
     return newParent;
   }
 

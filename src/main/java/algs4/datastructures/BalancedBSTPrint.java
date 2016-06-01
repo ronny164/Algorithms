@@ -35,7 +35,7 @@ public class BalancedBSTPrint {
     int linkCount = 0;
     while (!currentLevel.isEmpty()) {
       TreeNode<?> current = currentLevel.dequeue();
-      if (current.left != null || current.right != null) {
+      if (current != BLANK) {
         if (current.left != null) {
           nextLevel.enqueue(current.left);
         } else {
@@ -46,9 +46,10 @@ public class BalancedBSTPrint {
         } else {
           nextLevel.enqueue(BLANK);
         }
+        linkCount++;
       }
       printValue(spaceCount, sb, current);
-      linkCount++;
+      
       if (currentLevel.isEmpty()) {
         sb.append("\n");
         for (int i = 0; i < linkCount; i++) {
@@ -88,11 +89,7 @@ public class BalancedBSTPrint {
   }
 
   private static int getSpaceCount(int height) {
-//    int log = log2(tree.size());
-//    int top = (int) Math.pow(2, log + 2);
-//    int width = 3 * (top / 2);
-//    return (width / 2) - 2;
-    return (int) Math.pow(2, height + 1) -1;
+    return (int) Math.pow(2, height + 1) - 1;
   }
 
   private static int log2(int n) {
@@ -148,7 +145,7 @@ public class BalancedBSTPrint {
   public void testPrint32() {
     BalancedBST<Integer> bst = new BalancedBST<>();
     bst.add(16);
-    
+
     bst.add(8);
     bst.add(24);
 
